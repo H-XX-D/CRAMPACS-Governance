@@ -46,6 +46,12 @@ Controls are mandatory unless explicitly marked optional. Each full `CRAMPACS-*`
 | REL-03 | Decision memo | Convert evidence to authorized action | decision memo |
 | CAPA-01 | Deviation handling | Track failures and repairs | deviation/CAPA log |
 | CAPA-02 | Corrective action verification | Confirm repair works | verification evidence |
+| TRUST-01 | Build ledger | Track material work while package is being built | build_ledger.csv |
+| TRUST-02 | Trust checkpoint review | Prevent silent promotion of unchecked artifacts | checkpoint_reviews.csv |
+| TRUST-03 | Assumption and uncertainty log | Prevent assumptions becoming facts | assumption_uncertainty_log.csv |
+| TRUST-04 | Claim trace matrix | Tie every claim to evidence, controls, gates, and permitted reliance | claim_trace_matrix.csv |
+| TRUST-05 | Trust debt register | Track unresolved trust gaps with owner, due date, and release impact | trust_debt_register.csv |
+| TRUST-06 | Reliance positioning | State what the package is trustworthy for and not trustworthy for | trust status summary, decision memo |
 | TRAIN-01 | Role training | Ensure operators know controls | training matrix |
 | TRAIN-02 | Competency check | Ensure reviewers can apply method | competency records |
 
@@ -78,4 +84,3 @@ Required:
 ## Control Evidence Rule
 
 A control is not satisfied because a document exists. It is satisfied only when the document contains the required evidence and a named reviewer accepts it.
-

@@ -1,0 +1,1 @@
+entry_id,timestamp,study_id,actor_id,actor_type,action_type,artifact_path,artifact_previous_state,artifact_new_state,input_refs,output_refs,verification_performed,uncertainty_or_assumption,sidecar_run_id,decision_impact,reviewer_id,notes

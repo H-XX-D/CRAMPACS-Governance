@@ -31,6 +31,11 @@ Read in this order:
 15. `REGULATED_DEPLOYMENT_ADDENDUM.md`
 16. `REGISTER_DATA_DICTIONARY.md`
 17. `POLISH_ROUNDS_2026-05-16.md`
+18. `TRUST_MAINTENANCE_PROTOCOL.md`
+19. `TRUST_CHECKPOINT_MAP.md`
+20. `TRUST_POSITIONING_AND_RELIANCE_LEVELS.md`
+21. `TRUST_STATUS_SUMMARY_TEMPLATE.md`
+22. `AI_TRUSTED_USE_GATE_DAG_AND_QUARANTINE_POLICY.md`
 
 ## Operational Templates
 
@@ -51,7 +56,21 @@ These are not decorative. A CRAMPACS package is not release-ready unless the rel
 
 ## Package Scaffold
 
-Use the scaffold tool to create the full evidence-binder structure:
+Use the end-to-end CLI when an AI agent or practitioner is operating a package:
+
+```bash
+python tools/crampacs_cli.py init --level preflight --domain med --study-id STUDY001
+python tools/crampacs_cli.py check ./crampacs_projects/<package>
+python tools/crampacs_cli.py leak-scan ./crampacs_projects/<package>
+python tools/crampacs_cli.py gate ./crampacs_projects/<package>
+```
+
+The CLI creates a package-local AI operator brief, DAG gate map,
+term/prerequisite ledger, leak-watch report, quarantine protocol, sidecar
+metrics, and checksums. The source kit remains sanitized for reuse.
+
+Use the lower-level scaffold tool only when you need the full evidence-binder
+structure without the CLI operating controls:
 
 ```bash
 python tools/scaffold_crampacs_package.py ./packages/CRAMPACS_MED_STUDY001 --domain med --study-id STUDY001

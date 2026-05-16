@@ -1,0 +1,1 @@
+claim_id,study_id,claim_text,claim_type,evidence_tier,trust_state,permitted_reliance,prohibited_reliance,evidence_artifacts,control_ids,gate_ids,sidecar_run_id,reviewer_id,approval_status,notes

@@ -1,0 +1,1 @@
+checkpoint_id,timestamp,study_id,checkpoint_code,gate_id,reviewer_id,package_trust_state,changes_since_last_checkpoint,evidence_added,evidence_removed_or_quarantined,open_assumptions,open_uncertainty,sidecar_blockers,prohibited_claims,decision_now,decision_not_yet,next_trust_action,release_impact,status,notes

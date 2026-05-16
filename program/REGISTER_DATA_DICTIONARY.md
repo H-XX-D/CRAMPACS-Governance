@@ -76,6 +76,7 @@ Registers must be reviewed:
 | `decision_log.csv` | requested decision, evidence tier, conditions, prohibited claims, and approval record | final release decision exists and references the decision memo |
 | `risk_register.csv` | active and residual risks | release-impacting risks have owners and disposition |
 | `training_matrix.csv` | role training and competency | required roles have current competency evidence |
+| `trust_debt_register.csv` | unresolved trust gaps, affected artifacts, release impact, owners, due dates, and closure conditions | all release-impacting trust debt closed, demoted, or accepted as residual risk |
 
 ## 6. Field Rules
 
@@ -88,3 +89,7 @@ Registers must be reviewed:
 `evidence_sha256` is required for static package artifacts and may be marked `not_applicable` only for live restricted systems where a pointer, access log, or snapshot hash is used instead.
 
 `reopen_flag` is `yes` when a closed CAPA must be reopened due to recurrence, failed effectiveness check, or underestimated impact.
+
+`permitted_reliance` must describe the exact decision or use the artifact can support.
+
+`prohibited_reliance` must describe the claims or decisions the artifact cannot support.

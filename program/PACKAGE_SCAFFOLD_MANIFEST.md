@@ -24,6 +24,7 @@ The scaffold is the starting structure for an uppercase `CRAMPACS-*` full assura
 | `07_reproducibility` | checksums, environment, run instructions, clean run |
 | `08_assurance_case` | claims, rebuttals, residual risk |
 | `09_review_and_release` | gate reviews, audit, decision memo, release signoff |
+| `10_trust_maintenance` | build ledger, checkpoint reviews, assumptions, claim trace, trust debt |
 | `registers` | package-level governance registers |
 
 ## 3. Sidecar Rule
@@ -32,6 +33,7 @@ The full sidecar checks:
 
 - required binder presence
 - required program records
+- trust-maintenance records
 - required scientific data contracts
 - control evidence records
 - gate review records

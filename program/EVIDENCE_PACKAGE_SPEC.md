@@ -20,6 +20,7 @@ CRAMPACS_<domain>_<study_id>/
   07_reproducibility/
   08_assurance_case/
   09_review_and_release/
+  10_trust_maintenance/
   registers/
 ```
 
@@ -128,6 +129,18 @@ Required:
 - claim-language approval
 - decision memo
 
+### Binder 10: Trust Maintenance
+
+Required:
+
+- build ledger
+- checkpoint reviews
+- assumption and uncertainty log
+- claim trace matrix
+- trust debt register
+- trust status summary
+- open questions
+
 ## 4. Completeness Rule
 
 An evidence package is complete only when:
@@ -153,6 +166,7 @@ The scaffold tool creates the minimum file structure. Teams may add files, but t
 | `07_reproducibility` | `checksum_manifest.csv`, `environment_record.md`, `run_instructions.md`, `clean_run_report.md` |
 | `08_assurance_case` | `assurance_case.md`, `assurance_case_register.csv`, `risk_register.csv` |
 | `09_review_and_release` | `gate_review_record.csv`, `audit_report.md`, `decision_memo.md`, `claim_language_approval.md`, `release_signoff.md` |
+| `10_trust_maintenance` | `build_ledger.csv`, `checkpoint_reviews.csv`, `assumption_uncertainty_log.csv`, `claim_trace_matrix.csv`, `trust_debt_register.csv`, `trust_status_summary.md`, `open_questions.md` |
 | `registers` | document, control evidence, gate review, assurance case, CAPA, decision, risk, and training registers |
 
 ## 6. Sidecar Expectation

@@ -246,15 +246,21 @@ Purpose:
 - Keep package metrics as the package comes together.
 - Flag missing controls before release.
 - Support preflight-to-full upgrade decisions.
+- Evaluate package checks, gate prerequisites, leak surfaces, and quarantine state when operated through the CLI.
 
 Documents and tools:
 
 - `tools/crampacs_sidecar.py`
+- `tools/crampacs_cli.py`
+- `tools/CRAMPACS_CLI_AI_OPERATOR_GUIDE.md`
 
 Output:
 
 - `crampacs_sidecar_metrics.json`
 - `crampacs_sidecar_metrics.md`
+- `ai_controls/gate_status.json`
+- `ai_controls/term_prereq_ledger.csv`
+- `ai_controls/leak_scan_status.json`
 - Package manifest with hashes.
 - Readiness score.
 - Blocker list.
@@ -291,7 +297,41 @@ Output:
 - External review.
 - Assurance claim register.
 
-### Layer 10: Regulatory and Accreditation Layer
+### Layer 10: Trust Maintenance Layer
+
+Purpose:
+
+- Keep trust visible while a package is being built.
+- Track working truth, release truth, trust debt, claim trace, gate prerequisites, leak findings, and quarantine state.
+- Prevent silent promotion of unchecked artifacts.
+
+Documents:
+
+- `program/TRUST_MAINTENANCE_PROTOCOL.md`
+- `program/TRUST_CHECKPOINT_MAP.md`
+- `program/TRUST_POSITIONING_AND_RELIANCE_LEVELS.md`
+- `program/TRUST_STATUS_SUMMARY_TEMPLATE.md`
+- `program/AI_TRUSTED_USE_GATE_DAG_AND_QUARANTINE_POLICY.md`
+- `templates/build_ledger.csv`
+- `templates/checkpoint_reviews.csv`
+- `templates/assumption_uncertainty_log.csv`
+- `templates/claim_trace_matrix.csv`
+- `templates/trust_debt_register.csv`
+- `printouts/trust_checkpoint_printout.md`
+- `printouts/trust_positioning_printout.md`
+
+Output:
+
+- Build ledger.
+- Checkpoint reviews.
+- Assumption and uncertainty log.
+- Claim trace matrix.
+- Trust debt register.
+- Trust status summary.
+- Gate prerequisite accounting.
+- Quarantine record when needed.
+
+### Layer 11: Regulatory and Accreditation Layer
 
 Purpose:
 
@@ -325,7 +365,7 @@ Output:
 - Audit-ready decision support when paired with applicable domain controls.
 - Not automatic compliance.
 
-### Layer 11: Platform Layer
+### Layer 12: Platform Layer
 
 Purpose:
 
@@ -343,6 +383,8 @@ Platform modules:
 - Sidecar metrics dashboard.
 - Checksum and reproducibility capsule.
 - Claim-tier approval workflow.
+- DAG gate and term accounting workflow.
+- Leak-watch and quarantine workflow.
 - Preflight-to-full import workflow.
 
 Output:
@@ -357,10 +399,12 @@ The intended path is:
 crampacs-* preflight
   -> gotcha scan
   -> sidecar metrics
+  -> leak scan and gate accounting
   -> escalation decision
   -> preflight import log
   -> CRAMPACS-* full protocol
   -> full data contracts
+  -> trust checkpoints and term/prerequisite ledger
   -> full null/dependence/bias/statistical review
   -> checksum/reproducibility capsule
   -> red-team and domain signoff

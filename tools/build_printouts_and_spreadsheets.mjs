@@ -17,8 +17,9 @@ const layers = [
   ["7", "Checksums", "Cross-unit reproducibility and unit integrity", "checksum policy, reproducibility binder"],
   ["8", "Sidecar metrics", "Package readiness, binder coverage, blockers", "sidecar runner"],
   ["9", "Full SOP", "End-to-end study execution and evidence package assembly", "program SOP, evidence package spec, assurance case, decision memo"],
-  ["10", "Regulatory and deployment", "Safety supervisor review, audit, validation, training, regulated deployment", "supervisor packet, audit procedure, validation plan, training plan, regulated addendum, deployment playbook, 90-day roadmap"],
-  ["11", "Platform", "Software workflow modules", "future product layer"],
+  ["10", "Trust maintenance", "Checkpoint honesty, reliance positioning, trust debt, claim trace", "trust maintenance protocol, trust checkpoint map, trust positioning, trust status summary"],
+  ["11", "Regulatory and deployment", "Safety supervisor review, audit, validation, training, regulated deployment", "supervisor packet, audit procedure, validation plan, training plan, regulated addendum, deployment playbook, 90-day roadmap"],
+  ["12", "Platform", "Software workflow modules", "future product layer"],
 ];
 
 const gates = [
@@ -51,6 +52,12 @@ const controls = [
   ["REL-01", "Evidence tier assignment", "Prevent overclaiming", "evidence tier table"],
   ["REL-02", "Claim language approval", "Prevent unsupported conclusions", "signed report review"],
   ["CAPA-01", "Deviation handling", "Track failures and repairs", "deviation/CAPA log"],
+  ["TRUST-01", "Build ledger", "Track material work while package is being built", "build_ledger.csv"],
+  ["TRUST-02", "Trust checkpoint review", "Prevent silent promotion of unchecked artifacts", "checkpoint_reviews.csv"],
+  ["TRUST-03", "Assumption and uncertainty log", "Prevent assumptions becoming facts", "assumption_uncertainty_log.csv"],
+  ["TRUST-04", "Claim trace matrix", "Tie every claim to evidence, controls, gates, and permitted reliance", "claim_trace_matrix.csv"],
+  ["TRUST-05", "Trust debt register", "Track unresolved trust gaps with owner, due date, and release impact", "trust_debt_register.csv"],
+  ["TRUST-06", "Reliance positioning", "State what the package is trustworthy for and not trustworthy for", "trust status summary, decision memo"],
   ["TRAIN-01", "Role training", "Ensure operators know controls", "training matrix"],
 ];
 
@@ -88,6 +95,7 @@ const packageScaffold = [
   ["07_reproducibility", "checksums, environment, run instructions, clean run", "checksum_manifest.csv; environment_record.md; run_instructions.md; clean_run_report.md"],
   ["08_assurance_case", "claims, rebuttals, residual risk", "assurance_case.md; assurance_case_register.csv; risk_register.csv"],
   ["09_review_and_release", "gate review, audit, decision, release signoff", "gate_review_record.csv; audit_report.md; decision_memo.md; claim_language_approval.md; release_signoff.md"],
+  ["10_trust_maintenance", "build ledger, checkpoints, assumptions, claim trace, trust debt", "build_ledger.csv; checkpoint_reviews.csv; assumption_uncertainty_log.csv; claim_trace_matrix.csv; trust_debt_register.csv; trust_status_summary.md; open_questions.md"],
   ["registers", "package-level governance registers", "document; control; gate; assurance; CAPA; decision; risk; training"],
 ];
 
@@ -100,6 +108,7 @@ const programRegisters = [
   ["decision_log.csv", "authorized decision, tier, conditions, prohibited claims"],
   ["risk_register.csv", "active and residual risks"],
   ["training_matrix.csv", "role training and competency"],
+  ["trust_debt_register.csv", "unresolved trust gaps and release impact"],
 ];
 
 const brandControls = [
@@ -129,6 +138,38 @@ const frameworkPatterns = [
   ["NIST AI RMF", "Framework plus playbook", "Pair principles with teachable actions"],
   ["NASA systems engineering", "Lifecycle reviews", "Use G0-G7 as lifecycle gates"],
   ["FDA quality systems", "Quality model plus regulatory boundary", "Add regulated controls without claiming automatic compliance"],
+];
+
+const trustStates = [
+  ["draft", "work has started but is not checked", "do not rely"],
+  ["unchecked", "artifact exists but no reviewer has accepted it", "do not rely"],
+  ["checked_with_limits", "reviewed, but known limits remain", "rely only within stated limits"],
+  ["accepted", "reviewed and accepted for current gate", "rely within current evidence tier"],
+  ["blocked", "has a defect that prevents promotion or release", "do not promote"],
+  ["superseded", "replaced by a newer artifact", "retain but do not use"],
+  ["quarantined", "retained for traceability but excluded from scoring or release", "do not use as evidence"],
+];
+
+const relianceLevels = [
+  ["idea sketch", "conversation and scoping", "CRAMPACS claim, preflight decision, operational decision"],
+  ["crampacs-* checked", "continue, hold, stop, or full-study escalation", "domain conclusion, full assurance, external claim"],
+  ["CRAMPACS-* scaffold", "organizing work", "evidence reliance or release"],
+  ["CRAMPACS-* gate-accepted", "advancing to the next gate", "release unless G7 is complete"],
+  ["CRAMPACS-* release-ready", "decision support within assigned evidence tier", "proof of causality or regulatory compliance by itself"],
+  ["externally validated", "stronger prioritization and process confidence", "domain proof unless domain-standard confirmation is complete"],
+];
+
+const trustCheckpoints = [
+  ["T0", "package start", "unclear purpose or hidden intended use", "decision owner, intended use, prohibited use"],
+  ["T1", "coordinate proposed", "coordinate drift or tolerance creep", "coordinate, units, tolerance, forbidden changes"],
+  ["T2", "sources drafted", "positive-only evidence", "source roles, null search, exclusions"],
+  ["T3", "rows extracted", "source trace or AI-summary drift", "source links, raw values, extraction confidence"],
+  ["T4", "normalization drafted", "hidden unit conversion", "raw/normalized separation, transform review"],
+  ["T5", "dependence and bias drafted", "duplicate evidence counted independently", "evidence-family map, missing-evidence risk"],
+  ["T6", "statistics planned", "statistic shopping or weak null", "locked statistic, null model, multiplicity plan"],
+  ["T7", "results generated", "local result overclaimed", "global correction, sensitivities, negative controls"],
+  ["T8", "report drafted", "claim exceeds evidence tier", "claim trace matrix, prohibited claims"],
+  ["T9", "release review", "unknown trust state", "trust status summary, sidecar, open CAPA"],
 ];
 
 const supervisorQuestions = [
@@ -269,6 +310,18 @@ function governanceWorkbook() {
     ["Framework", "Pattern", "CRAMPACS adoption"],
     ...frameworkPatterns,
   ]);
+  addSheet(wb, "Trust States", [
+    ["Trust state", "Meaning", "Reliance rule"],
+    ...trustStates,
+  ]);
+  addSheet(wb, "Reliance Levels", [
+    ["Package state", "Trustworthy for", "Not trustworthy for"],
+    ...relianceLevels,
+  ]);
+  addSheet(wb, "Trust Checkpoints", [
+    ["Checkpoint", "Package point", "Main honesty risk", "Minimum review"],
+    ...trustCheckpoints,
+  ]);
   addSheet(wb, "CAPA Log", [
     ["Deviation ID", "Study ID", "Severity", "Affected controls", "Description", "Containment", "Root cause", "Corrective action", "Preventive action", "Owner", "Due date", "Verification", "Effectiveness check date", "Effectiveness result", "Approver", "Status"],
     ["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
@@ -321,10 +374,12 @@ function domainWorkbook(domain) {
     ["source_id", "citation_or_label", "url_or_path", "source_type", "domain", "source_role", "publication_or_snapshot_date", "unit_or_site", "known_dependence", "screening_status", "notes"],
     ["", "", "", "", domain.slug, "positive_or_anomaly", "", "", "", "", ""],
     ["", "", "", "", domain.slug, "null_or_non_event", "", "", "", "", ""],
+    ...Array.from({ length: 18 }, () => ["", "", "", "", domain.slug, "", "", "", "", "", ""]),
   ]);
   addSheet(wb, "Preflight Rows", [
     ["row_id", "source_id", "coordinate_label", "coordinate_value", "coordinate_units", "row_type", "result_direction", "uncertainty_status", "extraction_confidence", "dependence_concern", "bias_concern", "null_or_non_event_flag", "notes"],
     ["", "", "", "", "", "", "", "", "", "", "", "", ""],
+    ...Array.from({ length: 19 }, () => ["", "", "", "", "", "", "", "", "", "", "", "", ""]),
   ]);
   addSheet(wb, "Gotchas", [
     ["Gotcha", "Status", "Notes"],
@@ -343,6 +398,19 @@ function domainWorkbook(domain) {
   addSheet(wb, "Import Log", [
     ["full_study_id", "preflight_id", "artifact_path", "artifact_sha256", "imported_as", "reviewer_id", "review_disposition", "decision_timestamp", "notes"],
     ["", "", "", "", "", "", "", "", ""],
+  ]);
+  addSheet(wb, "Trust Checkpoints", [
+    ["Checkpoint", "Package point", "Main honesty risk", "Decision", "Reviewer", "Notes"],
+    ...trustCheckpoints.map((t) => [t[0], t[1], t[2], "", "", ""]),
+  ]);
+  addSheet(wb, "Reliance Positioning", [
+    ["Field", "Entry"],
+    ["Trustworthy for", ""],
+    ["Not trustworthy for", ""],
+    ["Current assurance route", domain.full],
+    ["Current trust state", ""],
+    ["Current evidence tier", ""],
+    ["Prohibited claims", ""],
   ]);
   return wb;
 }
@@ -395,6 +463,18 @@ ${mdTable(["Track", "Audience", "Duration", "Output"], trainingPaths)}
 ## Framework Patterns
 
 ${mdTable(["Framework", "Pattern", "CRAMPACS adoption"], frameworkPatterns)}
+
+## Trust States
+
+${mdTable(["Trust state", "Meaning", "Reliance rule"], trustStates)}
+
+## Reliance Levels
+
+${mdTable(["Package state", "Trustworthy for", "Not trustworthy for"], relianceLevels)}
+
+## Trust Checkpoints
+
+${mdTable(["Checkpoint", "Package point", "Main honesty risk", "Minimum review"], trustCheckpoints)}
 `
   );
 
@@ -416,6 +496,74 @@ ${mdTable(
 # CRAMPACS Governance Gotchas Printout
 
 ${mdTable(["Gotcha", "Symptom", "Fast sanity check"], gotchas)}
+`
+  );
+
+  await writeText(
+    path.join(printoutDir, "trust_checkpoint_printout.md"),
+    `
+# CRAMPACS Trust Checkpoint Printout
+
+## Required Positioning Sentence
+
+This package is trustworthy for:  
+This package is not trustworthy for:  
+Current assurance route:  
+Current trust state:  
+Current evidence tier:  
+
+## Checkpoint Questions
+
+| Question | Answer |
+|---|---|
+| What changed since the last checkpoint? |  |
+| What evidence was added, removed, revised, or quarantined? |  |
+| What is still assumed? |  |
+| What is still unverified? |  |
+| What sidecar blockers exist? |  |
+| What claim language is currently prohibited? |  |
+| What decision can be made now? |  |
+| What decision cannot be made yet? |  |
+| What is the next trust-building action? |  |
+
+## Checkpoint Map
+
+${mdTable(["Checkpoint", "Package point", "Main honesty risk", "Minimum review"], trustCheckpoints)}
+
+## Signoff
+
+| Role | Name | Decision | Date |
+|---|---|---|---|
+| Reviewer |  |  |  |
+| Decision owner |  |  |  |
+`
+  );
+
+  await writeText(
+    path.join(printoutDir, "trust_positioning_printout.md"),
+    `
+# CRAMPACS Trust Positioning Printout
+
+Never say a package is simply "trustworthy." State what it is trustworthy for and what it is not trustworthy for.
+
+## Reliance Levels
+
+${mdTable(["Package state", "Trustworthy for", "Not trustworthy for"], relianceLevels)}
+
+## Trust States
+
+${mdTable(["Trust state", "Meaning", "Reliance rule"], trustStates)}
+
+## Required Positioning
+
+| Field | Entry |
+|---|---|
+| Trustworthy for |  |
+| Not trustworthy for |  |
+| Current assurance route |  |
+| Current trust state |  |
+| Current evidence tier |  |
+| Prohibited claims |  |
 `
   );
 

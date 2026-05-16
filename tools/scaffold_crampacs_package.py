@@ -23,6 +23,7 @@ BINDERS = [
     "07_reproducibility",
     "08_assurance_case",
     "09_review_and_release",
+    "10_trust_maintenance",
     "registers",
 ]
 
@@ -42,6 +43,12 @@ TEMPLATE_COPIES = [
     ("program/ASSURANCE_CASE_FRAMEWORK.md", "08_assurance_case/assurance_case.md"),
     ("program/DECISION_MEMO_TEMPLATE.md", "09_review_and_release/decision_memo.md"),
     ("program/AUDIT_REPORT_TEMPLATE.md", "09_review_and_release/audit_report.md"),
+    ("templates/build_ledger.csv", "10_trust_maintenance/build_ledger.csv"),
+    ("templates/checkpoint_reviews.csv", "10_trust_maintenance/checkpoint_reviews.csv"),
+    ("templates/assumption_uncertainty_log.csv", "10_trust_maintenance/assumption_uncertainty_log.csv"),
+    ("templates/claim_trace_matrix.csv", "10_trust_maintenance/claim_trace_matrix.csv"),
+    ("templates/trust_debt_register.csv", "10_trust_maintenance/trust_debt_register.csv"),
+    ("program/TRUST_STATUS_SUMMARY_TEMPLATE.md", "10_trust_maintenance/trust_status_summary.md"),
 ]
 
 REGISTER_COPIES = [
@@ -53,6 +60,7 @@ REGISTER_COPIES = [
     "gate_review_record.csv",
     "risk_register.csv",
     "training_matrix.csv",
+    "trust_debt_register.csv",
 ]
 
 
@@ -108,6 +116,12 @@ Run `python tools/crampacs_sidecar.py {out_dir} --level full` from the repositor
 ## Binder Rule
 
 All required binders must be complete, all applicable controls must have evidence, and all Critical findings must be closed before release.
+
+## Trust Positioning Rule
+
+This package is not simply "trustworthy." It is trustworthy only for the reliance stated in the decision memo and trust status summary.
+
+Until `10_trust_maintenance/trust_status_summary.md` is reviewed, this package is not release-ready.
 """,
         force,
     )
@@ -289,6 +303,18 @@ Map each proposed claim to its evidence tier, required caveat, prohibited overcl
 # Release Signoff
 
 Release is prohibited until gate review, control evidence review, reproducibility review, claim-language approval, and decision memo are complete.
+""",
+        force,
+    )
+    write(
+        out_dir / "10_trust_maintenance" / "open_questions.md",
+        """
+# Open Questions
+
+Track unresolved questions that could change trust state, evidence tier, decision scope, or prohibited reliance.
+
+| question_id | question | owner | decision impact | due date | status |
+|---|---|---|---|---|---|
 """,
         force,
     )

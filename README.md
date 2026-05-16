@@ -13,6 +13,7 @@ CRAMPACS is not a discovery shortcut. It is a disciplined evidence-synthesis fra
 | Understand the brand and claim boundary | `brand/CRAMPACS_BRAND_SYSTEM.md` |
 | Teach the method to a team | `training/CRAMPACS_TRAINING_GUIDE.md` |
 | Run the assurance program | `program/README.md` |
+| Create isolated AI-operable packages | `tools/crampacs_cli.py` |
 | Start a full evidence package | `tools/scaffold_crampacs_package.py` |
 | Run package readiness checks | `tools/crampacs_sidecar.py` |
 | Adapt CRAMPACS to a field | `domain_packs/` and `domain_overlays/` |
@@ -58,6 +59,8 @@ Start here if you are deploying CRAMPACS inside an organization.
   Role competency expectations and a 90-day operational rollout plan.
 - `program/POLISH_ROUNDS_2026-05-16.md`
   Ten-round aesthetic, teaching, and system polish log.
+- `program/AI_TRUSTED_USE_GATE_DAG_AND_QUARANTINE_POLICY.md`
+  AI operator rules, package/source boundary, gate DAGs, term/prerequisite accounting, leak watches, and quarantine protocol.
 
 ## Brand and Training
 
@@ -135,6 +138,31 @@ The `printouts/` directory contains practitioner-facing checklists:
 - full assurance gate printout
 - preflight-to-full composition printout
 - field printouts for medicine, genomics, climate, materials, engineering, finance, cybersecurity, astronomy, and physics
+
+## End-To-End CLI
+
+Use the CLI when an AI agent or practitioner needs to run a reusable CRAMPACS
+system without contaminating the sanitized source kit.
+
+```bash
+python tools/crampacs_cli.py init --level preflight --domain phy --study-id STUDY001
+python tools/crampacs_cli.py check ./crampacs_projects/<package>
+python tools/crampacs_cli.py leak-scan ./crampacs_projects/<package>
+python tools/crampacs_cli.py gate ./crampacs_projects/<package>
+```
+
+The CLI writes package-local AI instructions, gate DAG status, prerequisite
+accounting, leak-watch reports, quarantine logs, sidecar metrics, and checksums.
+
+To compose a lowercase preflight into an uppercase full package without changing
+the original preflight:
+
+```bash
+python tools/crampacs_cli.py promote <preflight_package> --study-id STUDY001-FULL
+```
+
+Package outputs created under `crampacs_projects/` are ignored by git so the
+source kit remains reusable.
 
 ## Sidecar Runner
 

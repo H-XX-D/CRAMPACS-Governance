@@ -79,6 +79,7 @@ FULL_BINDERS = [
     "07_reproducibility",
     "08_assurance_case",
     "09_review_and_release",
+    "10_trust_maintenance",
     "registers",
 ]
 
@@ -116,6 +117,13 @@ FULL_REQUIRED_RECORDS = [
     "09_review_and_release/gate_review_record.csv",
     "09_review_and_release/claim_language_approval.md",
     "09_review_and_release/release_signoff.md",
+    "10_trust_maintenance/build_ledger.csv",
+    "10_trust_maintenance/checkpoint_reviews.csv",
+    "10_trust_maintenance/assumption_uncertainty_log.csv",
+    "10_trust_maintenance/claim_trace_matrix.csv",
+    "10_trust_maintenance/trust_debt_register.csv",
+    "10_trust_maintenance/trust_status_summary.md",
+    "10_trust_maintenance/open_questions.md",
     "registers/assurance_case_register.csv",
     "registers/control_evidence_register.csv",
     "registers/deviation_capa_log.csv",
@@ -124,6 +132,7 @@ FULL_REQUIRED_RECORDS = [
     "registers/gate_review_record.csv",
     "registers/risk_register.csv",
     "registers/training_matrix.csv",
+    "registers/trust_debt_register.csv",
 ]
 
 ALIASES = {
@@ -327,6 +336,10 @@ def score_full(root: Path) -> dict:
     control_records = load_csv_rows(root / "registers" / "control_evidence_register.csv")
     gate_records = load_csv_rows(root / "registers" / "gate_review_record.csv")
     decision_records = load_csv_rows(root / "registers" / "decision_log.csv")
+    build_ledger_records = load_csv_rows(root / "10_trust_maintenance" / "build_ledger.csv")
+    checkpoint_records = load_csv_rows(root / "10_trust_maintenance" / "checkpoint_reviews.csv")
+    claim_trace_records = load_csv_rows(root / "10_trust_maintenance" / "claim_trace_matrix.csv")
+    trust_debt_records = load_csv_rows(root / "10_trust_maintenance" / "trust_debt_register.csv")
 
     required_present = sum(1 for path in paths.values() if path and path.exists())
     binder_present = sum(1 for binder in FULL_BINDERS if (root / binder).is_dir())
@@ -356,6 +369,14 @@ def score_full(root: Path) -> dict:
         blockers.append("no_gate_review_records")
     if not decision_records:
         blockers.append("no_decision_records")
+    if not build_ledger_records:
+        blockers.append("no_build_ledger_records")
+    if not checkpoint_records:
+        blockers.append("no_trust_checkpoint_records")
+    if not claim_trace_records:
+        blockers.append("no_claim_trace_records")
+    if not (root / "10_trust_maintenance" / "trust_status_summary.md").exists():
+        blockers.append("missing_trust_status_summary")
     if raw_rows and null_count == 0:
         blockers.append("no_null_or_non_event_rows")
     if candidates and candidate_lock_coverage < 1:
@@ -415,6 +436,10 @@ def score_full(root: Path) -> dict:
         "control_evidence_record_count": len(control_records),
         "gate_review_record_count": len(gate_records),
         "decision_record_count": len(decision_records),
+        "build_ledger_record_count": len(build_ledger_records),
+        "trust_checkpoint_record_count": len(checkpoint_records),
+        "claim_trace_record_count": len(claim_trace_records),
+        "trust_debt_record_count": len(trust_debt_records),
         "positive_like_rows": positive_count,
         "null_or_non_event_rows": null_count,
         "independence_coverage": round(independence_coverage, 3),

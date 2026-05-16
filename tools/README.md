@@ -1,5 +1,25 @@
 # CRAMPACS Tools
 
+## End-To-End CLI
+
+`crampacs_cli.py` is the primary operating surface for AI-assisted package work.
+It creates isolated project packages, keeps the source kit sanitized, runs
+sidecar checks, evaluates DAG gates, writes term/prerequisite accounting, scans
+leak surfaces, and records quarantine state.
+
+Examples:
+
+```bash
+python3 tools/crampacs_cli.py domains
+python3 tools/crampacs_cli.py init --level preflight --domain phy --study-id STUDY001
+python3 tools/crampacs_cli.py check ./crampacs_projects/<package>
+python3 tools/crampacs_cli.py leak-scan ./crampacs_projects/<package>
+python3 tools/crampacs_cli.py gate ./crampacs_projects/<package>
+python3 tools/crampacs_cli.py promote ./crampacs_projects/<preflight_package> --study-id STUDY001-FULL
+```
+
+See `CRAMPACS_CLI_AI_OPERATOR_GUIDE.md` for the AI operator loop.
+
 ## Portable Tool
 
 `crampacs_sidecar.py` uses only the Python standard library. It checks preflight or full-study package completeness, writes package metrics, and produces a hash manifest.
@@ -24,4 +44,3 @@ Use explicit `--level preflight` or `--level full` for governance audits. Auto-d
 The JavaScript workbook tools require the Codex bundled spreadsheet runtime and `@oai/artifact-tool`. In this workspace, create or reuse a local `node_modules` symlink to the bundled package directory before running them.
 
 The generated XLSX files are committed release artifacts. The local `node_modules` symlink is intentionally ignored.
-
