@@ -1,8 +1,11 @@
 .DS_Store
 *.tmp
 *.log
+*.pyc
 cramps_sidecar_metrics.json
 cramps_sidecar_metrics.md
 __pycache__/
+.pytest_cache/
+.mypy_cache/
 node_modules
 cramps_projects/

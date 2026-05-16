@@ -167,3 +167,20 @@ Outcome:
 
 - package is ready for commit and push after the verification run.
 
+## Post-Build Round 3: Operational acceptance hardening
+
+Focus:
+
+- add a reviewer route for the worked example
+- make acceptance criteria explicit for source-kit releases, preflights, full packages, and examples
+- document the one-agent preflight boundary and full-system agent handoff point
+
+Artifacts:
+
+- `program/RELEASE_ACCEPTANCE_CHECKLIST.md`
+- `program/ROUND_3_HARDENING_AUDIT_2026-05-16.md`
+- `worked_examples/preflight/cramps-phy-synthetic-coordinate-recurrence/REVIEWER_WALKTHROUGH.md`
+
+Outcome:
+
+- a supervisor or AI operator can now inspect whether the source kit, worked example, or package is in a usable state without inferring acceptance rules from scattered documents.

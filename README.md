@@ -15,6 +15,7 @@ The method is useful when a team thinks something may be hiding in noisy records
 | Understand the brand and claim boundary | `brand/CRAMPS_BRAND_SYSTEM.md` |
 | Teach the method to a team | `training/CRAMPS_TRAINING_GUIDE.md` |
 | Run the assurance program | `program/README.md` |
+| Check release readiness | `program/RELEASE_ACCEPTANCE_CHECKLIST.md` |
 | Create isolated AI-operable packages | `tools/cramps_cli.py` |
 | Start a full evidence package | `tools/scaffold_cramps_package.py` |
 | Run package readiness checks | `tools/cramps_sidecar.py` |
@@ -64,6 +65,10 @@ Start here if you are deploying CRAMPS inside an organization.
   Ten-round aesthetic, teaching, and system polish log.
 - `program/AI_TRUSTED_USE_GATE_DAG_AND_QUARANTINE_POLICY.md`
   AI operator rules, package/source boundary, gate DAGs, term/prerequisite accounting, leak watches, and quarantine protocol.
+- `program/RELEASE_ACCEPTANCE_CHECKLIST.md`
+  Short acceptance checks for source-kit updates, lowercase preflights, uppercase full packages, and worked examples.
+- `program/ROUND_3_HARDENING_AUDIT_2026-05-16.md`
+  Round 3 audit note covering worked-example review, acceptance checks, and remaining boundaries.
 
 ## Brand and Training
 

@@ -9,6 +9,8 @@ Use them to see how a small `cramps-*` preflight is supposed to look before a te
 - `preflight/cramps-phy-synthetic-coordinate-recurrence/`
   A one-agent lowercase preflight for a synthetic physics-style coordinate recurrence question.
 
+Start with `REVIEWER_WALKTHROUGH.md` inside the example if you are auditing or teaching it.
+
 ## Rules
 
 - Worked examples stay separate from `templates/` so the reusable source kit remains clean.
