@@ -17,3 +17,21 @@ Rules:
 - Leave unknown values blank rather than inventing placeholders.
 - Keep all IDs stable after the protocol lock.
 
+## Lowercase Preflight Templates
+
+Use these for a one to two day `crampacs-*` preflight:
+
+- `preflight_scope.md`
+- `preflight_sources.csv`
+- `preflight_rows.csv`
+- `preflight_gotchas.md`
+- `preflight_decision.md`
+- `preflight_manifest.csv`
+
+If the preflight escalates, use `preflight_import_log.csv` in the uppercase `CRAMPACS-*` package to record which preflight artifacts were accepted, reworked, rejected, or quarantined.
+
+## Uppercase Full-System Templates
+
+Use the remaining CSV templates and `CRAMPACS_PROTOCOL_TEMPLATE.md` for a full `CRAMPACS-*` study.
+
+Lowercase templates can seed uppercase templates, but they do not carry full assurance until reviewed under the full protocol.

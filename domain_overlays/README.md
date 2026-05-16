@@ -21,6 +21,7 @@ Domain overlays:
 | CRAMPACS-FIN | CRAMPACS-F | Finance, fraud, and risk | `CRAMPACS_FIN_FINANCE_OVERLAY.md` |
 | CRAMPACS-CYB |  | Cybersecurity | `CRAMPACS_CYB_CYBERSECURITY_OVERLAY.md` |
 | CRAMPACS-AST |  | Astronomy and astrophysics | `CRAMPACS_AST_ASTRONOMY_OVERLAY.md` |
+| CRAMPACS-PHY |  | Physics and physical anomaly catalogs | `CRAMPACS_PHY_PHYSICS_OVERLAY.md` |
 
 Each overlay defines:
 
@@ -34,3 +35,6 @@ Each overlay defines:
 - Standards anchors.
 - Claim-language limits.
 
+For practitioner-ready field packets, use `../domain_packs/<domain>/`.
+
+Lowercase `crampacs-*` packets are preflight only. Uppercase `CRAMPACS-*` addenda are for full assurance studies.
