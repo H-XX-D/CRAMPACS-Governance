@@ -487,3 +487,20 @@ Artifacts:
 Outcome:
 
 - maintainers now test that sensitive-data leakage cannot pass the package hygiene path as a quiet warning.
+
+## Post-Build Round 20: Claim-overreach watch trap
+
+Focus:
+
+- prove overclaim language is surfaced even when it is not a credential leak
+- add a self-test negative control that injects proof/discovery language into a copied package export
+- verify `leak-scan` records a `proof_claim` watch finding without requiring quarantine
+
+Artifacts:
+
+- `tools/cramps_cli.py` `claim_overreach_watch_trap` self-test check
+- updated release checklist and tools README
+
+Outcome:
+
+- maintainers now test that CRAMPS claim boundaries are actively watched instead of relying only on reviewer memory.

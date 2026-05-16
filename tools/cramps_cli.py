@@ -3362,6 +3362,36 @@ def run_self_test(strict_source: bool, keep_temp: bool) -> dict:
             "leak-scan --fail-on-quarantine leak-preflight",
         )
 
+        claim_package = temp_path / "claim-overreach-preflight"
+        shutil.copytree(ROOT / "worked_examples" / "preflight" / "cramps-phy-synthetic-coordinate-recurrence", claim_package)
+        write_text(
+            claim_package / "exports" / "selftest_claim_overreach.md",
+            "The CRAMPS preflight proves a confirmed discovery at the candidate coordinate.",
+        )
+        claim_result = run_cli_subprocess(["leak-scan", str(claim_package)])
+        claim_status = load_json_artifact(claim_package / "ai_controls" / "leak_scan_status.json") or {}
+        claim_patterns = {finding.get("pattern_id", "") for finding in claim_status.get("findings", [])}
+        claim_trap_detected = (
+            claim_result.returncode == 0
+            and claim_status.get("open_watch_findings", 0) > 0
+            and claim_status.get("quarantine_required") is False
+            and "proof_claim" in claim_patterns
+        )
+        add_self_test_check(
+            checks,
+            "claim_overreach_watch_trap",
+            "pass" if claim_trap_detected else "fail",
+            "leak scan flagged proof/discovery language as a watch finding"
+            if claim_trap_detected
+            else (
+                "expected proof_claim watch finding without quarantine; "
+                f"got exit={claim_result.returncode}, "
+                f"watch={claim_status.get('open_watch_findings', 'missing')}, "
+                f"quarantine={claim_status.get('quarantine_required', 'missing')}"
+            ),
+            "leak-scan claim-overreach-preflight",
+        )
+
         sequence = [
             ("check", ["check", str(package), "--level", "preflight"]),
             ("agent_audit", ["agent-audit", str(package), "--level", "preflight"]),
