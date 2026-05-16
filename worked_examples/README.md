@@ -17,6 +17,7 @@ Use `RUN_RECORD.md` for source-safe verification commands and `TEACHING_SCRIPT.m
 - Worked examples stay separate from `templates/` so the reusable source kit remains clean.
 - Copy a worked example to `/tmp`, `cramps_projects/`, or another external package directory before running mutating CLI commands such as `check`, `gate`, `contract-audit package`, `acceptance-audit`, `review-packet`, or `release-check package`.
 - Runtime outputs such as sidecar metrics, gate status, acceptance reports, review packets, and release-check exports must stay out of the source example.
+- `preflight_manifest.csv` records the expected SHA-256 for each custody artifact. `source-audit` fails if a listed artifact is missing, escapes the example folder, or no longer matches its recorded hash.
 - Preflight examples use one named operator only.
 - Full-system agent deployment begins only after the preflight decision recommends escalation and a separate uppercase package is created.
 - Synthetic examples must never be copied into a real evidence package without changing IDs, dates, sources, and claim boundaries.

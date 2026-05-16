@@ -26,6 +26,20 @@ Expected:
 - recommendation: `candidate_for_CRAMPS_upgrade`
 - blockers: none
 
+## Source-Kit Custody Check
+
+```bash
+python tools/cramps_cli.py source-audit --fail-on-warning
+```
+
+Expected:
+
+- `worked_example_runtime_outputs`: `pass`
+- `worked_example_manifest_hashes`: `pass`
+- no blockers or warnings after the source tree is committed cleanly
+
+If any listed artifact is edited, update `preflight_manifest.csv` with the new SHA-256 as part of the same reviewed change. Do not leave the manifest stale.
+
 ## Isolated Release Check
 
 ```bash
@@ -80,4 +94,3 @@ Expected:
 If the isolated release check passes, the correct reviewer decision is:
 
 > Accept this as a source-safe worked preflight example. It can teach escalation mechanics, contract checks, and claim boundaries. It cannot be reused as evidence.
-

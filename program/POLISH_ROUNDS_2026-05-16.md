@@ -402,3 +402,20 @@ Artifacts:
 Outcome:
 
 - the worked example now teaches custody, contract audit, source-safe verification, and escalation boundaries without carrying stale generated output in the reusable source tree.
+
+## Post-Build Round 15: Worked example manifest hardening
+
+Focus:
+
+- make worked-example custody hashes executable instead of decorative
+- fail the source audit if a worked-example manifest path is unsafe, missing, or stale
+- document how maintainers update custody hashes after reviewed artifact edits
+
+Artifacts:
+
+- `tools/cramps_cli.py` `worked_example_manifest_hashes` source-audit check
+- updated worked-example README and run record
+
+Outcome:
+
+- a reviewer can now trust that the worked example's manifest represents the files actually present in the repository at audit time.

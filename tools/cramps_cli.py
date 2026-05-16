@@ -2363,6 +2363,49 @@ def worked_example_runtime_outputs() -> list[str]:
     return contamination
 
 
+def worked_example_manifest_hash_issues() -> list[str]:
+    base = ROOT / "worked_examples"
+    if not base.exists():
+        return []
+    expected_header = template_header("preflight_manifest.csv")
+    issues = []
+    for manifest in sorted(base.rglob("preflight_manifest.csv")):
+        manifest_rel = relative_artifact(ROOT, manifest)
+        header = read_csv_header(manifest)
+        if header != expected_header:
+            issues.append(f"{manifest_rel} header mismatch")
+            continue
+        rows = read_csv_rows(manifest)
+        if not rows:
+            issues.append(f"{manifest_rel} has no manifest rows")
+            continue
+        manifest_dir = manifest.parent.resolve()
+        for index, row in enumerate(rows, start=2):
+            artifact_rel = (row.get("artifact_path") or "").strip()
+            expected_digest = (row.get("sha256") or "").strip().lower()
+            row_label = f"{manifest_rel}:line {index}"
+            if not artifact_rel:
+                issues.append(f"{row_label} missing artifact_path")
+                continue
+            if Path(artifact_rel).is_absolute() or ".." in Path(artifact_rel).parts:
+                issues.append(f"{row_label} unsafe artifact_path {artifact_rel}")
+                continue
+            artifact = (manifest.parent / artifact_rel).resolve()
+            if not is_relative_to(artifact, manifest_dir):
+                issues.append(f"{row_label} artifact escapes worked example: {artifact_rel}")
+                continue
+            if not artifact.exists() or not artifact.is_file():
+                issues.append(f"{row_label} missing artifact {artifact_rel}")
+                continue
+            if not re.fullmatch(r"[0-9a-f]{64}", expected_digest):
+                issues.append(f"{row_label} invalid sha256 for {artifact_rel}")
+                continue
+            actual_digest = sha256_file(artifact)
+            if actual_digest != expected_digest:
+                issues.append(f"{row_label} sha256 mismatch for {artifact_rel}")
+    return issues
+
+
 def missing_domain_artifacts(domains: list[dict]) -> list[str]:
     missing = []
     for domain in domains:
@@ -2486,6 +2529,18 @@ def source_audit_status() -> dict:
         "worked examples contain no committed runtime outputs"
         if not worked_runtime
         else f"worked example runtime artifacts found: {', '.join(worked_runtime[:10])}",
+    )
+
+    manifest_issues = worked_example_manifest_hash_issues()
+    add_source_audit_check(
+        checks,
+        "worked_example_manifest_hashes",
+        "pass" if not manifest_issues else "fail",
+        "blocker",
+        "worked_examples/**/preflight_manifest.csv",
+        "worked-example manifest checksums match current artifacts"
+        if not manifest_issues
+        else f"worked-example manifest issues: {', '.join(manifest_issues[:10])}",
     )
 
     missing_domains = missing_domain_artifacts(domains)
