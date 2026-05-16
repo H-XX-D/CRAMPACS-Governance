@@ -23,6 +23,7 @@ Use before pushing a CRAMPS source-kit update.
 | CLI health | source kit reports no doctor issues | `python tools/cramps_cli.py doctor` |
 | Source audit | source kit has no release blockers | `python tools/cramps_cli.py source-audit` |
 | Self-test | temporary package path clears and stale-change trap blocks | `python tools/cramps_cli.py self-test` |
+| Source snapshot | source kit handoff manifest and ZIP are created from a clean source | `python tools/cramps_cli.py source-snapshot` |
 | Agent audit | fresh package agent controls audit without blockers | `python tools/cramps_cli.py agent-audit <package>` |
 | Acceptance audit | package acceptance audit has no blockers and no wrong-level or stale-gate artifacts | `python tools/cramps_cli.py acceptance-audit <package>` |
 | Review packet | package reviewer handoff has no blockers and no post-acceptance material changes | `python tools/cramps_cli.py review-packet <package>` |
@@ -122,6 +123,7 @@ python -m py_compile tools/cramps_cli.py tools/cramps_sidecar.py tools/scaffold_
 python tools/cramps_cli.py doctor
 python tools/cramps_cli.py source-audit
 python tools/cramps_cli.py self-test
+python tools/cramps_cli.py source-snapshot
 node tools/verify_workbooks.mjs
 git diff --check
 ```

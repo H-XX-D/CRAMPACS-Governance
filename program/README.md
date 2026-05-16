@@ -88,6 +88,7 @@ For source-kit handoff, run:
 ```bash
 python tools/cramps_cli.py source-audit
 python tools/cramps_cli.py self-test
+python tools/cramps_cli.py source-snapshot
 ```
 
 Use the lower-level scaffold tool only when you need the full evidence-binder

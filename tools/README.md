@@ -14,6 +14,7 @@ Examples:
 python3 tools/cramps_cli.py domains
 python3 tools/cramps_cli.py source-audit
 python3 tools/cramps_cli.py self-test
+python3 tools/cramps_cli.py source-snapshot
 python3 tools/cramps_cli.py init --level preflight --domain phy --study-id STUDY001
 python3 tools/cramps_cli.py check ./cramps_projects/<package>
 python3 tools/cramps_cli.py agent-audit ./cramps_projects/<package>

@@ -166,6 +166,14 @@ REVIEW_PACKET_MANIFEST_FIELDS = [
     "notes",
 ]
 
+SOURCE_SNAPSHOT_MANIFEST_FIELDS = [
+    "artifact_path",
+    "bytes",
+    "sha256",
+    "modified_utc",
+    "included_in_zip",
+]
+
 SOURCE_AUDIT_SKIP_DIRS = {
     ".git",
     "__pycache__",
@@ -173,6 +181,7 @@ SOURCE_AUDIT_SKIP_DIRS = {
     ".mypy_cache",
     "node_modules",
     "cramps_projects",
+    "dist",
 }
 
 SOURCE_AUDIT_SKIP_SUFFIXES = {
@@ -1897,7 +1906,7 @@ def source_audit_status() -> dict:
     domains = load_domains()
     gitignore = ROOT / ".gitignore"
     gitignore_text = gitignore.read_text(encoding="utf-8") if gitignore.exists() else ""
-    required_gitignore = [".DS_Store", "cramps_projects/", "node_modules", "__pycache__/"]
+    required_gitignore = [".DS_Store", "cramps_projects/", "dist/", "node_modules", "__pycache__/"]
     missing_gitignore = [item for item in required_gitignore if item not in gitignore_text]
     add_source_audit_check(
         checks,
@@ -2056,6 +2065,197 @@ def render_source_audit_report(status: dict) -> str:
     return "\n".join(lines)
 
 
+def default_source_snapshot_dir() -> Path:
+    stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+    commit = git_value("rev-parse", "--short", "HEAD") or "unknown"
+    return ROOT / "dist" / "source_snapshots" / f"{stamp}_{commit}"
+
+
+def source_snapshot_output_dir(out: Path | None, force: bool) -> Path:
+    output = (out or default_source_snapshot_dir()).expanduser().resolve()
+    if output == ROOT:
+        raise SystemExit("Refusing to write source snapshot into the source repository root.")
+    dist_root = (ROOT / "dist").resolve()
+    if is_relative_to(output, ROOT) and not is_relative_to(output, dist_root):
+        raise SystemExit(f"Refusing to write source snapshot inside the source repository outside dist/: {output}")
+    for dirname in CONTROLLED_SOURCE_DIRS:
+        controlled = (ROOT / dirname).resolve()
+        if output == controlled or is_relative_to(output, controlled):
+            raise SystemExit(f"Refusing to write source snapshot inside controlled source material: {controlled}")
+    if output.exists() and any(output.iterdir()) and not force:
+        raise SystemExit(f"Snapshot output directory is not empty. Re-run with --force if intentional: {output}")
+    return output
+
+
+def iter_source_snapshot_files(output_dir: Path) -> list[Path]:
+    files = []
+    output_resolved = output_dir.resolve()
+    skip_names = {".DS_Store"}
+    skip_suffixes = {".pyc"}
+    for path in sorted(ROOT.rglob("*")):
+        if not path.is_file():
+            continue
+        if any(part in SOURCE_AUDIT_SKIP_DIRS for part in path.parts):
+            continue
+        if path.name in skip_names or path.suffix.lower() in skip_suffixes:
+            continue
+        if path.resolve() == output_resolved or is_relative_to(path.resolve(), output_resolved):
+            continue
+        files.append(path)
+    return files
+
+
+def build_source_snapshot_manifest(output_dir: Path) -> list[dict[str, str]]:
+    rows = []
+    for path in iter_source_snapshot_files(output_dir):
+        rows.append(
+            {
+                "artifact_path": relative_artifact(ROOT, path),
+                "bytes": str(path.stat().st_size),
+                "sha256": sha256_file(path),
+                "modified_utc": path_modified_utc(path),
+                "included_in_zip": "yes",
+            }
+        )
+    return rows
+
+
+def source_snapshot_digest(rows: list[dict[str, str]]) -> str:
+    stable = [
+        {
+            "artifact_path": row["artifact_path"],
+            "bytes": row["bytes"],
+            "sha256": row["sha256"],
+        }
+        for row in rows
+    ]
+    return hashlib.sha256(json.dumps(stable, sort_keys=True, separators=(",", ":")).encode("utf-8")).hexdigest()
+
+
+def render_source_snapshot_summary(status: dict, manifest_rows: list[dict[str, str]]) -> str:
+    lines = [
+        "# CRAMPS Source Snapshot Summary",
+        "",
+        f"Generated: {status['generated_at']}",
+        f"Decision: `{status['decision']}`",
+        f"Source commit: `{status['source_commit']}`",
+        f"Source dirty: `{status['source_dirty']}`",
+        f"Source audit blockers: `{status['source_audit_blockers']}`",
+        f"Source audit warnings: `{status['source_audit_warnings']}`",
+        f"Snapshot digest: `{status['snapshot_sha256']}`",
+        f"Artifact count: `{len(manifest_rows)}`",
+        "",
+        "This snapshot is a source-kit handoff record. It does not certify any study package or domain claim.",
+        "",
+        "## Checks",
+        "",
+        "| check | status | message |",
+        "|---|---|---|",
+    ]
+    for check in status["checks"]:
+        lines.append(f"| `{check['check_id']}` | `{check['status']}` | {check['message']} |")
+    lines.extend(
+        [
+            "",
+            "## Outputs",
+            "",
+            "- `source_snapshot_status.json`",
+            "- `SOURCE_SNAPSHOT_SUMMARY.md`",
+            "- `SOURCE_SNAPSHOT_MANIFEST.csv`",
+            "- `source_snapshot.zip` when ZIP creation is enabled",
+        ]
+    )
+    return "\n".join(lines)
+
+
+def write_source_snapshot_zip(output_dir: Path, manifest_rows: list[dict[str, str]]) -> Path:
+    zip_path = output_dir / "source_snapshot.zip"
+    with zipfile.ZipFile(zip_path, "w", compression=zipfile.ZIP_DEFLATED) as archive:
+        for row in manifest_rows:
+            artifact = ROOT / row["artifact_path"]
+            if artifact.exists() and artifact.is_file():
+                archive.write(artifact, f"CRAMPS-Governance/{row['artifact_path']}")
+        for packet_file in [
+            output_dir / "source_snapshot_status.json",
+            output_dir / "SOURCE_SNAPSHOT_SUMMARY.md",
+            output_dir / "SOURCE_SNAPSHOT_MANIFEST.csv",
+        ]:
+            if packet_file.exists():
+                archive.write(packet_file, f"CRAMPS-Governance/{packet_file.name}")
+    return zip_path
+
+
+def build_source_snapshot(
+    out: Path | None,
+    force: bool,
+    allow_dirty: bool,
+    allow_warning: bool,
+    create_zip: bool,
+) -> dict:
+    output_dir = source_snapshot_output_dir(out, force)
+    audit = source_audit_status()
+    manifest_rows = build_source_snapshot_manifest(output_dir)
+    checks: list[dict[str, str]] = []
+
+    def add_check(check_id: str, ok: bool, message: str) -> None:
+        checks.append({"check_id": check_id, "status": "pass" if ok else "fail", "message": message})
+
+    add_check(
+        "source_audit_blockers",
+        audit["blocker_count"] == 0,
+        f"source audit blockers={audit['blocker_count']}",
+    )
+    add_check(
+        "source_audit_warnings",
+        allow_warning or audit["warning_count"] == 0,
+        f"source audit warnings={audit['warning_count']}",
+    )
+    add_check(
+        "source_dirty",
+        allow_dirty or not audit["source_dirty"],
+        f"source dirty={audit['source_dirty']}",
+    )
+    add_check(
+        "manifest_nonempty",
+        bool(manifest_rows),
+        f"manifest artifact count={len(manifest_rows)}",
+    )
+
+    failed = [check for check in checks if check["status"] != "pass"]
+    output_dir.mkdir(parents=True, exist_ok=True)
+    write_csv(output_dir / "SOURCE_SNAPSHOT_MANIFEST.csv", SOURCE_SNAPSHOT_MANIFEST_FIELDS, manifest_rows)
+    status = {
+        "generated_at": utc_now(),
+        "decision": "source_snapshot_ready" if not failed else "hold_source_snapshot",
+        "source_repo": str(ROOT),
+        "source_commit": audit["source_commit"],
+        "source_dirty": audit["source_dirty"],
+        "source_audit_blockers": audit["blocker_count"],
+        "source_audit_warnings": audit["warning_count"],
+        "output_dir": str(output_dir),
+        "artifact_count": len(manifest_rows),
+        "snapshot_sha256": source_snapshot_digest(manifest_rows),
+        "zip_path": "",
+        "zip_sha256": "",
+        "checks": checks,
+    }
+    (output_dir / "source_snapshot_status.json").write_text(
+        json.dumps(status, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
+    write_text(output_dir / "SOURCE_SNAPSHOT_SUMMARY.md", render_source_snapshot_summary(status, manifest_rows))
+    if create_zip and not failed:
+        zip_path = write_source_snapshot_zip(output_dir, manifest_rows)
+        status["zip_path"] = str(zip_path)
+        status["zip_sha256"] = sha256_file(zip_path)
+        (output_dir / "source_snapshot_status.json").write_text(
+            json.dumps(status, indent=2, sort_keys=True) + "\n",
+            encoding="utf-8",
+        )
+    status["exit_code"] = 0 if not failed else 1
+    return status
+
+
 def add_self_test_check(
     checks: list[dict[str, str]],
     check_id: str,
@@ -2120,6 +2320,23 @@ def run_self_test(strict_source: bool, keep_temp: bool) -> dict:
             "pass" if source_ok else "fail",
             f"source audit blockers={source_status['blocker_count']}, warnings={source_status['warning_count']}",
             "source-audit",
+        )
+
+        snapshot_command = ["source-snapshot", "--out", str(temp_path / "source-snapshot")]
+        if not strict_source:
+            snapshot_command.extend(["--allow-dirty", "--allow-warning"])
+        snapshot_result = run_cli_subprocess(snapshot_command)
+        snapshot_json = parse_json_stdout(snapshot_result)
+        snapshot_zip = Path(snapshot_json.get("zip_path", ""))
+        snapshot_ok = snapshot_result.returncode == 0 and snapshot_json.get("decision") == "source_snapshot_ready" and snapshot_zip.exists()
+        add_self_test_check(
+            checks,
+            "source_snapshot",
+            "pass" if snapshot_ok else "fail",
+            "source snapshot created with manifest and ZIP"
+            if snapshot_ok
+            else f"source snapshot failed: exit={snapshot_result.returncode}, decision={snapshot_json.get('decision', 'missing')}",
+            " ".join(snapshot_command),
         )
 
         package = temp_path / "worked-preflight"
@@ -3220,6 +3437,30 @@ def command_source_audit(args: argparse.Namespace) -> int:
     return 0
 
 
+def command_source_snapshot(args: argparse.Namespace) -> int:
+    status = build_source_snapshot(
+        args.out,
+        args.force,
+        args.allow_dirty,
+        args.allow_warning,
+        not args.no_zip,
+    )
+    print(
+        json.dumps(
+            {
+                "decision": status["decision"],
+                "artifact_count": status["artifact_count"],
+                "snapshot_sha256": status["snapshot_sha256"],
+                "output_dir": status["output_dir"],
+                "zip_path": status.get("zip_path", ""),
+                "zip_sha256": status.get("zip_sha256", ""),
+            },
+            indent=2,
+        )
+    )
+    return int(status["exit_code"])
+
+
 def command_self_test(args: argparse.Namespace) -> int:
     status = run_self_test(args.strict_source, args.keep_temp)
     if args.report:
@@ -3412,7 +3653,7 @@ def command_doctor(_args: argparse.Namespace) -> int:
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="cramps",
-        description="Create, operate, check, audit, gate, leak-scan, accept, packet, quarantine, source-audit, and self-test CRAMPS packages.",
+        description="Create, operate, check, audit, gate, leak-scan, accept, packet, quarantine, source-audit, source-snapshot, and self-test CRAMPS packages.",
     )
     sub = parser.add_subparsers(dest="command", required=True)
 
@@ -3502,6 +3743,14 @@ def build_parser() -> argparse.ArgumentParser:
     source_audit.add_argument("--report", type=Path, default=None, help="Optional Markdown report output path.")
     source_audit.add_argument("--verbose", action="store_true", help="Print full check details after the summary.")
     source_audit.set_defaults(func=command_source_audit)
+
+    source_snapshot = sub.add_parser("source-snapshot", help="Build a source-kit handoff snapshot with hashes and ZIP.")
+    source_snapshot.add_argument("--out", type=Path, default=None)
+    source_snapshot.add_argument("--force", action="store_true")
+    source_snapshot.add_argument("--allow-dirty", action="store_true", help="Allow snapshot creation when the worktree is dirty.")
+    source_snapshot.add_argument("--allow-warning", action="store_true", help="Allow snapshot creation when source-audit has warnings.")
+    source_snapshot.add_argument("--no-zip", action="store_true")
+    source_snapshot.set_defaults(func=command_source_snapshot)
 
     self_test = sub.add_parser("self-test", help="Run an end-to-end temp-package CRAMPS smoke test.")
     self_test.add_argument("--strict-source", action="store_true", help="Fail when source-audit reports warnings.")

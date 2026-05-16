@@ -9,3 +9,4 @@ __pycache__/
 .mypy_cache/
 node_modules
 cramps_projects/
+dist/

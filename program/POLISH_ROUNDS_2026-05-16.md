@@ -316,3 +316,22 @@ Artifacts:
 Outcome:
 
 - maintainers can now run one command to exercise the trust path before pushing or handing CRAMPS to another operator.
+
+## Post-Build Round 11: Source snapshot handoff
+
+Focus:
+
+- create a reproducible source-kit handoff record after source audit and self-test
+- generate a file-level source manifest with hashes, a summary, status JSON, and ZIP
+- fail closed on dirty source or audit warnings unless explicitly allowed
+- keep generated handoff artifacts under ignored `dist/`
+
+Artifacts:
+
+- `tools/cramps_cli.py source-snapshot`
+- ignored `dist/` output path
+- updated README, program README, tools README, and release acceptance checklist
+
+Outcome:
+
+- source-kit releases can now be handed off with a manifest and archive instead of relying only on the git commit pointer.
