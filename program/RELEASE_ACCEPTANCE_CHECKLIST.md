@@ -22,12 +22,13 @@ Use before pushing a CRAMPS source-kit update.
 | Python tools | CLI and sidecar compile | `python -m py_compile ...` |
 | CLI health | source kit reports no doctor issues | `python tools/cramps_cli.py doctor` |
 | Source audit | source kit has no release blockers | `python tools/cramps_cli.py source-audit` |
+| Self-test | temporary package path clears and stale-change trap blocks | `python tools/cramps_cli.py self-test` |
 | Agent audit | fresh package agent controls audit without blockers | `python tools/cramps_cli.py agent-audit <package>` |
 | Acceptance audit | package acceptance audit has no blockers and no wrong-level or stale-gate artifacts | `python tools/cramps_cli.py acceptance-audit <package>` |
 | Review packet | package reviewer handoff has no blockers and no post-acceptance material changes | `python tools/cramps_cli.py review-packet <package>` |
 | Workbooks | master and domain workbooks import cleanly | `node tools/verify_workbooks.mjs` |
 | Whitespace | no trailing whitespace or patch errors | `git diff --check` |
-| Smoke path | preflight init/check/leak/gate and promote-to-full path behave as expected | smoke command output |
+| Smoke path | preflight init/check/leak/gate and promote-to-full path behave as expected | smoke command output or self-test output |
 
 Do not push if any source-kit acceptance check fails unless the failure is documented as an intentional deviation.
 
@@ -120,6 +121,7 @@ Source kit:
 python -m py_compile tools/cramps_cli.py tools/cramps_sidecar.py tools/scaffold_cramps_package.py tools/generate_domain_packs.py
 python tools/cramps_cli.py doctor
 python tools/cramps_cli.py source-audit
+python tools/cramps_cli.py self-test
 node tools/verify_workbooks.mjs
 git diff --check
 ```

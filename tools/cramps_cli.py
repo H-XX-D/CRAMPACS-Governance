@@ -17,6 +17,8 @@ import re
 import shutil
 import subprocess
 import sys
+import tempfile
+import time
 import zipfile
 from dataclasses import dataclass
 from datetime import datetime, timezone
@@ -2054,6 +2056,174 @@ def render_source_audit_report(status: dict) -> str:
     return "\n".join(lines)
 
 
+def add_self_test_check(
+    checks: list[dict[str, str]],
+    check_id: str,
+    status: str,
+    message: str,
+    evidence: str = "",
+) -> None:
+    checks.append(
+        {
+            "check_id": check_id,
+            "status": status,
+            "message": message,
+            "evidence": evidence,
+        }
+    )
+
+
+def run_cli_subprocess(args: list[str]) -> subprocess.CompletedProcess[str]:
+    return subprocess.run(
+        [sys.executable, str(Path(__file__).resolve()), *args],
+        cwd=ROOT,
+        capture_output=True,
+        text=True,
+    )
+
+
+def parse_json_stdout(result: subprocess.CompletedProcess[str]) -> dict:
+    try:
+        return json.loads(result.stdout)
+    except json.JSONDecodeError:
+        return {}
+
+
+def render_self_test_report(status: dict) -> str:
+    lines = [
+        "# CRAMPS Self-Test Report",
+        "",
+        f"Generated: {status['generated_at']}",
+        f"Decision: `{status['decision']}`",
+        f"Temp directory: `{status['temp_dir']}`",
+        f"Checks passed: `{status['passed_count']}`",
+        f"Checks failed: `{status['failed_count']}`",
+        "",
+        "| check | status | evidence | message |",
+        "|---|---|---|---|",
+    ]
+    for check in status["checks"]:
+        lines.append(f"| `{check['check_id']}` | `{check['status']}` | `{check['evidence']}` | {check['message']} |")
+    lines.append("")
+    return "\n".join(lines)
+
+
+def run_self_test(strict_source: bool, keep_temp: bool) -> dict:
+    checks: list[dict[str, str]] = []
+    temp_path = Path(tempfile.mkdtemp(prefix="cramps-selftest-"))
+    try:
+        source_status = source_audit_status()
+        source_ok = source_status["blocker_count"] == 0 and (not strict_source or source_status["warning_count"] == 0)
+        add_self_test_check(
+            checks,
+            "source_audit",
+            "pass" if source_ok else "fail",
+            f"source audit blockers={source_status['blocker_count']}, warnings={source_status['warning_count']}",
+            "source-audit",
+        )
+
+        package = temp_path / "worked-preflight"
+        shutil.copytree(ROOT / "worked_examples" / "preflight" / "cramps-phy-synthetic-coordinate-recurrence", package)
+        add_self_test_check(checks, "temp_package_copy", "pass", "worked example copied into temp package", str(package))
+
+        sequence = [
+            ("check", ["check", str(package), "--level", "preflight"]),
+            ("agent_audit", ["agent-audit", str(package), "--level", "preflight"]),
+            ("leak_scan", ["leak-scan", str(package)]),
+            ("gate", ["gate", str(package), "--level", "preflight"]),
+            ("acceptance_audit", ["acceptance-audit", str(package), "--level", "preflight"]),
+            ("review_packet", ["review-packet", str(package), "--level", "preflight"]),
+        ]
+        for check_id, command in sequence:
+            result = run_cli_subprocess(command)
+            add_self_test_check(
+                checks,
+                check_id,
+                "pass" if result.returncode == 0 else "fail",
+                result.stdout.strip().replace("\n", " ")[:400] if result.returncode == 0 else result.stderr.strip()[:400],
+                " ".join(command),
+            )
+
+        review_status_path = package / "exports" / "review_packet" / "review_packet_status.json"
+        review_status = load_json_artifact(review_status_path) or {}
+        ready = review_status.get("decision") == "ready_for_review_handoff"
+        add_self_test_check(
+            checks,
+            "review_packet_decision",
+            "pass" if ready else "fail",
+            f"review-packet decision={review_status.get('decision', 'missing')}",
+            relative_artifact(package, review_status_path),
+        )
+
+        zip_path = package / "exports" / "review_packet" / "review_packet.zip"
+        if zip_path.exists():
+            with zipfile.ZipFile(zip_path) as archive:
+                names = archive.namelist()
+            bounded = names and not any(name.startswith("package/") for name in names)
+            add_self_test_check(
+                checks,
+                "bounded_review_zip",
+                "pass" if bounded else "fail",
+                "default review ZIP contains only packet index files" if bounded else "default review ZIP included package evidence files",
+                relative_artifact(package, zip_path),
+            )
+        else:
+            add_self_test_check(checks, "bounded_review_zip", "fail", "review ZIP was not created", relative_artifact(package, zip_path))
+
+        status_result = run_cli_subprocess(["status", str(package)])
+        status_json = parse_json_stdout(status_result)
+        status_ok = (
+            status_result.returncode == 0
+            and status_json.get("review_packet", {}).get("decision") == "ready_for_review_handoff"
+        )
+        add_self_test_check(
+            checks,
+            "status_reports_review_packet",
+            "pass" if status_ok else "fail",
+            "status includes ready review-packet decision" if status_ok else "status did not include ready review-packet decision",
+            "status",
+        )
+
+        time.sleep(1.05)
+        (package / "preflight_decision.md").touch()
+        stale_result = run_cli_subprocess(["review-packet", str(package), "--level", "preflight"])
+        stale_json = parse_json_stdout(stale_result)
+        stale_blocked = stale_result.returncode == 1 and stale_json.get("decision") == "hold_review_packet"
+        add_self_test_check(
+            checks,
+            "stale_change_trap",
+            "pass" if stale_blocked else "fail",
+            "post-acceptance material edit blocked review-packet"
+            if stale_blocked
+            else f"expected hold_review_packet exit=1; got exit={stale_result.returncode}, decision={stale_json.get('decision', 'missing')}",
+            "review-packet after touched preflight_decision.md",
+        )
+
+        source_root_result = run_cli_subprocess(["review-packet", str(ROOT), "--level", "preflight"])
+        add_self_test_check(
+            checks,
+            "source_root_refusal",
+            "pass" if source_root_result.returncode != 0 else "fail",
+            "review-packet refused to write into source root"
+            if source_root_result.returncode != 0
+            else "review-packet unexpectedly allowed source root",
+            "review-packet source-root",
+        )
+    finally:
+        if not keep_temp:
+            shutil.rmtree(temp_path, ignore_errors=True)
+
+    failed = [check for check in checks if check["status"] != "pass"]
+    return {
+        "generated_at": utc_now(),
+        "decision": "self_test_passed" if not failed else "self_test_failed",
+        "temp_dir": str(temp_path) if keep_temp else "removed",
+        "passed_count": sum(1 for check in checks if check["status"] == "pass"),
+        "failed_count": len(failed),
+        "checks": checks,
+    }
+
+
 def render_gate_dag_doc(level: str) -> str:
     specs = gate_specs(level)
     lines = [
@@ -3050,6 +3220,26 @@ def command_source_audit(args: argparse.Namespace) -> int:
     return 0
 
 
+def command_self_test(args: argparse.Namespace) -> int:
+    status = run_self_test(args.strict_source, args.keep_temp)
+    if args.report:
+        write_text(args.report.resolve(), render_self_test_report(status))
+    print(
+        json.dumps(
+            {
+                "decision": status["decision"],
+                "passed_count": status["passed_count"],
+                "failed_count": status["failed_count"],
+                "temp_dir": status["temp_dir"],
+            },
+            indent=2,
+        )
+    )
+    if args.verbose:
+        print(json.dumps(status, indent=2, sort_keys=True))
+    return 0 if status["failed_count"] == 0 else 1
+
+
 def render_leak_report(status: dict) -> str:
     lines = [
         "# CRAMPS Leak Scan Report",
@@ -3222,7 +3412,7 @@ def command_doctor(_args: argparse.Namespace) -> int:
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="cramps",
-        description="Create, operate, check, audit, gate, leak-scan, accept, packet, quarantine, and source-audit CRAMPS packages.",
+        description="Create, operate, check, audit, gate, leak-scan, accept, packet, quarantine, source-audit, and self-test CRAMPS packages.",
     )
     sub = parser.add_subparsers(dest="command", required=True)
 
@@ -3312,6 +3502,13 @@ def build_parser() -> argparse.ArgumentParser:
     source_audit.add_argument("--report", type=Path, default=None, help="Optional Markdown report output path.")
     source_audit.add_argument("--verbose", action="store_true", help="Print full check details after the summary.")
     source_audit.set_defaults(func=command_source_audit)
+
+    self_test = sub.add_parser("self-test", help="Run an end-to-end temp-package CRAMPS smoke test.")
+    self_test.add_argument("--strict-source", action="store_true", help="Fail when source-audit reports warnings.")
+    self_test.add_argument("--keep-temp", action="store_true", help="Keep the temporary package for debugging.")
+    self_test.add_argument("--report", type=Path, default=None, help="Optional Markdown report output path.")
+    self_test.add_argument("--verbose", action="store_true", help="Print full check details after the summary.")
+    self_test.set_defaults(func=command_self_test)
 
     doctor = sub.add_parser("doctor", help="Check source-kit readiness for CLI operation.")
     doctor.set_defaults(func=command_doctor)

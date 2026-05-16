@@ -297,3 +297,22 @@ Artifacts:
 Outcome:
 
 - a maintainer can now ask whether the source kit itself is coherent enough to publish or hand off before running package-specific controls.
+
+## Post-Build Round 10: End-to-end self-test hardening
+
+Focus:
+
+- add a no-residue smoke test that proves the CLI can operate a package from source audit through review packet
+- verify the default review ZIP stays bounded and does not include package evidence
+- verify stale post-acceptance edits block handoff
+- verify source-root review-packet writes are refused
+
+Artifacts:
+
+- `tools/cramps_cli.py self-test`
+- optional self-test Markdown report output
+- updated README, program README, tools README, and release acceptance checklist
+
+Outcome:
+
+- maintainers can now run one command to exercise the trust path before pushing or handing CRAMPS to another operator.

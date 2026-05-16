@@ -179,6 +179,7 @@ Before publishing or handing off the reusable source kit itself, run:
 
 ```bash
 python tools/cramps_cli.py source-audit
+python tools/cramps_cli.py self-test
 ```
 
 To compose a lowercase preflight into an uppercase full package without changing
