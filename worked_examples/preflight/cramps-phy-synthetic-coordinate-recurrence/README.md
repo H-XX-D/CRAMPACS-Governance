@@ -18,6 +18,8 @@ The example asks whether a synthetic set of physics-style records shows enough c
 5. Read `preflight_decision.md`.
 6. Check `ai_controls/agent_registry.csv` and `ai_controls/agent_deployment_plan.csv` to confirm the one-agent preflight rule.
 7. Read `FULL_SYSTEM_HANDOFF.md` to see where expanded agent deployment would begin.
+8. Read `RUN_RECORD.md` for source-safe verification commands.
+9. Use `TEACHING_SCRIPT.md` when walking a learner through the example.
 
 ## Expected Sidecar Result
 
@@ -43,6 +45,7 @@ Expected posture:
 - required preflight artifacts present
 - positive-like and null/non-event rows present
 - coordinate and unit coverage complete
+- contract audit passes on source, row, manifest, and agent-control CSVs
 - no full-system claim permitted
 - decision may recommend escalation only as a preflight output
 

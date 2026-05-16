@@ -1476,6 +1476,7 @@ def package_contract_checks(package: Path, level: str) -> list[dict[str, str]]:
     if level == "preflight":
         audit_csv_header(checks, "package", package, "preflight_sources.csv", template_header("preflight_sources.csv"))
         audit_csv_header(checks, "package", package, "preflight_rows.csv", template_header("preflight_rows.csv"))
+        audit_csv_header(checks, "package", package, "preflight_manifest.csv", template_header("preflight_manifest.csv"), required=False)
         source_rows = audit_required_fields(
             checks,
             "package",
@@ -2334,6 +2335,34 @@ def controlled_source_contamination() -> list[str]:
     return contamination
 
 
+def worked_example_runtime_outputs() -> list[str]:
+    runtime_names = {
+        "cramps_sidecar_metrics.json",
+        "cramps_sidecar_metrics.md",
+        "gate_status.json",
+        "gate_status.md",
+        "leak_scan_status.json",
+        "leak_scan_report.md",
+        "acceptance_audit_status.json",
+        "acceptance_audit_report.md",
+        "review_packet_status.json",
+        "contract_audit_status.json",
+        "contract_audit_report.md",
+    }
+    runtime_dirs = {"exports", "quarantine"}
+    base = ROOT / "worked_examples"
+    if not base.exists():
+        return []
+    contamination = []
+    for path in sorted(base.rglob("*")):
+        rel = relative_artifact(ROOT, path)
+        if path.is_dir() and path.name in runtime_dirs:
+            contamination.append(rel)
+        elif path.is_file() and path.name in runtime_names:
+            contamination.append(rel)
+    return contamination
+
+
 def missing_domain_artifacts(domains: list[dict]) -> list[str]:
     missing = []
     for domain in domains:
@@ -2445,6 +2474,18 @@ def source_audit_status() -> dict:
         "no package runtime outputs found inside controlled source material"
         if not contamination
         else f"package runtime artifacts found: {', '.join(contamination[:10])}",
+    )
+
+    worked_runtime = worked_example_runtime_outputs()
+    add_source_audit_check(
+        checks,
+        "worked_example_runtime_outputs",
+        "pass" if not worked_runtime else "fail",
+        "blocker",
+        "worked_examples/",
+        "worked examples contain no committed runtime outputs"
+        if not worked_runtime
+        else f"worked example runtime artifacts found: {', '.join(worked_runtime[:10])}",
     )
 
     missing_domains = missing_domain_artifacts(domains)

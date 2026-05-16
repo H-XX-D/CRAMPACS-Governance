@@ -381,3 +381,24 @@ Artifacts:
 Outcome:
 
 - CRAMPS now has a dedicated data-contract gate between DAG accounting and acceptance, making malformed package tables a release blocker rather than a hidden reviewer burden.
+
+## Post-Build Round 14: Worked example custody polish
+
+Focus:
+
+- make the worked example a stronger teaching and audit artifact
+- replace the informal preflight manifest with the source-kit manifest contract and SHA-256 hashes
+- add a source-safe run record and guided teaching script
+- remove stale committed sidecar runtime output from the source example
+- add a source-audit blocker if worked examples contain runtime outputs
+
+Artifacts:
+
+- `worked_examples/preflight/cramps-phy-synthetic-coordinate-recurrence/RUN_RECORD.md`
+- `worked_examples/preflight/cramps-phy-synthetic-coordinate-recurrence/TEACHING_SCRIPT.md`
+- contract-shaped `preflight_manifest.csv`
+- updated worked-example README, reviewer walkthrough, expected-output guidance, and source-audit check
+
+Outcome:
+
+- the worked example now teaches custody, contract audit, source-safe verification, and escalation boundaries without carrying stale generated output in the reusable source tree.

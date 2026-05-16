@@ -31,10 +31,12 @@ python tools/cramps_cli.py release-check package /tmp/cramps-phy-worked-example 
 
 Expected gate posture:
 
+- contract audit passes
 - leak scan has zero open critical findings
 - highest cleared priority: `50`
 - next blocked gate: blank
 - all clear: `true`
 - review-packet decision: `ready_for_review_handoff`
+- release-check decision: `package_release_ready`
 
 The gate result clears only the worked preflight structure. It does not clear any full `CRAMPS-PHY` gate.

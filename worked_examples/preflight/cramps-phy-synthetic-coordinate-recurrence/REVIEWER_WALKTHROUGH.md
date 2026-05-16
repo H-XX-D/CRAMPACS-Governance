@@ -47,6 +47,14 @@ Hold:
 - `SRC-SYN-002` and `SRC-SYN-004` share a synthetic detector family
 - real source search would need replacement, not reuse
 
+Also open `preflight_manifest.csv`.
+
+Pass:
+
+- manifest uses the source-kit preflight manifest contract
+- every listed artifact has a SHA-256 hash
+- synthetic row and decision artifacts are marked `accepted_with_limits`
+
 ## 4. Review Rows
 
 Open `preflight_rows.csv`.
@@ -116,6 +124,7 @@ Expected:
 
 - readiness score: `100.0`
 - recommendation: `candidate_for_CRAMPS_upgrade`
+- contract-audit decision: `contract_audit_passed`
 - leak findings: `0`
 - highest cleared gate priority: `50`
 - review-packet decision: `ready_for_review_handoff`
