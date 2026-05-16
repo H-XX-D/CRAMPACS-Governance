@@ -3335,6 +3335,33 @@ def run_self_test(strict_source: bool, keep_temp: bool) -> dict:
             "agent-audit package multi-agent-preflight",
         )
 
+        leak_package = temp_path / "leak-preflight"
+        shutil.copytree(ROOT / "worked_examples" / "preflight" / "cramps-phy-synthetic-coordinate-recurrence", leak_package)
+        write_text(
+            leak_package / "intake" / "selftest_leak_fixture.txt",
+            "Synthetic leak fixture for self-test only.\n-----BEGIN PRIVATE KEY-----",
+        )
+        leak_trap_result = run_cli_subprocess(["leak-scan", str(leak_package), "--fail-on-quarantine"])
+        leak_trap_json = parse_json_stdout(leak_trap_result)
+        leak_trap_blocked = (
+            leak_trap_result.returncode == 2
+            and leak_trap_json.get("quarantine_required") is True
+            and leak_trap_json.get("open_critical_findings", 0) > 0
+        )
+        add_self_test_check(
+            checks,
+            "leak_quarantine_tamper_trap",
+            "pass" if leak_trap_blocked else "fail",
+            "leak scan required quarantine for a synthetic critical pattern"
+            if leak_trap_blocked
+            else (
+                "expected quarantine_required with exit=2; "
+                f"got exit={leak_trap_result.returncode}, "
+                f"quarantine_required={leak_trap_json.get('quarantine_required', 'missing')}"
+            ),
+            "leak-scan --fail-on-quarantine leak-preflight",
+        )
+
         sequence = [
             ("check", ["check", str(package), "--level", "preflight"]),
             ("agent_audit", ["agent-audit", str(package), "--level", "preflight"]),

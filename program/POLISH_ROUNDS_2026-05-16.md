@@ -470,3 +470,20 @@ Artifacts:
 Outcome:
 
 - maintainers now test that a lightweight preflight cannot quietly become an undeclared multi-agent workflow before review.
+
+## Post-Build Round 19: Leak-quarantine tamper trap
+
+Focus:
+
+- prove the leak scanner fails closed on critical disclosure patterns
+- add a self-test negative control that injects a synthetic private-key header into a copied package
+- verify `leak-scan --fail-on-quarantine` requires quarantine before release checks proceed
+
+Artifacts:
+
+- `tools/cramps_cli.py` `leak_quarantine_tamper_trap` self-test check
+- updated release checklist and tools README
+
+Outcome:
+
+- maintainers now test that sensitive-data leakage cannot pass the package hygiene path as a quiet warning.

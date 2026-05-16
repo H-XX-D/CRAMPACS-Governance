@@ -37,7 +37,8 @@ blocked, and tampers with a copied worked-example artifact to confirm manifest
 SHA-256 drift is detected. It also corrupts a copied row/source reference to
 confirm the contract audit fails closed on broken foreign keys, and injects a
 second active preflight operator to confirm the agent audit enforces the
-lowercase one-operator boundary.
+lowercase one-operator boundary. It also injects a synthetic critical leak
+pattern to confirm `leak-scan --fail-on-quarantine` requires quarantine.
 
 ## Portable Tool
 
