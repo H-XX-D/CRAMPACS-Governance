@@ -54,6 +54,9 @@ Documents:
 
 - `README.md`
 - `policies/CRAMPACS_NAMING_AND_ASSURANCE_LEVELS_2026-05-15.md`
+- `brand/CRAMPACS_BRAND_SYSTEM.md`
+- `brand/CRAMPACS_MESSAGE_ARCHITECTURE.md`
+- `brand/CRAMPACS_DOCUMENT_STYLE_GUIDE.md`
 
 Output:
 
@@ -306,6 +309,13 @@ Documents:
 - `program/DEPLOYMENT_PLAYBOOK.md`
 - `program/TRAINING_AND_COMPETENCY_PLAN.md`
 - `program/IMPLEMENTATION_ROADMAP_90_DAY.md`
+- `training/CRAMPACS_TRAINING_GUIDE.md`
+- `training/INSTRUCTOR_GUIDE.md`
+- `training/LEARNER_WORKBOOK.md`
+- `training/EXERCISE_PACKETS.md`
+- `training/COMPETENCY_RUBRIC.md`
+- `training/SLIDE_OUTLINE.md`
+- `research/SUCCESSFUL_FRAMEWORK_PATTERNS.md`
 - Core standards policy.
 - Domain overlay.
 - Organization-specific compliance addendum.

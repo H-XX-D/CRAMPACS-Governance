@@ -30,6 +30,7 @@ Read in this order:
 14. `VALIDATION_AND_BENCHMARKING_PLAN.md`
 15. `REGULATED_DEPLOYMENT_ADDENDUM.md`
 16. `REGISTER_DATA_DICTIONARY.md`
+17. `POLISH_ROUNDS_2026-05-16.md`
 
 ## Operational Templates
 
@@ -58,3 +59,19 @@ python tools/crampacs_sidecar.py ./packages/CRAMPACS_MED_STUDY001 --level full
 ```
 
 The first command creates the binder. The second command shows what is still missing before the package can be treated as release-ready.
+
+## Teaching and Adoption
+
+Use the training kit when introducing CRAMPACS to a team:
+
+- `../training/CRAMPACS_TRAINING_GUIDE.md`
+- `../training/INSTRUCTOR_GUIDE.md`
+- `../training/LEARNER_WORKBOOK.md`
+- `../training/EXERCISE_PACKETS.md`
+- `../training/COMPETENCY_RUBRIC.md`
+
+Use the brand kit when writing public, internal, or platform-facing material:
+
+- `../brand/CRAMPACS_BRAND_SYSTEM.md`
+- `../brand/CRAMPACS_DOCUMENT_STYLE_GUIDE.md`
+- `../brand/CRAMPACS_MESSAGE_ARCHITECTURE.md`

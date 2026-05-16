@@ -103,3 +103,38 @@
 | decision_log.csv | authorized decision, tier, conditions, prohibited claims |
 | risk_register.csv | active and residual risks |
 | training_matrix.csv | role training and competency |
+
+## Brand Controls
+
+| Control | Rule |
+| --- | --- |
+| Assurance boundary | Every artifact states whether it is crampacs-* or CRAMPACS-* |
+| Claim boundary | Every release-facing artifact states what CRAMPACS does not prove |
+| Decision language | Approve, approve_with_limits, hold, demote, reject, stop, emergency_parallel_action |
+| Severity language | Critical, Major, Minor, Observation |
+| Stop signs | Preflight and full package stop rules are easy to find |
+| Evidence names | Required evidence uses concrete file, register, or binder names |
+| Domain humility | Domain claims are restrained and require domain-standard confirmation |
+
+## Training Paths
+
+| Track | Audience | Duration | Output |
+| --- | --- | --- | --- |
+| Executive briefing | Sponsor, agency lead, director | 60 minutes | adoption decision and pilot scope |
+| Supervisor orientation | Safety supervisor, risk owner, program officer | 2 hours | approval, hold, demote, reject literacy |
+| Preflight workshop | Analyst, domain reviewer, project lead | 1 day | completed mock crampacs-* preflight |
+| Practitioner course | Data scientist, evidence reviewer, auditor | 3 days | full package walkthrough and gate practice |
+| Instructor course | Internal trainer, quality lead | 2 days after practitioner course | teach-back and scoring consistency |
+
+## Framework Patterns
+
+| Framework | Pattern | CRAMPACS adoption |
+| --- | --- | --- |
+| PRISMA | Checklist plus flow diagrams | Use checklists, printouts, and package flow |
+| Cochrane | Missing-evidence risk | Treat nulls, non-events, and missing evidence as release issues |
+| GRADE | Separate certainty and recommendation | Separate evidence tier from supervisor decision |
+| ISO quality management | Process, evidence-based decisions, improvement | Use owners, registers, CAPA, and review cadence |
+| NIST CSF | Core, examples, references, tiers | Keep a small core with implementation examples and maturity levels |
+| NIST AI RMF | Framework plus playbook | Pair principles with teachable actions |
+| NASA systems engineering | Lifecycle reviews | Use G0-G7 as lifecycle gates |
+| FDA quality systems | Quality model plus regulatory boundary | Add regulated controls without claiming automatic compliance |

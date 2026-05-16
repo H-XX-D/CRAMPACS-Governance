@@ -6,6 +6,18 @@ This repository contains a domain-general governance, methodology, and data-cont
 
 CRAMPACS is not a discovery shortcut. It is a disciplined evidence-synthesis framework for building defensible anomaly-prioritization results.
 
+## Start Here
+
+| Need | Use |
+|---|---|
+| Understand the brand and claim boundary | `brand/CRAMPACS_BRAND_SYSTEM.md` |
+| Teach the method to a team | `training/CRAMPACS_TRAINING_GUIDE.md` |
+| Run the assurance program | `program/README.md` |
+| Start a full evidence package | `tools/scaffold_crampacs_package.py` |
+| Run package readiness checks | `tools/crampacs_sidecar.py` |
+| Adapt CRAMPACS to a field | `domain_packs/` and `domain_overlays/` |
+| Review research-backed design choices | `research/SUCCESSFUL_FRAMEWORK_PATTERNS.md` |
+
 ## Program Spine
 
 Start here if you are deploying CRAMPACS inside an organization.
@@ -44,6 +56,23 @@ Start here if you are deploying CRAMPACS inside an organization.
   Added controls for safety, security, public agency, financial, clinical, or other regulated decisions.
 - `program/TRAINING_AND_COMPETENCY_PLAN.md` and `program/IMPLEMENTATION_ROADMAP_90_DAY.md`
   Role competency expectations and a 90-day operational rollout plan.
+- `program/POLISH_ROUNDS_2026-05-16.md`
+  Ten-round aesthetic, teaching, and system polish log.
+
+## Brand and Training
+
+The `brand/` directory defines the CRAMPACS identity, message architecture, visual roles, document style, decision language, and claim-boundary patterns.
+
+The `training/` directory contains a teachable training kit:
+
+- `CRAMPACS_TRAINING_GUIDE.md`
+- `INSTRUCTOR_GUIDE.md`
+- `LEARNER_WORKBOOK.md`
+- `EXERCISE_PACKETS.md`
+- `COMPETENCY_RUBRIC.md`
+- `SLIDE_OUTLINE.md`
+
+The `research/` directory records source-backed design lessons from PRISMA, Cochrane, GRADE, ISO quality management, NIST risk frameworks, NASA systems engineering, and FDA quality systems.
 
 ## Supporting Documents
 
