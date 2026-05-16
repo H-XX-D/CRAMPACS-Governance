@@ -112,12 +112,13 @@ python tools/cramps_cli.py check <package> --level preflight
 python tools/cramps_cli.py agent-audit <package> --level preflight
 python tools/cramps_cli.py leak-scan <package>
 python tools/cramps_cli.py gate <package> --level preflight
+python tools/cramps_cli.py contract-audit package <package> --level preflight
 python tools/cramps_cli.py acceptance-audit <package> --level preflight
 python tools/cramps_cli.py review-packet <package> --level preflight
 python tools/cramps_cli.py release-check package <package> --level preflight
 ```
 
-Run `check`, then `agent-audit`, then `leak-scan`, then `gate`, then `acceptance-audit`, then `review-packet` in that order. Use `release-check package` for the final executable acceptance sequence. The acceptance audit depends on the latest sidecar, agent-control, leak-scan, and gate status. The review packet depends on the accepted package snapshot.
+Run `check`, then `agent-audit`, then `leak-scan`, then `gate`, then `contract-audit package`, then `acceptance-audit`, then `review-packet` in that order. Use `release-check package` for the final executable acceptance sequence. The acceptance audit depends on the latest sidecar, agent-control, leak-scan, gate, and contract-audit status. The review packet depends on the accepted package snapshot.
 
 Preflight output must be one of:
 
@@ -175,12 +176,13 @@ python tools/cramps_cli.py check <full_package> --level full
 python tools/cramps_cli.py agent-audit <full_package> --level full
 python tools/cramps_cli.py leak-scan <full_package>
 python tools/cramps_cli.py gate <full_package> --level full
+python tools/cramps_cli.py contract-audit package <full_package> --level full
 python tools/cramps_cli.py acceptance-audit <full_package> --level full
 python tools/cramps_cli.py review-packet <full_package> --level full
 python tools/cramps_cli.py release-check package <full_package> --level full
 ```
 
-Run these commands sequentially. Use `release-check package` as the final acceptance rerun before closeout. Do not evaluate acceptance from stale or missing sidecar, agent-audit, leak-scan, or gate output. Do not hand reviewers a packet that reports material changes after acceptance.
+Run these commands sequentially. Use `release-check package` as the final acceptance rerun before closeout. Do not evaluate acceptance from stale or missing sidecar, agent-audit, leak-scan, gate, or contract-audit output. Do not hand reviewers a packet that reports material changes after acceptance.
 
 ### Step 5: Closeout
 

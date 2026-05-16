@@ -63,6 +63,7 @@ python tools/cramps_cli.py check <package_dir>
 python tools/cramps_cli.py agent-audit <package_dir>
 python tools/cramps_cli.py leak-scan <package_dir>
 python tools/cramps_cli.py gate <package_dir>
+python tools/cramps_cli.py contract-audit package <package_dir>
 python tools/cramps_cli.py acceptance-audit <package_dir>
 python tools/cramps_cli.py review-packet <package_dir>
 python tools/cramps_cli.py release-check package <package_dir>
@@ -76,6 +77,7 @@ Use the outputs to decide the next action:
 - `ai_controls/leak_scan_status.json` gives leak and quarantine risk.
 - `ai_controls/gate_status.json` gives DAG gate status.
 - `ai_controls/term_prereq_ledger.csv` gives explicit prerequisite accounting.
+- `ai_controls/contract_audit_status.json` gives CSV contract and cross-table reference state.
 - `ai_controls/acceptance_audit_status.json` gives the package acceptance decision, including level and freshness checks.
 - `exports/review_packet/` gives the reviewer handoff summary, manifest, and bounded ZIP.
 - `exports/release_check/` gives the executable release-check report, command logs, and CSV results.

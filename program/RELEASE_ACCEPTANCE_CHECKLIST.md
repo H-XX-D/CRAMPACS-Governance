@@ -23,6 +23,7 @@ Use before pushing a CRAMPS source-kit update.
 | Python tools | CLI and sidecar compile | `python -m py_compile ...` |
 | CLI health | source kit reports no doctor issues | `python tools/cramps_cli.py doctor` |
 | Source audit | source kit has no release blockers | `python tools/cramps_cli.py source-audit` |
+| Contract audit | source and package CSV data contracts are internally consistent | `python tools/cramps_cli.py contract-audit source` |
 | Self-test | temporary package path clears and stale-change trap blocks | `python tools/cramps_cli.py self-test` |
 | Source snapshot | source kit handoff manifest and ZIP are created from a clean source | `python tools/cramps_cli.py source-snapshot` |
 | Agent audit | fresh package agent controls audit without blockers | `python tools/cramps_cli.py agent-audit <package>` |
@@ -51,6 +52,7 @@ A `cramps-*` preflight may recommend escalation only when:
 | Claim boundary | no uppercase/full assurance claim appears |
 | Agent boundary | package uses the default `single_preflight_operator` or records a deviation |
 | Agent audit | `agent-audit` reports no blockers |
+| Contract audit | `contract-audit package` reports no blockers |
 | Acceptance audit | `acceptance-audit` returns `accepted_for_preflight_decision` |
 | Review packet | `review-packet` returns `ready_for_review_handoff` |
 
@@ -79,6 +81,7 @@ A `CRAMPS-*` package may be release-reviewed only when:
 | Trust | build ledger, checkpoint reviews, claim trace, trust debt, and trust status summary are complete |
 | Agent deployment | deployment plan, agent registry, and handoff checklist are complete for agents used |
 | Agent audit | `agent-audit` reports no blockers before release review |
+| Contract audit | `contract-audit package` reports no blockers before release review |
 | Acceptance audit | `acceptance-audit` returns `ready_for_release_review` |
 | Review packet | `review-packet` returns `ready_for_review_handoff` and includes a manifest |
 | Release | decision memo, claim-language approval, and signoff are complete |
@@ -123,6 +126,7 @@ Source kit:
 python tools/cramps_cli.py release-check source
 python -m py_compile tools/cramps_cli.py tools/cramps_sidecar.py tools/scaffold_cramps_package.py tools/generate_domain_packs.py
 python tools/cramps_cli.py doctor
+python tools/cramps_cli.py contract-audit source
 python tools/cramps_cli.py source-audit
 python tools/cramps_cli.py self-test
 python tools/cramps_cli.py source-snapshot

@@ -73,20 +73,22 @@ python tools/cramps_cli.py check ./cramps_projects/<package>
 python tools/cramps_cli.py agent-audit ./cramps_projects/<package>
 python tools/cramps_cli.py leak-scan ./cramps_projects/<package>
 python tools/cramps_cli.py gate ./cramps_projects/<package>
+python tools/cramps_cli.py contract-audit package ./cramps_projects/<package>
 python tools/cramps_cli.py acceptance-audit ./cramps_projects/<package>
 python tools/cramps_cli.py review-packet ./cramps_projects/<package>
 ```
 
 The CLI creates a package-local AI operator brief, agent deployment helper,
 deployment plan, handoff checklist, DAG gate map, term/prerequisite ledger,
-agent-audit report, leak-watch report, acceptance-audit report, reviewer packet,
-quarantine protocol, sidecar metrics, and checksums. The source kit remains
-sanitized for reuse.
+agent-audit report, leak-watch report, contract-audit report, acceptance-audit
+report, reviewer packet, quarantine protocol, sidecar metrics, and checksums.
+The source kit remains sanitized for reuse.
 
 For source-kit handoff, run:
 
 ```bash
 python tools/cramps_cli.py release-check source
+python tools/cramps_cli.py contract-audit source
 python tools/cramps_cli.py source-audit
 python tools/cramps_cli.py self-test
 python tools/cramps_cli.py source-snapshot

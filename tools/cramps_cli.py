@@ -189,6 +189,15 @@ RELEASE_CHECK_FIELDS = [
     "message",
 ]
 
+CONTRACT_AUDIT_FIELDS = [
+    "check_id",
+    "scope",
+    "artifact_path",
+    "status",
+    "severity",
+    "message",
+]
+
 SOURCE_AUDIT_SKIP_DIRS = {
     ".git",
     "__pycache__",
@@ -394,6 +403,14 @@ def read_csv_header(path: Path) -> list[str]:
         return next(reader, [])
 
 
+def template_header(name: str) -> list[str]:
+    return read_csv_header(ROOT / "templates" / name)
+
+
+def register_header(name: str) -> list[str]:
+    return read_csv_header(ROOT / "program" / "registers" / name)
+
+
 def write_csv(path: Path, fieldnames: list[str], rows: list[dict[str, str]], force: bool = True) -> None:
     if path.exists() and not force:
         raise SystemExit(f"Refusing to overwrite existing file without --force: {path}")
@@ -542,10 +559,11 @@ outside the package and must not be edited during package operation.
 4. Run `python {ROOT / "tools" / "cramps_cli.py"} agent-audit . --level {check_level}` after agent-plan, registry, or handoff changes.
 5. Run `python {ROOT / "tools" / "cramps_cli.py"} leak-scan .` before sharing, exporting, escalation, release, or gate evaluation.
 6. Run `python {ROOT / "tools" / "cramps_cli.py"} gate . --level {check_level}` before phase progress.
-7. Run `python {ROOT / "tools" / "cramps_cli.py"} acceptance-audit . --level {check_level}` before reliance changes.
-8. Run `python {ROOT / "tools" / "cramps_cli.py"} review-packet . --level {check_level}` before reviewer handoff.
-9. Run `python {ROOT / "tools" / "cramps_cli.py"} release-check package . --level {check_level}` before promotion, closeout, or release review.
-10. If a critical leak, source-boundary breach, fabricated field, or prohibited claim is found, run quarantine.
+7. Run `python {ROOT / "tools" / "cramps_cli.py"} contract-audit package . --level {check_level}` before acceptance.
+8. Run `python {ROOT / "tools" / "cramps_cli.py"} acceptance-audit . --level {check_level}` before reliance changes.
+9. Run `python {ROOT / "tools" / "cramps_cli.py"} review-packet . --level {check_level}` before reviewer handoff.
+10. Run `python {ROOT / "tools" / "cramps_cli.py"} release-check package . --level {check_level}` before promotion, closeout, or release review.
+11. If a critical leak, source-boundary breach, fabricated field, or prohibited claim is found, run quarantine.
 
 ## Claim Boundary
 
@@ -606,10 +624,11 @@ while performing package work.
 6. Run agent-control checks with `cramps_cli.py agent-audit`.
 7. Run leak scanning with `cramps_cli.py leak-scan`.
 8. Run DAG accounting with `cramps_cli.py gate`.
-9. Run acceptance synthesis with `cramps_cli.py acceptance-audit`.
-10. Run reviewer packet synthesis with `cramps_cli.py review-packet` before handoff.
-11. Run executable package acceptance with `cramps_cli.py release-check package` before promotion, closeout, or release review.
-12. Stop and quarantine if a critical leak, contamination event, fabricated field, or prohibited claim appears.
+9. Run CSV contract checks with `cramps_cli.py contract-audit package`.
+10. Run acceptance synthesis with `cramps_cli.py acceptance-audit`.
+11. Run reviewer packet synthesis with `cramps_cli.py review-packet` before handoff.
+12. Run executable package acceptance with `cramps_cli.py release-check package` before promotion, closeout, or release review.
+13. Stop and quarantine if a critical leak, contamination event, fabricated field, or prohibited claim appears.
 
 ## Non-Negotiables
 
@@ -932,6 +951,7 @@ python {ROOT / "tools" / "cramps_cli.py"} check .
 python {ROOT / "tools" / "cramps_cli.py"} agent-audit .
 python {ROOT / "tools" / "cramps_cli.py"} leak-scan .
 python {ROOT / "tools" / "cramps_cli.py"} gate . --level {level}
+python {ROOT / "tools" / "cramps_cli.py"} contract-audit package . --level {level}
 python {ROOT / "tools" / "cramps_cli.py"} acceptance-audit . --level {level}
 python {ROOT / "tools" / "cramps_cli.py"} review-packet . --level {level}
 python {ROOT / "tools" / "cramps_cli.py"} release-check package . --level {level}
@@ -1263,6 +1283,366 @@ def add_acceptance_check(
     )
 
 
+def add_contract_check(
+    checks: list[dict[str, str]],
+    check_id: str,
+    scope: str,
+    artifact_path: str,
+    status: str,
+    severity: str,
+    message: str,
+) -> None:
+    checks.append(
+        {
+            "check_id": check_id,
+            "scope": scope,
+            "artifact_path": artifact_path,
+            "status": status,
+            "severity": severity,
+            "message": message,
+        }
+    )
+
+
+def header_shape_message(header: list[str]) -> str:
+    if not header:
+        return "missing or empty CSV header"
+    if any(not item.strip() for item in header):
+        return "CSV header contains a blank field"
+    duplicates = sorted({item for item in header if header.count(item) > 1})
+    if duplicates:
+        return f"CSV header has duplicate fields: {', '.join(duplicates)}"
+    return ""
+
+
+def audit_csv_header(
+    checks: list[dict[str, str]],
+    scope: str,
+    base: Path,
+    rel: str,
+    expected: list[str],
+    required: bool = True,
+    check_id_prefix: str = "csv_header",
+) -> None:
+    path = base / rel
+    if not path.exists():
+        add_contract_check(
+            checks,
+            f"{check_id_prefix}:{rel}",
+            scope,
+            rel,
+            "fail" if required else "warn",
+            "blocker" if required else "warning",
+            "required CSV contract artifact is missing" if required else "optional CSV contract artifact is missing",
+        )
+        return
+    header = read_csv_header(path)
+    shape_issue = header_shape_message(header)
+    if shape_issue:
+        add_contract_check(checks, f"{check_id_prefix}:{rel}", scope, rel, "fail", "blocker", shape_issue)
+        return
+    if expected and header != expected:
+        add_contract_check(
+            checks,
+            f"{check_id_prefix}:{rel}",
+            scope,
+            rel,
+            "fail",
+            "blocker",
+            f"header mismatch; expected {','.join(expected)}",
+        )
+        return
+    add_contract_check(checks, f"{check_id_prefix}:{rel}", scope, rel, "pass", "blocker", "CSV header matches contract")
+
+
+def audit_required_fields(
+    checks: list[dict[str, str]],
+    scope: str,
+    base: Path,
+    rel: str,
+    required_fields: list[str],
+    id_field: str,
+) -> list[dict[str, str]]:
+    path = base / rel
+    rows = read_csv_rows(path)
+    if not path.exists() or not rows:
+        return rows
+    bad_rows = []
+    for index, row in enumerate(rows, start=2):
+        missing = [field for field in required_fields if is_blank_field(row.get(field, ""))]
+        if missing:
+            row_id = row.get(id_field, "") or f"line {index}"
+            bad_rows.append(f"{row_id} missing {', '.join(missing)}")
+    add_contract_check(
+        checks,
+        f"required_fields:{rel}",
+        scope,
+        rel,
+        "pass" if not bad_rows else "fail",
+        "blocker",
+        "required populated-row fields are present" if not bad_rows else "; ".join(bad_rows[:8]),
+    )
+    return rows
+
+
+def audit_reference_integrity(
+    checks: list[dict[str, str]],
+    scope: str,
+    artifact_path: str,
+    source_ids: set[str],
+    rows: list[dict[str, str]],
+    row_field: str,
+    ref_field: str,
+) -> None:
+    missing = []
+    for row in rows:
+        row_id = row.get(row_field, "") or "unidentified_row"
+        ref = (row.get(ref_field, "") or "").strip()
+        if ref and ref not in source_ids:
+            missing.append(f"{row_id}->{ref}")
+    add_contract_check(
+        checks,
+        f"reference_integrity:{artifact_path}:{ref_field}",
+        scope,
+        artifact_path,
+        "pass" if not missing else "fail",
+        "blocker",
+        "foreign-key references resolve" if not missing else f"unresolved references: {', '.join(missing[:10])}",
+    )
+
+
+def source_contract_checks() -> list[dict[str, str]]:
+    checks: list[dict[str, str]] = []
+    template_contracts = {
+        "agent_deployment_plan.csv": AGENT_DEPLOYMENT_PLAN_FIELDS,
+        "agent_handoff_checklist.csv": AGENT_HANDOFF_FIELDS,
+        "agent_registry.csv": AGENT_REGISTRY_FIELDS,
+        "preflight_sources.csv": template_header("preflight_sources.csv"),
+        "preflight_rows.csv": template_header("preflight_rows.csv"),
+        "preflight_manifest.csv": template_header("preflight_manifest.csv"),
+        "preflight_import_log.csv": template_header("preflight_import_log.csv"),
+        "source_catalog.csv": template_header("source_catalog.csv"),
+        "anomaly_rows_raw.csv": template_header("anomaly_rows_raw.csv"),
+        "normalized_rows.csv": template_header("normalized_rows.csv"),
+        "candidate_coordinate_registry.csv": template_header("candidate_coordinate_registry.csv"),
+        "coordinate_transform_registry.csv": template_header("coordinate_transform_registry.csv"),
+        "independence_groups.csv": template_header("independence_groups.csv"),
+        "bias_assessment.csv": template_header("bias_assessment.csv"),
+        "null_model_runs.csv": template_header("null_model_runs.csv"),
+        "analysis_result.csv": template_header("analysis_result.csv"),
+        "amendment_log.csv": template_header("amendment_log.csv"),
+        "role_assignment.csv": template_header("role_assignment.csv"),
+        "build_ledger.csv": template_header("build_ledger.csv"),
+        "checkpoint_reviews.csv": template_header("checkpoint_reviews.csv"),
+        "assumption_uncertainty_log.csv": template_header("assumption_uncertainty_log.csv"),
+        "claim_trace_matrix.csv": template_header("claim_trace_matrix.csv"),
+        "trust_debt_register.csv": template_header("trust_debt_register.csv"),
+    }
+    for rel, expected in template_contracts.items():
+        audit_csv_header(checks, "source", ROOT, f"templates/{rel}", expected)
+
+    for rel in sorted((ROOT / "program" / "registers").glob("*.csv")):
+        audit_csv_header(checks, "source", ROOT, f"program/registers/{rel.name}", read_csv_header(rel))
+
+    for domain in load_domains():
+        audit_csv_header(
+            checks,
+            "source",
+            ROOT,
+            f"domain_packs/{domain['slug']}/{domain['light']}_PREFLIGHT_SOURCES.csv",
+            template_header("preflight_sources.csv"),
+        )
+        audit_csv_header(
+            checks,
+            "source",
+            ROOT,
+            f"domain_packs/{domain['slug']}/{domain['light']}_PREFLIGHT_ROWS.csv",
+            template_header("preflight_rows.csv"),
+        )
+    return checks
+
+
+def package_contract_checks(package: Path, level: str) -> list[dict[str, str]]:
+    assert_package_output_allowed(package, "contract-audit")
+    checks: list[dict[str, str]] = []
+    common_contracts = {
+        "ai_controls/agent_deployment_plan.csv": AGENT_DEPLOYMENT_PLAN_FIELDS,
+        "ai_controls/agent_handoff_checklist.csv": AGENT_HANDOFF_FIELDS,
+        "ai_controls/agent_registry.csv": AGENT_REGISTRY_FIELDS,
+    }
+    for rel, expected in common_contracts.items():
+        audit_csv_header(checks, "package", package, rel, expected)
+
+    if level == "preflight":
+        audit_csv_header(checks, "package", package, "preflight_sources.csv", template_header("preflight_sources.csv"))
+        audit_csv_header(checks, "package", package, "preflight_rows.csv", template_header("preflight_rows.csv"))
+        source_rows = audit_required_fields(
+            checks,
+            "package",
+            package,
+            "preflight_sources.csv",
+            ["source_id", "citation_or_label", "source_role", "unit_or_site"],
+            "source_id",
+        )
+        row_rows = audit_required_fields(
+            checks,
+            "package",
+            package,
+            "preflight_rows.csv",
+            ["row_id", "source_id", "coordinate_value", "coordinate_units", "row_type"],
+            "row_id",
+        )
+        audit_reference_integrity(
+            checks,
+            "package",
+            "preflight_rows.csv",
+            {row.get("source_id", "") for row in source_rows if row.get("source_id")},
+            row_rows,
+            "row_id",
+            "source_id",
+        )
+    else:
+        full_contracts = {
+            "00_charter/role_assignment.csv": template_header("role_assignment.csv"),
+            "01_protocol_lock/candidate_coordinate_registry.csv": template_header("candidate_coordinate_registry.csv"),
+            "01_protocol_lock/amendment_log.csv": template_header("amendment_log.csv"),
+            "02_sources/source_catalog.csv": template_header("source_catalog.csv"),
+            "03_extraction/anomaly_rows_raw.csv": template_header("anomaly_rows_raw.csv"),
+            "04_coordinate_normalization/coordinate_transform_registry.csv": template_header("coordinate_transform_registry.csv"),
+            "04_coordinate_normalization/normalized_rows.csv": template_header("normalized_rows.csv"),
+            "05_dependence_bias/independence_groups.csv": template_header("independence_groups.csv"),
+            "05_dependence_bias/bias_assessment.csv": template_header("bias_assessment.csv"),
+            "06_statistics/null_model_runs.csv": template_header("null_model_runs.csv"),
+            "06_statistics/analysis_result.csv": template_header("analysis_result.csv"),
+            "09_review_and_release/gate_review_record.csv": register_header("gate_review_record.csv"),
+            "10_trust_maintenance/build_ledger.csv": template_header("build_ledger.csv"),
+            "10_trust_maintenance/checkpoint_reviews.csv": template_header("checkpoint_reviews.csv"),
+            "10_trust_maintenance/assumption_uncertainty_log.csv": template_header("assumption_uncertainty_log.csv"),
+            "10_trust_maintenance/claim_trace_matrix.csv": template_header("claim_trace_matrix.csv"),
+            "10_trust_maintenance/trust_debt_register.csv": template_header("trust_debt_register.csv"),
+        }
+        for rel, expected in full_contracts.items():
+            audit_csv_header(checks, "package", package, rel, expected)
+        for register in sorted((ROOT / "program" / "registers").glob("*.csv")):
+            audit_csv_header(checks, "package", package, f"registers/{register.name}", read_csv_header(register))
+
+        sources = audit_required_fields(
+            checks,
+            "package",
+            package,
+            "02_sources/source_catalog.csv",
+            ["source_id", "citation", "source_type", "domain", "screening_status"],
+            "source_id",
+        )
+        raw_rows = audit_required_fields(
+            checks,
+            "package",
+            package,
+            "03_extraction/anomaly_rows_raw.csv",
+            ["row_id", "source_id", "result_type", "raw_coordinate_value", "raw_coordinate_units"],
+            "row_id",
+        )
+        normalized = audit_required_fields(
+            checks,
+            "package",
+            package,
+            "04_coordinate_normalization/normalized_rows.csv",
+            ["row_id", "canonical_coordinate_family", "canonical_coordinate_value", "canonical_coordinate_units"],
+            "row_id",
+        )
+        candidates = audit_required_fields(
+            checks,
+            "package",
+            package,
+            "01_protocol_lock/candidate_coordinate_registry.csv",
+            ["candidate_id", "coordinate_family", "value", "units", "lock_timestamp", "status"],
+            "candidate_id",
+        )
+        audit_reference_integrity(
+            checks,
+            "package",
+            "03_extraction/anomaly_rows_raw.csv",
+            {row.get("source_id", "") for row in sources if row.get("source_id")},
+            raw_rows,
+            "row_id",
+            "source_id",
+        )
+        raw_ids = {row.get("row_id", "") for row in raw_rows if row.get("row_id")}
+        audit_reference_integrity(checks, "package", "04_coordinate_normalization/normalized_rows.csv", raw_ids, normalized, "row_id", "row_id")
+        audit_reference_integrity(
+            checks,
+            "package",
+            "06_statistics/analysis_result.csv",
+            {row.get("candidate_id", "") for row in candidates if row.get("candidate_id")},
+            read_csv_rows(package / "06_statistics" / "analysis_result.csv"),
+            "result_id",
+            "candidate_id",
+        )
+    return checks
+
+
+def contract_audit_status(scope: str, package: Path | None, level: str) -> dict:
+    if scope == "source":
+        checks = source_contract_checks()
+        package_path = ""
+        resolved_level = ""
+    else:
+        if package is None:
+            raise SystemExit("Package path is required for package contract audit.")
+        package = package.resolve()
+        resolved_level = package_level(package, level)
+        checks = package_contract_checks(package, resolved_level)
+        package_path = str(package)
+
+    blockers = [check for check in checks if check["severity"] == "blocker" and check["status"] != "pass"]
+    warnings = [check for check in checks if check["severity"] == "warning" and check["status"] != "pass"]
+    return {
+        "generated_at": utc_now(),
+        "scope": scope,
+        "package": package_path,
+        "level": resolved_level,
+        "decision": "contract_audit_passed" if not blockers else "hold_contract_audit",
+        "all_clear": not blockers,
+        "blocker_count": len(blockers),
+        "warning_count": len(warnings),
+        "checks": checks,
+    }
+
+
+def render_contract_audit_report(status: dict) -> str:
+    lines = [
+        "# CRAMPS Contract Audit Report",
+        "",
+        f"Generated: {status['generated_at']}",
+        f"Scope: `{status['scope']}`",
+        f"Decision: `{status['decision']}`",
+        f"All clear: `{status['all_clear']}`",
+        f"Blockers: `{status['blocker_count']}`",
+        f"Warnings: `{status['warning_count']}`",
+        f"Output directory: `{status.get('output_dir', '')}`",
+        "",
+    ]
+    if status.get("package"):
+        lines.extend([f"Package: `{status['package']}`", f"Level: `{status['level']}`", ""])
+    lines.extend(["| check | artifact | status | severity | message |", "|---|---|---|---|---|"])
+    for check in status["checks"]:
+        lines.append(
+            f"| `{check['check_id']}` | `{check['artifact_path']}` | `{check['status']}` | `{check['severity']}` | {check['message']} |"
+        )
+    lines.append("")
+    return "\n".join(lines)
+
+
+def write_contract_audit_outputs(status: dict, output_dir: Path) -> None:
+    output_dir.mkdir(parents=True, exist_ok=True)
+    write_csv(output_dir / "CONTRACT_AUDIT_RESULTS.csv", CONTRACT_AUDIT_FIELDS, status["checks"])
+    (output_dir / "contract_audit_status.json").write_text(
+        json.dumps(status, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
+    write_text(output_dir / "contract_audit_report.md", render_contract_audit_report(status))
+
+
 def acceptance_audit(package: Path, level: str) -> dict:
     assert_package_output_allowed(package, "acceptance-audit")
 
@@ -1275,11 +1655,13 @@ def acceptance_audit(package: Path, level: str) -> dict:
     agent_path = package / "ai_controls" / "agent_audit_status.json"
     leak_path = package / "ai_controls" / "leak_scan_status.json"
     gate_path = package / "ai_controls" / "gate_status.json"
+    contract_path = package / "ai_controls" / "contract_audit_status.json"
 
     metrics = load_json_artifact(metrics_path)
     agent = load_json_artifact(agent_path)
     leak = load_json_artifact(leak_path)
     gate = load_json_artifact(gate_path)
+    contract = load_json_artifact(contract_path)
 
     state_status = state.get("status", "missing")
     add_acceptance_check(
@@ -1429,6 +1811,37 @@ def acceptance_audit(package: Path, level: str) -> dict:
             if gate_mtime >= leak_mtime
             else "gate status is stale relative to leak scan",
         )
+
+    if not contract:
+        add_acceptance_check(
+            checks,
+            "contract_audit_present",
+            "fail",
+            "ai_controls/contract_audit_status.json",
+            "contract audit is missing",
+        )
+    else:
+        add_acceptance_check(
+            checks,
+            "contract_audit_clear",
+            "pass" if contract.get("all_clear") else "fail",
+            "ai_controls/contract_audit_status.json",
+            "contract audit has no blockers"
+            if contract.get("all_clear")
+            else f"contract blockers={contract.get('blocker_count', 'unknown')}",
+        )
+        if gate_path.exists() and contract_path.exists():
+            contract_mtime = contract_path.stat().st_mtime
+            gate_mtime = gate_path.stat().st_mtime
+            add_acceptance_check(
+                checks,
+                "contract_after_gate",
+                "pass" if contract_mtime >= gate_mtime else "fail",
+                "ai_controls/contract_audit_status.json",
+                "contract audit was generated after gate status"
+                if contract_mtime >= gate_mtime
+                else "contract audit is stale relative to gate status",
+            )
 
     blockers = [check for check in checks if check["severity"] == "blocker" and check["status"] != "pass"]
     warnings = [check for check in checks if check["severity"] == "warning" and check["status"] != "pass"]
@@ -2058,6 +2471,18 @@ def source_audit_status() -> dict:
         else f"template header issues: {', '.join(header_issues)}",
     )
 
+    contract_status = contract_audit_status("source", None, "auto")
+    add_source_audit_check(
+        checks,
+        "source_csv_contracts",
+        "pass" if contract_status["blocker_count"] == 0 else "fail",
+        "blocker",
+        "contract-audit source",
+        "source CSV contracts are internally consistent"
+        if contract_status["blocker_count"] == 0
+        else f"source CSV contract blockers: {contract_status['blocker_count']}",
+    )
+
     junk = source_junk_files()
     add_source_audit_check(
         checks,
@@ -2490,6 +2915,14 @@ def build_source_release_check(
         )
     )
     checks.append(run_release_command("doctor", "source", [sys.executable, script, "doctor"], output_dir))
+    checks.append(
+        run_release_command(
+            "contract_audit",
+            "source",
+            [sys.executable, script, "contract-audit", "source", "--out", str(output_dir / "contract_audit"), "--force"],
+            output_dir,
+        )
+    )
     source_audit_cmd = [sys.executable, script, "source-audit"]
     if not allow_warning:
         source_audit_cmd.append("--fail-on-warning")
@@ -2560,6 +2993,7 @@ def build_package_release_check(
     checks.append(run_release_command("agent_audit", "package", agent_cmd, output_dir))
     checks.append(run_release_command("leak_scan", "package", [sys.executable, script, "leak-scan", str(package), "--fail-on-quarantine"], output_dir))
     checks.append(run_release_command("gate", "package", [sys.executable, script, "gate", str(package), "--level", level], output_dir))
+    checks.append(run_release_command("contract_audit", "package", [sys.executable, script, "contract-audit", "package", str(package), "--level", level], output_dir))
     acceptance_cmd = [sys.executable, script, "acceptance-audit", str(package), "--level", level]
     if fail_on_warning:
         acceptance_cmd.append("--fail-on-warning")
@@ -2688,6 +3122,7 @@ def run_self_test(strict_source: bool, keep_temp: bool) -> dict:
             ("agent_audit", ["agent-audit", str(package), "--level", "preflight"]),
             ("leak_scan", ["leak-scan", str(package)]),
             ("gate", ["gate", str(package), "--level", "preflight"]),
+            ("contract_audit", ["contract-audit", "package", str(package), "--level", "preflight"]),
             ("acceptance_audit", ["acceptance-audit", str(package), "--level", "preflight"]),
             ("review_packet", ["review-packet", str(package), "--level", "preflight"]),
         ]
@@ -2890,7 +3325,7 @@ def render_next_actions(level: str) -> str:
             "Add searched and included sources to `preflight_sources.csv`.",
             "Extract weak observation, residual, null, non-event, exclusion, and near-miss rows into `preflight_rows.csv`.",
             "Complete `preflight_gotchas.md` as the failure-mode worksheet before making an escalation decision.",
-            "Run `check`, `agent-audit`, `leak-scan`, `gate`, `acceptance-audit`, and `review-packet` before deciding whether to promote.",
+            "Run `check`, `agent-audit`, `leak-scan`, `gate`, `contract-audit package`, `acceptance-audit`, and `review-packet` before deciding whether to promote.",
         ]
     else:
         actions = [
@@ -2898,7 +3333,7 @@ def render_next_actions(level: str) -> str:
             "Lock candidate coordinates before scoring.",
             "Populate source, raw row, normalized row, independence, bias, null model, and result contracts.",
             "Maintain build ledger, checkpoint reviews, claim trace matrix, trust debt, and trust status summary.",
-            "Run `check`, `agent-audit`, `leak-scan`, `gate`, `acceptance-audit`, and `review-packet` before release review.",
+            "Run `check`, `agent-audit`, `leak-scan`, `gate`, `contract-audit package`, `acceptance-audit`, and `review-packet` before release review.",
         ]
     return "# Next Actions\n\n" + "\n".join(f"- {item}" for item in actions)
 
@@ -3839,6 +4274,55 @@ def command_release_check(args: argparse.Namespace) -> int:
     return 0 if status["blocker_count"] == 0 and status["warning_count"] == 0 else 1
 
 
+def command_contract_audit(args: argparse.Namespace) -> int:
+    if args.contract_scope == "source":
+        status = contract_audit_status("source", None, "auto")
+        output_dir = (args.out or default_release_check_dir("contract_audit")).expanduser().resolve()
+        if output_dir.exists() and any(output_dir.iterdir()) and not args.force:
+            raise SystemExit(f"Contract-audit output directory is not empty. Re-run with --force if intentional: {output_dir}")
+        if is_relative_to(output_dir, ROOT) and not is_relative_to(output_dir, (ROOT / "dist").resolve()):
+            raise SystemExit(f"Refusing to write source contract-audit outputs inside the source repository outside dist/: {output_dir}")
+        status["output_dir"] = str(output_dir)
+        write_contract_audit_outputs(status, output_dir)
+    else:
+        package = args.package.resolve()
+        level = package_level(package, args.level)
+        status = contract_audit_status("package", package, level)
+        output_dir = package / "ai_controls"
+        status["output_dir"] = str(output_dir)
+        write_contract_audit_outputs(status, output_dir)
+        append_history(
+            package,
+            "contract_audit",
+            {
+                "level": level,
+                "all_clear": status["all_clear"],
+                "blocker_count": status["blocker_count"],
+                "warning_count": status["warning_count"],
+            },
+        )
+    print(
+        json.dumps(
+            {
+                "scope": status["scope"],
+                "decision": status["decision"],
+                "all_clear": status["all_clear"],
+                "blocker_count": status["blocker_count"],
+                "warning_count": status["warning_count"],
+                "output_dir": status["output_dir"],
+            },
+            indent=2,
+        )
+    )
+    if args.verbose:
+        print(json.dumps(status, indent=2, sort_keys=True))
+    if status["blocker_count"]:
+        return 1
+    if args.fail_on_warning and status["warning_count"]:
+        return 2
+    return 0
+
+
 def command_self_test(args: argparse.Namespace) -> int:
     status = run_self_test(args.strict_source, args.keep_temp)
     if args.report:
@@ -3970,6 +4454,7 @@ def command_status(args: argparse.Namespace) -> int:
     gate_path = package / "ai_controls" / "gate_status.json"
     leak_path = package / "ai_controls" / "leak_scan_status.json"
     agent_audit_path = package / "ai_controls" / "agent_audit_status.json"
+    contract_audit_path = package / "ai_controls" / "contract_audit_status.json"
     acceptance_audit_path = package / "ai_controls" / "acceptance_audit_status.json"
     review_packet_path = package / "exports" / "review_packet" / "review_packet_status.json"
     result = {
@@ -3984,6 +4469,7 @@ def command_status(args: argparse.Namespace) -> int:
         "gate": json.loads(gate_path.read_text(encoding="utf-8"))["summary"] if gate_path.exists() else None,
         "leak_scan": json.loads(leak_path.read_text(encoding="utf-8")) if leak_path.exists() else None,
         "agent_audit": json.loads(agent_audit_path.read_text(encoding="utf-8")) if agent_audit_path.exists() else None,
+        "contract_audit": json.loads(contract_audit_path.read_text(encoding="utf-8")) if contract_audit_path.exists() else None,
         "acceptance_audit": json.loads(acceptance_audit_path.read_text(encoding="utf-8")) if acceptance_audit_path.exists() else None,
         "review_packet": json.loads(review_packet_path.read_text(encoding="utf-8")) if review_packet_path.exists() else None,
     }
@@ -4033,7 +4519,7 @@ def command_doctor(_args: argparse.Namespace) -> int:
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="cramps",
-        description="Create, operate, check, audit, gate, leak-scan, accept, packet, quarantine, source-audit, source-snapshot, release-check, and self-test CRAMPS packages.",
+        description="Create, operate, check, audit, gate, leak-scan, contract-audit, accept, packet, quarantine, source-audit, source-snapshot, release-check, and self-test CRAMPS packages.",
     )
     sub = parser.add_subparsers(dest="command", required=True)
 
@@ -4117,6 +4603,21 @@ def build_parser() -> argparse.ArgumentParser:
 
     domains = sub.add_parser("domains", help="List configured CRAMPS domains.")
     domains.set_defaults(func=command_domains)
+
+    contract_audit = sub.add_parser("contract-audit", help="Audit CSV data-contract headers, required fields, and references.")
+    contract_scopes = contract_audit.add_subparsers(dest="contract_scope", required=True)
+    contract_source = contract_scopes.add_parser("source", help="Audit source-kit templates, registers, and domain-pack CSV contracts.")
+    contract_source.add_argument("--out", type=Path, default=None)
+    contract_source.add_argument("--force", action="store_true")
+    contract_source.add_argument("--fail-on-warning", action="store_true")
+    contract_source.add_argument("--verbose", action="store_true")
+    contract_source.set_defaults(func=command_contract_audit)
+    contract_package = contract_scopes.add_parser("package", help="Audit a package's CSV contracts and cross-table references.")
+    contract_package.add_argument("package", type=Path)
+    contract_package.add_argument("--level", choices=["auto", "preflight", "full"], default="auto")
+    contract_package.add_argument("--fail-on-warning", action="store_true")
+    contract_package.add_argument("--verbose", action="store_true")
+    contract_package.set_defaults(func=command_contract_audit)
 
     release_check = sub.add_parser("release-check", help="Run executable source-kit or package release acceptance checks.")
     release_scopes = release_check.add_subparsers(dest="release_scope", required=True)

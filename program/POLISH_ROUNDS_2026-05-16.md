@@ -359,3 +359,25 @@ Artifacts:
 Outcome:
 
 - maintainers and AI operators can now run one acceptance command before handoff instead of manually reconstructing the release sequence from the checklist.
+
+## Post-Build Round 13: Data-contract audit gate
+
+Focus:
+
+- add an explicit CSV data-contract audit instead of relying only on file presence
+- check package table headers, required populated-row fields, and cross-table references
+- check source templates, register headers, and domain-pack starter CSVs for internal consistency
+- make acceptance depend on a current contract audit so malformed rows cannot bypass review
+
+Artifacts:
+
+- `tools/cramps_cli.py contract-audit source`
+- `tools/cramps_cli.py contract-audit package <package>`
+- `CONTRACT_AUDIT_RESULTS.csv`
+- `contract_audit_status.json`
+- `contract_audit_report.md`
+- updated release-check, self-test, status, acceptance audit, operator guides, and release checklist
+
+Outcome:
+
+- CRAMPS now has a dedicated data-contract gate between DAG accounting and acceptance, making malformed package tables a release blocker rather than a hidden reviewer burden.

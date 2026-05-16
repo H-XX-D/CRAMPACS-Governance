@@ -65,6 +65,7 @@ python tools/cramps_cli.py check <package_dir>
 python tools/cramps_cli.py agent-audit <package_dir>
 python tools/cramps_cli.py leak-scan <package_dir>
 python tools/cramps_cli.py gate <package_dir>
+python tools/cramps_cli.py contract-audit package <package_dir>
 python tools/cramps_cli.py acceptance-audit <package_dir>
 python tools/cramps_cli.py review-packet <package_dir>
 python tools/cramps_cli.py release-check package <package_dir>

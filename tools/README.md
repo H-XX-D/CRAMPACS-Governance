@@ -13,6 +13,7 @@ Examples:
 ```bash
 python3 tools/cramps_cli.py domains
 python3 tools/cramps_cli.py release-check source
+python3 tools/cramps_cli.py contract-audit source
 python3 tools/cramps_cli.py source-audit
 python3 tools/cramps_cli.py self-test
 python3 tools/cramps_cli.py source-snapshot
@@ -21,6 +22,7 @@ python3 tools/cramps_cli.py check ./cramps_projects/<package>
 python3 tools/cramps_cli.py agent-audit ./cramps_projects/<package>
 python3 tools/cramps_cli.py leak-scan ./cramps_projects/<package>
 python3 tools/cramps_cli.py gate ./cramps_projects/<package>
+python3 tools/cramps_cli.py contract-audit package ./cramps_projects/<package>
 python3 tools/cramps_cli.py acceptance-audit ./cramps_projects/<package>
 python3 tools/cramps_cli.py review-packet ./cramps_projects/<package>
 python3 tools/cramps_cli.py release-check package ./cramps_projects/<package>

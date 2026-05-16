@@ -167,19 +167,21 @@ python tools/cramps_cli.py check ./cramps_projects/<package>
 python tools/cramps_cli.py agent-audit ./cramps_projects/<package>
 python tools/cramps_cli.py leak-scan ./cramps_projects/<package>
 python tools/cramps_cli.py gate ./cramps_projects/<package>
+python tools/cramps_cli.py contract-audit package ./cramps_projects/<package>
 python tools/cramps_cli.py acceptance-audit ./cramps_projects/<package>
 python tools/cramps_cli.py review-packet ./cramps_projects/<package>
 ```
 
 The CLI writes package-local AI instructions, agent deployment helpers, gate DAG
 status, prerequisite accounting, agent-audit reports, leak-watch reports,
-acceptance-audit reports, reviewer packets, quarantine logs, sidecar metrics,
-and checksums.
+contract-audit reports, acceptance-audit reports, reviewer packets, quarantine
+logs, sidecar metrics, and checksums.
 
 Before publishing or handing off the reusable source kit itself, run:
 
 ```bash
 python tools/cramps_cli.py release-check source
+python tools/cramps_cli.py contract-audit source
 python tools/cramps_cli.py source-audit
 python tools/cramps_cli.py self-test
 python tools/cramps_cli.py source-snapshot
