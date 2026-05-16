@@ -34,7 +34,8 @@ See `CRAMPS_CLI_AI_OPERATOR_GUIDE.md` for the AI operator loop.
 `self-test` includes both positive and negative controls: it runs a temp-package
 happy path, verifies reviewer handoff, confirms stale post-acceptance edits are
 blocked, and tampers with a copied worked-example artifact to confirm manifest
-SHA-256 drift is detected.
+SHA-256 drift is detected. It also corrupts a copied row/source reference to
+confirm the contract audit fails closed on broken foreign keys.
 
 ## Portable Tool
 

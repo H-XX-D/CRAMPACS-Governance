@@ -3241,6 +3241,35 @@ def run_self_test(strict_source: bool, keep_temp: bool) -> dict:
             "worked-example manifest tamper check",
         )
 
+        broken_contract = temp_path / "broken-contract-preflight"
+        shutil.copytree(ROOT / "worked_examples" / "preflight" / "cramps-phy-synthetic-coordinate-recurrence", broken_contract)
+        row_path = broken_contract / "preflight_rows.csv"
+        row_header = read_csv_header(row_path)
+        row_rows = read_csv_rows(row_path)
+        if row_rows:
+            row_rows[0]["source_id"] = "SRC-MISSING-SELFTEST"
+            write_csv(row_path, row_header, row_rows)
+        broken_contract_result = run_cli_subprocess(["contract-audit", "package", str(broken_contract), "--level", "preflight"])
+        broken_contract_json = parse_json_stdout(broken_contract_result)
+        contract_trap_blocked = (
+            broken_contract_result.returncode == 1
+            and broken_contract_json.get("decision") == "hold_contract_audit"
+            and broken_contract_json.get("blocker_count", 0) > 0
+        )
+        add_self_test_check(
+            checks,
+            "contract_reference_tamper_trap",
+            "pass" if contract_trap_blocked else "fail",
+            "contract audit detected a row referencing a missing source"
+            if contract_trap_blocked
+            else (
+                "expected hold_contract_audit for missing source reference; "
+                f"got exit={broken_contract_result.returncode}, "
+                f"decision={broken_contract_json.get('decision', 'missing')}"
+            ),
+            "contract-audit package broken-contract-preflight",
+        )
+
         sequence = [
             ("check", ["check", str(package), "--level", "preflight"]),
             ("agent_audit", ["agent-audit", str(package), "--level", "preflight"]),

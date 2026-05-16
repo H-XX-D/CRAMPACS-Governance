@@ -436,3 +436,20 @@ Artifacts:
 Outcome:
 
 - maintainers now test both sides of the worked-example checksum control: current manifests pass, stale manifests are detected before release.
+
+## Post-Build Round 17: Contract-reference tamper trap
+
+Focus:
+
+- prove the data-contract audit catches broken row-to-source references
+- add a self-test negative control that corrupts a copied preflight row source ID
+- make release documentation treat contract-reference failure as a tested stop condition
+
+Artifacts:
+
+- `tools/cramps_cli.py` `contract_reference_tamper_trap` self-test check
+- updated release checklist and tools README
+
+Outcome:
+
+- maintainers now test that malformed preflight rows cannot pass release hygiene simply because the happy-path worked example is valid.
