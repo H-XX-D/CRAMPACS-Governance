@@ -1,0 +1,25 @@
+{
+  "cli_version": "0.1.0",
+  "domain_slug": "phy",
+  "full_name": "CRAMPS-PHY",
+  "history": [
+    {
+      "details": {
+        "agent_rule": "one preflight operator only",
+        "domain": "phy",
+        "level": "preflight"
+      },
+      "event": "worked_example_created",
+      "timestamp": "2026-05-16T00:00:00-07:00"
+    }
+  ],
+  "level": "preflight",
+  "lightweight_name": "cramps-phy",
+  "package_id": "EX-PHY-001",
+  "sanitized_source_rule": "This worked example is a package-like teaching artifact. Operators may inspect it and run checks, but synthetic rows must not be reused as evidence.",
+  "schema": "cramps.package.v1",
+  "status": "active",
+  "study_id": "EX-PHY-001",
+  "synthetic_status": "teaching_example_only",
+  "title": "synthetic-coordinate-recurrence"
+}

@@ -1,0 +1,2 @@
+timestamp,actor_id,surface,artifact_path,finding,disposition,notes
+2026-05-16T00:00:00-07:00,single_preflight_operator,evidence_rows,preflight_rows.csv,synthetic rows only,accepted_with_limits,Rows are teaching data and must not be used as evidence.

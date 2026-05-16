@@ -19,6 +19,7 @@ The method is useful when a team thinks something may be hiding in noisy records
 | Start a full evidence package | `tools/scaffold_cramps_package.py` |
 | Run package readiness checks | `tools/cramps_sidecar.py` |
 | Adapt CRAMPS to a field | `domain_packs/` and `domain_overlays/` |
+| See a completed teaching preflight | `worked_examples/preflight/cramps-phy-synthetic-coordinate-recurrence/` |
 | Review research-backed design choices | `research/SUCCESSFUL_FRAMEWORK_PATTERNS.md` |
 
 ## Program Spine
@@ -140,6 +141,10 @@ The `printouts/` directory contains practitioner-facing checklists:
 - full assurance gate printout
 - preflight-to-full composition printout
 - field printouts for medicine, genomics, climate, materials, engineering, finance, cybersecurity, astronomy, and physics
+
+## Worked Examples
+
+The `worked_examples/` directory contains sanitized teaching examples. The included `cramps-phy` preflight uses one operator only, then shows where expanded full-system agent deployment would begin during a separate `CRAMPS-PHY` escalation.
 
 ## End-To-End CLI
 

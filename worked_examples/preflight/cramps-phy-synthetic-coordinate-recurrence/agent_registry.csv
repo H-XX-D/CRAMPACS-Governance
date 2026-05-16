@@ -1,0 +1,2 @@
+agent_id,agent_type,assigned_scope,allowed_actions,forbidden_actions,reviewer,notes
+single_preflight_operator,human_or_ai_assisted_preflight_operator,Complete the lowercase preflight artifacts only,"summarize sources; fill preflight rows; run sidecar; draft preflight decision","create full-system claims; edit source-kit templates; deploy additional agents; score a full CRAMPS result",training_reviewer,This worked example intentionally uses one agent in preflight.

@@ -1,0 +1,6 @@
+source_id,citation_or_label,url_or_path,source_type,domain,source_role,publication_or_snapshot_date,unit_or_site,known_dependence,screening_status,notes
+SRC-SYN-001,Synthetic bump note A,synthetic://phy/example/source-a,synthetic_note,phy,positive_or_anomaly,2026-05-16,synthetic_detector_a,none,include,Teaching source with weak excess near candidate coordinate.
+SRC-SYN-002,Synthetic residual table B,synthetic://phy/example/source-b,synthetic_table,phy,positive_or_anomaly,2026-05-16,synthetic_detector_b,possible shared background model with SRC-SYN-004,include,Teaching source with residual near candidate coordinate.
+SRC-SYN-003,Synthetic exclusion scan C,synthetic://phy/example/source-c,synthetic_scan,phy,null_or_non_event,2026-05-16,synthetic_detector_c,none,include,Teaching null row covering candidate range.
+SRC-SYN-004,Synthetic sideband check D,synthetic://phy/example/source-d,synthetic_control,phy,null_or_non_event,2026-05-16,synthetic_detector_b,possible shared background model with SRC-SYN-002,include,Teaching non-event from same unit family as one positive row.
+SRC-SYN-005,Synthetic follow-up note E,synthetic://phy/example/source-e,synthetic_note,phy,null_or_non_event,2026-05-16,synthetic_detector_e,none,include,Teaching failed follow-up around candidate coordinate.

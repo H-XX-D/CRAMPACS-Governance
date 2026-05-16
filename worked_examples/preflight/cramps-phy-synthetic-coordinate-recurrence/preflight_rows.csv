@@ -1,0 +1,6 @@
+row_id,source_id,coordinate_label,coordinate_value,coordinate_units,row_type,result_direction,uncertainty_status,extraction_confidence,dependence_concern,bias_concern,null_or_non_event_flag,notes
+ROW-SYN-001,SRC-SYN-001,mass,41.6,GeV/c^2,residual,positive,reported_uncertainty,high,,source-selection bias concern,no,Synthetic weak residual near candidate coordinate; bias concern is source selection.
+ROW-SYN-002,SRC-SYN-002,mass,42.8,GeV/c^2,near_miss,positive,reported_uncertainty,medium,shared background model concern,,no,Synthetic near-miss; possible shared model dependence with SRC-SYN-004.
+ROW-SYN-003,SRC-SYN-003,mass,42.0,GeV/c^2,exclusion,negative,range_covered,high,,,yes,Synthetic exclusion row covering the candidate coordinate.
+ROW-SYN-004,SRC-SYN-004,mass,41.9,GeV/c^2,non_event,negative,range_covered,high,shared background model concern,,yes,Synthetic sideband non-event; dependence concern linked to SRC-SYN-002.
+ROW-SYN-005,SRC-SYN-005,mass,43.1,GeV/c^2,failed_replication,negative,range_covered,medium,,incomplete follow-up detail,yes,Synthetic follow-up failed to reproduce; bias concern is incomplete follow-up detail.

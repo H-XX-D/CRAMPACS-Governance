@@ -1,0 +1,2 @@
+timestamp,actor_id,action,artifact_path,gate_id,decision_impact,notes
+2026-05-16T00:00:00-07:00,single_preflight_operator,worked_example_created,.,G0,teaching_example,One-agent synthetic preflight example created.

@@ -1,0 +1,4 @@
+full_study_id,preflight_id,artifact_path,artifact_sha256,imported_as,reviewer_id,review_disposition,decision_timestamp,notes
+CRAMPS-PHY-EX-001,EX-PHY-001,preflight_scope.md,,background_seed,training_reviewer,accepted_for_background,2026-05-16T00:00:00-07:00,Synthetic artifact; do not use as evidence.
+CRAMPS-PHY-EX-001,EX-PHY-001,preflight_sources.csv,,source_seed,training_reviewer,needs_rework,2026-05-16T00:00:00-07:00,Must be replaced with real source search in full package.
+CRAMPS-PHY-EX-001,EX-PHY-001,preflight_rows.csv,,row_seed,training_reviewer,quarantined,2026-05-16T00:00:00-07:00,Synthetic rows are teaching-only and excluded from scoring.

@@ -1,0 +1,8 @@
+artifact_path,artifact_type,trust_state,owner,review_status,notes
+preflight_scope.md,scope,accepted,single_preflight_operator,training_reviewed,Synthetic scope for teaching only.
+preflight_sources.csv,source_table,accepted,single_preflight_operator,training_reviewed,Synthetic sources only.
+preflight_rows.csv,row_table,accepted_with_limits,single_preflight_operator,training_reviewed,Rows are synthetic and cannot be reused as evidence.
+preflight_gotchas.md,failure_mode_check,accepted_with_limits,single_preflight_operator,training_reviewed,Known dependence and bias holds remain.
+preflight_decision.md,decision,accepted_with_limits,training_reviewer,training_reviewed,Escalation disposition is for teaching only.
+agent_registry.csv,agent_record,accepted,single_preflight_operator,training_reviewed,One-agent preflight rule documented.
+FULL_SYSTEM_HANDOFF.md,handoff,accepted_with_limits,training_reviewer,training_reviewed,Shows where full agent deployment begins.
