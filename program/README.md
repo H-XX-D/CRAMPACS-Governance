@@ -38,8 +38,9 @@ Read in this order:
 22. `TRUST_POSITIONING_AND_RELIANCE_LEVELS.md`
 23. `TRUST_STATUS_SUMMARY_TEMPLATE.md`
 24. `AI_TRUSTED_USE_GATE_DAG_AND_QUARANTINE_POLICY.md`
-25. `RELEASE_ACCEPTANCE_CHECKLIST.md`
-26. `ROUND_3_HARDENING_AUDIT_2026-05-16.md`
+25. `AGENT_DEPLOYMENT_HELPERS.md`
+26. `RELEASE_ACCEPTANCE_CHECKLIST.md`
+27. `ROUND_3_HARDENING_AUDIT_2026-05-16.md`
 
 ## Operational Templates
 
@@ -54,6 +55,7 @@ Use these when running a real engagement:
 - `RELEASE_ACCEPTANCE_CHECKLIST.md`
 - `FIRST_PILOT_RUNBOOK.md`
 - `PILOT_SELECTION_SCORECARD.md`
+- `AGENT_DEPLOYMENT_HELPERS.md`
 
 ## Registers
 
@@ -72,9 +74,10 @@ python tools/cramps_cli.py leak-scan ./cramps_projects/<package>
 python tools/cramps_cli.py gate ./cramps_projects/<package>
 ```
 
-The CLI creates a package-local AI operator brief, DAG gate map,
-term/prerequisite ledger, leak-watch report, quarantine protocol, sidecar
-metrics, and checksums. The source kit remains sanitized for reuse.
+The CLI creates a package-local AI operator brief, agent deployment helper,
+deployment plan, handoff checklist, DAG gate map, term/prerequisite ledger,
+leak-watch report, quarantine protocol, sidecar metrics, and checksums. The
+source kit remains sanitized for reuse.
 
 Use the lower-level scaffold tool only when you need the full evidence-binder
 structure without the CLI operating controls:

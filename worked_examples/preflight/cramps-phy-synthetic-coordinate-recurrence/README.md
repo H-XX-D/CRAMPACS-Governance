@@ -16,7 +16,7 @@ The example asks whether a synthetic set of physics-style records shows enough c
 3. Review `preflight_rows.csv`.
 4. Read `preflight_gotchas.md`.
 5. Read `preflight_decision.md`.
-6. Check `agent_registry.csv` to confirm the one-agent preflight rule.
+6. Check `ai_controls/agent_registry.csv` and `ai_controls/agent_deployment_plan.csv` to confirm the one-agent preflight rule.
 7. Read `FULL_SYSTEM_HANDOFF.md` to see where expanded agent deployment would begin.
 
 ## Expected Sidecar Result

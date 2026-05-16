@@ -201,3 +201,23 @@ Artifacts:
 Outcome:
 
 - a team can now choose a bounded first pilot, run a lowercase preflight, decide whether to open an uppercase package, and close the pilot without inventing the operating sequence.
+
+## Post-Build Round 5: Agent deployment helper polish
+
+Focus:
+
+- make agent deployment explicit instead of implied by role names
+- keep lowercase preflights to one accountable operator by default
+- make uppercase role-agent deployment gated, logged, and handoff-controlled
+
+Artifacts:
+
+- `program/AGENT_DEPLOYMENT_HELPERS.md`
+- `templates/agent_deployment_plan.csv`
+- `templates/agent_handoff_checklist.csv`
+- `templates/agent_task_brief.md`
+- package-local `ai_controls/AGENT_DEPLOYMENT_HELPER.md`
+
+Outcome:
+
+- AI and human helpers can be pointed at a package with clear role spans, input limits, handoff accounting, and quarantine stop rules.

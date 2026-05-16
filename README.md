@@ -67,6 +67,8 @@ Start here if you are deploying CRAMPS inside an organization.
   Ten-round aesthetic, teaching, and system polish log.
 - `program/AI_TRUSTED_USE_GATE_DAG_AND_QUARANTINE_POLICY.md`
   AI operator rules, package/source boundary, gate DAGs, term/prerequisite accounting, leak watches, and quarantine protocol.
+- `program/AGENT_DEPLOYMENT_HELPERS.md`
+  Agent deployment modes, role cards, handoff rules, and supervisor quick checks for human, software, and AI agents.
 - `program/RELEASE_ACCEPTANCE_CHECKLIST.md`
   Short acceptance checks for source-kit updates, lowercase preflights, uppercase full packages, and worked examples.
 - `program/ROUND_3_HARDENING_AUDIT_2026-05-16.md`
@@ -126,7 +128,7 @@ The `domain_overlays/` directory adapts the full system to each domain. The `dom
 
 ## Templates
 
-The `templates/` directory contains the protocol template and CSV data-contract headers for source catalogs, raw signal rows, normalized rows, candidate coordinate registries, transforms, independence groups, bias assessment, null runs, results, amendments, agents, and roles.
+The `templates/` directory contains the protocol template and CSV data-contract headers for source catalogs, raw signal rows, normalized rows, candidate coordinate registries, transforms, independence groups, bias assessment, null runs, results, amendments, agent deployment, handoffs, agent registry records, and roles.
 
 It also contains preflight templates that compose into the full system:
 
@@ -165,8 +167,9 @@ python tools/cramps_cli.py leak-scan ./cramps_projects/<package>
 python tools/cramps_cli.py gate ./cramps_projects/<package>
 ```
 
-The CLI writes package-local AI instructions, gate DAG status, prerequisite
-accounting, leak-watch reports, quarantine logs, sidecar metrics, and checksums.
+The CLI writes package-local AI instructions, agent deployment helpers, gate DAG
+status, prerequisite accounting, leak-watch reports, quarantine logs, sidecar
+metrics, and checksums.
 
 To compose a lowercase preflight into an uppercase full package without changing
 the original preflight:

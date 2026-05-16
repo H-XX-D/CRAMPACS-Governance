@@ -10,6 +10,13 @@ The lowercase preflight used one operator: `single_preflight_operator`.
 
 If the work escalates, the full package must be created as a separate uppercase `CRAMPS-PHY` package. The preflight artifacts may seed the package, but they do not carry full assurance status.
 
+The package-local deployment controls are in:
+
+- `ai_controls/AGENT_DEPLOYMENT_HELPER.md`
+- `ai_controls/agent_deployment_plan.csv`
+- `ai_controls/agent_handoff_checklist.csv`
+- `ai_controls/agent_registry.csv`
+
 ## Where Expanded Agent Deployment Starts
 
 Expanded agent deployment starts after:

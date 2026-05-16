@@ -192,6 +192,8 @@ Every agent must have:
 - Human review threshold.
 - Version identifier.
 - Audit log.
+- Deployment-plan row.
+- Handoff checklist row for every material artifact transfer.
 
 No agent may:
 
@@ -208,7 +210,7 @@ No agent may:
 | Protocol agent | Converts study intent into a PRISMA-P-like protocol draft | `protocol.md`, amendment plan |
 | Source search agent | Runs source search against registered strategy | `source_search_log.csv`, flow counts |
 | Deduplication agent | Identifies repeated datasets, analyses, and derived papers | `dedupe_map.csv` |
-| Extraction agent | Extracts row-level coordinate, uncertainty, residual, and source metadata | `anomaly_rows.csv` |
+| Extraction agent | Extracts row-level coordinate, uncertainty, residual, and source metadata | `anomaly_rows_raw.csv` |
 | Coordinate normalization agent | Converts raw coordinates into registered coordinate systems | `normalized_rows.csv` |
 | Independence agent | Assigns dependence groups and evidence-family links | `independence_groups.csv` |
 | Bias agent | Scores missing-evidence and reporting-bias risks | `bias_assessment.csv` |
@@ -222,6 +224,8 @@ No agent may:
 
 If AI agents are used, the AI/agent steward must maintain:
 
+- `agent_deployment_plan.csv`.
+- `agent_handoff_checklist.csv`.
 - Model name and version.
 - Prompt version.
 - Temperature or decoding settings where available.
@@ -1073,7 +1077,15 @@ cramps/<study_id>/
   00_charter/
     study_charter.md
     role_assignment.csv
+  ai_controls/
+    AI_OPERATOR_BRIEF.md
+    AGENT_DEPLOYMENT_HELPER.md
+    agent_deployment_plan.csv
+    agent_handoff_checklist.csv
     agent_registry.csv
+    GATE_DAG.md
+    LEAK_WATCH_SURFACES.md
+    QUARANTINE_PROTOCOL.md
   01_protocol/
     CRAMPS_PROTOCOL_LOCK_<date>.md
     protocol_hash.txt

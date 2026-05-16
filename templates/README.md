@@ -43,3 +43,13 @@ Core full-system narrative templates:
 - `null_model_specification.md`
 - `independence_policy.md`
 - `bias_assessment_policy.md`
+
+Agent deployment templates:
+
+- `agent_deployment_plan.csv`
+- `agent_handoff_checklist.csv`
+- `agent_registry.csv`
+- `agent_task_brief.md`
+
+CLI-created packages place active copies under `ai_controls/` so agent use,
+handoffs, review requirements, and audit paths stay package-local.

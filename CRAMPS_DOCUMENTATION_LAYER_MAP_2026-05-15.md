@@ -206,7 +206,10 @@ Documents:
 - `templates/null_model_runs.csv`
 - `templates/analysis_result.csv`
 - `templates/amendment_log.csv`
+- `templates/agent_deployment_plan.csv`
+- `templates/agent_handoff_checklist.csv`
 - `templates/agent_registry.csv`
+- `templates/agent_task_brief.md`
 - `templates/role_assignment.csv`
 - `domain_packs/<domain>/*_PREFLIGHT_SOURCES.csv`
 - `domain_packs/<domain>/*_PREFLIGHT_ROWS.csv`
@@ -253,11 +256,16 @@ Documents and tools:
 - `tools/cramps_sidecar.py`
 - `tools/cramps_cli.py`
 - `tools/CRAMPS_CLI_AI_OPERATOR_GUIDE.md`
+- `program/AGENT_DEPLOYMENT_HELPERS.md`
 
 Output:
 
 - `cramps_sidecar_metrics.json`
 - `cramps_sidecar_metrics.md`
+- `ai_controls/AGENT_DEPLOYMENT_HELPER.md`
+- `ai_controls/agent_deployment_plan.csv`
+- `ai_controls/agent_handoff_checklist.csv`
+- `ai_controls/agent_registry.csv`
 - `ai_controls/gate_status.json`
 - `ai_controls/term_prereq_ledger.csv`
 - `ai_controls/leak_scan_status.json`

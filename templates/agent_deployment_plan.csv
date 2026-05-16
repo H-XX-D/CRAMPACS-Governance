@@ -1,0 +1,1 @@
+study_id,package_level,deployment_mode,agent_id,agent_role,assigned_scope,allowed_inputs,prohibited_inputs,required_outputs,reviewer_id,gate_start,gate_stop,can_write,can_export,human_review_required,status,notes

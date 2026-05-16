@@ -42,6 +42,7 @@ A `cramps-*` preflight may recommend escalation only when:
 | Decision | decision record states advance, hold, stop, or re-scope |
 | Leak scan | no open critical leak findings |
 | Claim boundary | no uppercase/full assurance claim appears |
+| Agent boundary | package uses the default `single_preflight_operator` or records a deviation |
 
 Passing preflight acceptance means only:
 
@@ -66,6 +67,7 @@ A `CRAMPS-*` package may be release-reviewed only when:
 | Statistics | null model, global correction, negative controls, and sensitivities are complete |
 | Reproducibility | checksums, environment, run instructions, and clean-run record exist |
 | Trust | build ledger, checkpoint reviews, claim trace, trust debt, and trust status summary are complete |
+| Agent deployment | deployment plan, agent registry, and handoff checklist are complete for agents used |
 | Release | decision memo, claim-language approval, and signoff are complete |
 
 Passing full-system acceptance means only:
@@ -86,6 +88,7 @@ Worked examples must satisfy:
 - gate run clears only the worked-example level
 - example states what cannot be inferred
 - example states whether preflight uses one operator or full-system agent deployment
+- example includes package-local agent deployment helper files when CLI controls are present
 
 ## 6. Stop Conditions
 

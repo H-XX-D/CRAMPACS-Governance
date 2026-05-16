@@ -4,8 +4,9 @@
 
 `cramps_cli.py` is the primary operating surface for AI-assisted package work.
 It creates isolated project packages, keeps the source kit sanitized, runs
-sidecar checks, evaluates DAG gates, writes term/prerequisite accounting, scans
-leak surfaces, and records quarantine state.
+sidecar checks, evaluates DAG gates, writes term/prerequisite accounting,
+creates agent deployment helper files, scans leak surfaces, and records
+quarantine state.
 
 Examples:
 

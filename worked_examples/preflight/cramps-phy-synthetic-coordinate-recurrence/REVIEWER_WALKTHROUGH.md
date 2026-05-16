@@ -94,7 +94,7 @@ Required interpretation:
 
 ## 7. Review Agent Boundary
 
-Open `agent_registry.csv` and `FULL_SYSTEM_HANDOFF.md`.
+Open `ai_controls/agent_registry.csv`, `ai_controls/agent_deployment_plan.csv`, and `FULL_SYSTEM_HANDOFF.md`.
 
 Pass:
 

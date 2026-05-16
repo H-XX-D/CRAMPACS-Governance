@@ -4,5 +4,8 @@ preflight_sources.csv,source_table,accepted,single_preflight_operator,training_r
 preflight_rows.csv,row_table,accepted_with_limits,single_preflight_operator,training_reviewed,Rows are synthetic and cannot be reused as evidence.
 preflight_gotchas.md,failure_mode_check,accepted_with_limits,single_preflight_operator,training_reviewed,Known dependence and bias holds remain.
 preflight_decision.md,decision,accepted_with_limits,training_reviewer,training_reviewed,Escalation disposition is for teaching only.
-agent_registry.csv,agent_record,accepted,single_preflight_operator,training_reviewed,One-agent preflight rule documented.
+ai_controls/agent_registry.csv,agent_record,accepted,single_preflight_operator,training_reviewed,One-agent preflight rule documented.
+ai_controls/agent_deployment_plan.csv,agent_deployment_plan,accepted,single_preflight_operator,training_reviewed,Preflight uses one operator only.
+ai_controls/agent_handoff_checklist.csv,agent_handoff_checklist,accepted,single_preflight_operator,training_reviewed,No internal multi-agent handoff for this preflight.
+ai_controls/AGENT_DEPLOYMENT_HELPER.md,agent_deployment_helper,accepted,single_preflight_operator,training_reviewed,Package-local helper states deployment boundary.
 FULL_SYSTEM_HANDOFF.md,handoff,accepted_with_limits,training_reviewer,training_reviewed,Shows where full agent deployment begins.

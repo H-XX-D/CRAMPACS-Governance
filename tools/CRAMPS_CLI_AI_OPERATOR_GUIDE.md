@@ -56,7 +56,7 @@ evidence into full assurance without review.
 
 ## Required Work Loop
 
-After material edits, run:
+After material edits, run these in order:
 
 ```bash
 python tools/cramps_cli.py check <package_dir>
@@ -71,6 +71,20 @@ Use the outputs to decide the next action:
 - `ai_controls/leak_scan_status.json` gives leak and quarantine risk.
 - `ai_controls/gate_status.json` gives DAG gate status.
 - `ai_controls/term_prereq_ledger.csv` gives explicit prerequisite accounting.
+
+## Agent Deployment Helpers
+
+Every CLI package contains:
+
+- `ai_controls/AGENT_DEPLOYMENT_HELPER.md`
+- `ai_controls/agent_deployment_plan.csv`
+- `ai_controls/agent_handoff_checklist.csv`
+- `ai_controls/agent_registry.csv`
+
+For a lowercase preflight, keep the default `single_preflight_operator` unless a
+documented deviation approves help. For an uppercase full package, deploy only
+the role agents listed in `agent_deployment_plan.csv`, stay inside their gate
+spans, and record material handoffs in the handoff checklist.
 
 ## When To Quarantine
 

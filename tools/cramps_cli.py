@@ -104,6 +104,41 @@ TERM_FIELDS = [
     "notes",
 ]
 
+AGENT_DEPLOYMENT_PLAN_FIELDS = [
+    "study_id",
+    "package_level",
+    "deployment_mode",
+    "agent_id",
+    "agent_role",
+    "assigned_scope",
+    "allowed_inputs",
+    "prohibited_inputs",
+    "required_outputs",
+    "reviewer_id",
+    "gate_start",
+    "gate_stop",
+    "can_write",
+    "can_export",
+    "human_review_required",
+    "status",
+    "notes",
+]
+
+AGENT_HANDOFF_FIELDS = [
+    "handoff_id",
+    "study_id",
+    "from_agent_id",
+    "to_agent_id",
+    "artifact_path",
+    "artifact_state",
+    "gate_context",
+    "open_blockers",
+    "quarantine_status",
+    "reviewer_id",
+    "accepted_timestamp",
+    "notes",
+]
+
 
 LEAK_PATTERNS = [
     ("openai_api_key", "critical", re.compile(r"\bsk-[A-Za-z0-9_-]{20,}\b")),
@@ -324,8 +359,8 @@ outside the package and must not be edited during package operation.
 1. Work only inside this package directory unless a human explicitly authorizes source-kit maintenance.
 2. Record material AI actions in `logs/ai_activity_log.csv`.
 3. Run `python {ROOT / "tools" / "cramps_cli.py"} check . --level {check_level}` after material edits.
-4. Run `python {ROOT / "tools" / "cramps_cli.py"} gate . --level {check_level}` before phase progress.
-5. Run `python {ROOT / "tools" / "cramps_cli.py"} leak-scan .` before sharing, exporting, escalation, or release.
+4. Run `python {ROOT / "tools" / "cramps_cli.py"} leak-scan .` before sharing, exporting, escalation, release, or gate evaluation.
+5. Run `python {ROOT / "tools" / "cramps_cli.py"} gate . --level {check_level}` before phase progress.
 6. If a critical leak, source-boundary breach, fabricated field, or prohibited claim is found, run quarantine.
 
 ## Claim Boundary
@@ -365,9 +400,9 @@ def render_ai_operator_brief(domain: dict, level: str, study_id: str, title: str
     return f"""
 # AI Operator Brief
 
-**Package:** {label}  
-**Study ID:** {study_id}  
-**Title:** {title}  
+**Package:** {label}
+**Study ID:** {study_id}
+**Title:** {title}
 **Trust posture:** bounded, inspected, non-confirmatory until gates clear.
 
 ## Prime Directive
@@ -379,13 +414,13 @@ while performing package work.
 
 ## Required Loop
 
-1. Read `cramps_project.json`, this brief, and `ai_controls/GATE_DAG.md`.
+1. Read `cramps_project.json`, this brief, `ai_controls/AGENT_DEPLOYMENT_HELPER.md`, and `ai_controls/GATE_DAG.md`.
 2. Before adding evidence, state the current phase and blocked gate.
 3. Add or revise only package artifacts.
 4. Record material actions in `logs/ai_activity_log.csv`.
 5. Run sidecar checks with `cramps_cli.py check`.
-6. Run DAG accounting with `cramps_cli.py gate`.
-7. Run leak scanning with `cramps_cli.py leak-scan`.
+6. Run leak scanning with `cramps_cli.py leak-scan`.
+7. Run DAG accounting with `cramps_cli.py gate`.
 8. Stop and quarantine if a critical leak, contamination event, fabricated field, or prohibited claim appears.
 
 ## Non-Negotiables
@@ -402,6 +437,314 @@ while performing package work.
 The package may progress only when the next gate's prerequisites are met,
 leak-scan has no open critical findings, quarantine status is clear, and the
 claim language matches the package level.
+"""
+
+
+def agent_deployment_plan_rows(domain: dict, level: str, study_id: str) -> list[dict[str, str]]:
+    def row(
+        deployment_mode: str,
+        agent_id: str,
+        agent_role: str,
+        assigned_scope: str,
+        allowed_inputs: str,
+        prohibited_inputs: str,
+        required_outputs: str,
+        gate_start: str,
+        gate_stop: str,
+        can_write: str,
+        can_export: str,
+        review: str,
+        notes: str,
+    ) -> dict[str, str]:
+        return {
+            "study_id": study_id,
+            "package_level": level,
+            "deployment_mode": deployment_mode,
+            "agent_id": agent_id,
+            "agent_role": agent_role,
+            "assigned_scope": assigned_scope,
+            "allowed_inputs": allowed_inputs,
+            "prohibited_inputs": prohibited_inputs,
+            "required_outputs": required_outputs,
+            "reviewer_id": "",
+            "gate_start": gate_start,
+            "gate_stop": gate_stop,
+            "can_write": can_write,
+            "can_export": can_export,
+            "human_review_required": review,
+            "status": "planned",
+            "notes": notes,
+        }
+
+    if level == "preflight":
+        return [
+            row(
+                "single_operator_preflight",
+                "single_preflight_operator",
+                "preflight_operator",
+                "Complete the bounded one to two day preflight and prepare an escalation, hold, stop, or rescope decision.",
+                "Package files; public or authorized sources; domain reference; preflight templates.",
+                "Source-kit edits; restricted data without authorization; full-system assurance claims; unlogged external outputs.",
+                "preflight_scope.md; preflight_sources.csv; preflight_rows.csv; preflight_gotchas.md; preflight_decision.md; logs/ai_activity_log.csv.",
+                "G0",
+                "P5",
+                "yes-package-only",
+                "no-before-P5",
+                "yes-before-promotion",
+                f"Default for {domain['light']}: do not deploy extra agents unless a documented deviation approves the scope.",
+            )
+        ]
+
+    common_allowed = "Package files; locked protocol; authorized source materials; package-local AI controls."
+    common_prohibited = "Unapproved source-kit edits; private or restricted data without authorization; post-hoc coordinate tuning; final release signoff."
+    return [
+        row(
+            "full_system_role_agents",
+            "protocol_agent",
+            "protocol_steward",
+            "Maintain protocol, amendment path, candidate-coordinate lock, and role boundaries.",
+            "Charter, preflight import log, domain reference, reviewer instructions.",
+            "Scoring results; changing methods after seeing results; approving release alone.",
+            "01_protocol_lock/protocol.md; 01_protocol_lock/candidate_coordinate_registry.csv; 01_protocol_lock/amendment_log.csv.",
+            "F1",
+            "F2",
+            "yes-package-only",
+            "no",
+            "yes",
+            "Can block downstream agents until candidate coordinates and amendment rules are locked.",
+        ),
+        row(
+            "full_system_role_agents",
+            "source_search_agent",
+            "source_search",
+            "Execute registered searches, record source universe, and preserve exclusions, nulls, and non-events.",
+            "Locked protocol, search strategy, public or authorized databases.",
+            "Dropping adverse evidence; adding unregistered search criteria without amendment.",
+            "02_sources/source_catalog.csv; 02_sources/search_strategy.md; 02_sources/source_flow.md.",
+            "F2",
+            "F3",
+            "yes-package-only",
+            "no",
+            "yes",
+            "Search records must include unavailable, duplicate, null, and excluded sources.",
+        ),
+        row(
+            "full_system_role_agents",
+            "extraction_agent",
+            "row_extraction",
+            "Extract raw coordinate, uncertainty, residual, source, and reviewer fields without normalization.",
+            common_allowed,
+            f"{common_prohibited}; inferred values presented as source values.",
+            "03_extraction/anomaly_rows_raw.csv; 03_extraction/extraction_notes.md.",
+            "F3",
+            "F3",
+            "yes-package-only",
+            "no",
+            "yes-sampled-or-dual-review",
+            "Raw values stay raw; uncertain values remain blank or flagged.",
+        ),
+        row(
+            "full_system_role_agents",
+            "normalization_agent",
+            "coordinate_normalization",
+            "Apply locked transforms and keep raw and normalized coordinate values separated.",
+            common_allowed,
+            f"{common_prohibited}; undocumented unit conversions.",
+            "04_coordinate_normalization/normalized_rows.csv; 04_coordinate_normalization/coordinate_transform_registry.csv; 04_coordinate_normalization/unit_conversion_audit.md.",
+            "F3",
+            "F4",
+            "yes-package-only",
+            "no",
+            "yes",
+            "Every transform must be reproducible from raw values.",
+        ),
+        row(
+            "full_system_role_agents",
+            "independence_agent",
+            "dependence_mapping",
+            "Assign evidence-family, shared-instrument, shared-dataset, and shared-pipeline dependence groups.",
+            common_allowed,
+            f"{common_prohibited}; treating duplicate analyses as independent rows.",
+            "05_dependence_bias/independence_groups.csv.",
+            "F4",
+            "F5",
+            "yes-package-only",
+            "no",
+            "yes",
+            "Dependence grades can reduce but must not inflate evidentiary weight.",
+        ),
+        row(
+            "full_system_role_agents",
+            "bias_agent",
+            "bias_and_missing_evidence",
+            "Assess missing evidence, selective reporting, source-process bias, and domain-specific blind spots.",
+            common_allowed,
+            f"{common_prohibited}; removing inconvenient missing-evidence findings.",
+            "05_dependence_bias/bias_assessment.csv; 05_dependence_bias/missing_evidence_assessment.md.",
+            "F4",
+            "F5",
+            "yes-package-only",
+            "no",
+            "yes",
+            "Bias findings are gate inputs, not narrative decoration.",
+        ),
+        row(
+            "full_system_role_agents",
+            "statistics_agent",
+            "null_model_and_statistics",
+            "Run registered null models, correction accounting, negative controls, and sensitivity summaries.",
+            "Locked protocol, normalized rows, dependence map, bias assessment, approved analysis environment.",
+            "Changing nulls after seeing results; release language; unregistered favorable reruns.",
+            "06_statistics/null_model_runs.csv; 06_statistics/analysis_result.csv; 06_statistics/negative_controls.md; 06_statistics/sensitivity_results.md.",
+            "F5",
+            "F6",
+            "yes-package-only",
+            "no",
+            "yes-statistical-lead",
+            "All runs need seed, code version, and correction-scope accounting.",
+        ),
+        row(
+            "full_system_role_agents",
+            "reproducibility_agent",
+            "reproducibility",
+            "Rebuild the package outputs from frozen inputs and record environment, hashes, and clean-run issues.",
+            "Frozen package snapshot, analysis code, environment instructions.",
+            "Editing evidence to make reproduction pass; omitting failed rebuild notes.",
+            "07_reproducibility/checksum_manifest.csv; 07_reproducibility/environment_record.md; 07_reproducibility/clean_run_report.md.",
+            "F6",
+            "F7",
+            "yes-package-only",
+            "no",
+            "yes",
+            "Reproduction failures stay visible until resolved or accepted as residual risk.",
+        ),
+        row(
+            "full_system_role_agents",
+            "reporting_agent",
+            "bounded_reporting",
+            "Draft claim-limited reports, decision memo text, and claim trace entries from reviewed evidence.",
+            common_allowed,
+            "Proof, discovery, safety, efficacy, compliance, causality, fraud, or exploitability claims from CRAMPS alone.",
+            "09_review_and_release/decision_memo.md; 10_trust_maintenance/claim_trace_matrix.csv; exports/.",
+            "F7",
+            "F8",
+            "yes-package-only",
+            "hold-until-release-review",
+            "yes-release-authority",
+            "Reports must cite gate status and unresolved trust debt.",
+        ),
+        row(
+            "full_system_role_agents",
+            "red_team_agent",
+            "red_team_review",
+            "Attempt to break the package through dependence, leakage, null-model, missing-evidence, and claim-boundary attacks.",
+            "Complete package, gate status, leak reports, sidecar metrics, claim drafts.",
+            "Rewriting the claim to hide a defect; closing findings without reviewer basis.",
+            "09_review_and_release/audit_report.md; 10_trust_maintenance/trust_debt_register.csv; logs/ai_activity_log.csv.",
+            "F6",
+            "F8",
+            "yes-package-only",
+            "no",
+            "yes-release-authority",
+            "Red-team findings block release until accepted, resolved, or formally dispositioned.",
+        ),
+    ]
+
+
+def render_agent_deployment_helper(domain: dict, level: str, study_id: str, title: str) -> str:
+    label = domain["light"] if level == "preflight" else domain["full"]
+    rows = agent_deployment_plan_rows(domain, level, study_id)
+    role_lines = [
+        "| agent_id | role | gate span | writes | required review |",
+        "|---|---|---|---|---|",
+    ]
+    for item in rows:
+        role_lines.append(
+            f"| `{item['agent_id']}` | {item['agent_role']} | `{item['gate_start']}` to `{item['gate_stop']}` | {item['can_write']} | {item['human_review_required']} |"
+        )
+
+    if level == "preflight":
+        level_rule = f"""
+## Preflight Deployment Rule
+
+`{label}` defaults to one operator only: `single_preflight_operator`.
+
+The preflight is meant to be fast, bounded, and cheap. Do not split the work
+across multiple agents unless the package owner records a deviation explaining
+why the preflight cannot be completed with one operator. If additional help is
+approved, the helper may gather source candidates or formatting checks only;
+the single preflight operator remains accountable for the decision record.
+"""
+    else:
+        level_rule = f"""
+## Full-System Deployment Rule
+
+`{label}` may use role-specific agents after the charter, role assignment, and
+protocol-lock path are in place. The deployment plan is not permission to run
+unbounded parallel work. Each role must stay within its assigned gate span and
+must hand off artifacts through `ai_controls/agent_handoff_checklist.csv`.
+"""
+
+    return f"""
+# Agent Deployment Helper
+
+**Package:** {label}
+**Study ID:** {study_id}
+**Title:** {title}
+
+This helper controls when human, software, or AI agents can be used inside this
+package. It is a deployment aid, not a release authority.
+
+{level_rule}
+
+## Required Files
+
+- `ai_controls/agent_deployment_plan.csv` records who can work, on what scope,
+  with which inputs, and under which gate span.
+- `ai_controls/agent_handoff_checklist.csv` records artifact handoffs between
+  agents or reviewers.
+- `ai_controls/agent_registry.csv` records model, tool, prompt, SOP, review,
+  and audit-log details for agents used in the package.
+- `logs/ai_activity_log.csv` records material actions.
+
+## Deployment Preconditions
+
+Before deploying any agent beyond the default operator:
+
+1. Confirm the package is active and outside controlled source material.
+2. Confirm the agent has a row in `agent_deployment_plan.csv`.
+3. Confirm allowed inputs and prohibited inputs are explicit.
+4. Confirm the agent's write scope is package-only.
+5. Run `cramps_cli.py check`, then `cramps_cli.py leak-scan`, then
+   `cramps_cli.py gate`.
+6. Do not start work if the current gate or a dependency gate is blocked for a
+   reason the agent would bypass rather than fix.
+
+## Role Cards
+
+{chr(10).join(role_lines)}
+
+## Handoff Rule
+
+An artifact is not handed off by conversation alone. Record the path, state,
+gate context, open blockers, quarantine status, reviewer, and acceptance time
+in `ai_controls/agent_handoff_checklist.csv`.
+
+## Stop Conditions
+
+Stop and quarantine when an agent encounters a critical leak, source-kit
+contamination, fabricated value, untraceable source field, hidden deletion of
+null/non-event evidence, blocked-gate bypass, or claim language above the
+package assurance level.
+
+## Command Order
+
+```bash
+python {ROOT / "tools" / "cramps_cli.py"} check .
+python {ROOT / "tools" / "cramps_cli.py"} leak-scan .
+python {ROOT / "tools" / "cramps_cli.py"} gate . --level {level}
+python {ROOT / "tools" / "cramps_cli.py"} status .
+```
 """
 
 
@@ -425,6 +768,8 @@ def render_gate_dag_doc(level: str) -> str:
             "Run:",
             "",
             f"```bash\npython {ROOT / 'tools' / 'cramps_cli.py'} gate <package_dir> --level {level}\n```",
+            "",
+            "Run gate evaluation after `check` and `leak-scan` so the DAG sees current package metrics and leak status.",
             "",
             "The command writes `ai_controls/gate_status.json`, `ai_controls/gate_status.md`, and `ai_controls/term_prereq_ledger.csv`.",
         ]
@@ -500,7 +845,7 @@ def render_next_actions(level: str) -> str:
             "Add searched and included sources to `preflight_sources.csv`.",
             "Extract weak observation, residual, null, non-event, exclusion, and near-miss rows into `preflight_rows.csv`.",
             "Complete `preflight_gotchas.md` as the failure-mode worksheet before making an escalation decision.",
-            "Run `check`, `gate`, and `leak-scan` before deciding whether to promote.",
+            "Run `check`, `leak-scan`, and `gate` before deciding whether to promote.",
         ]
     else:
         actions = [
@@ -508,7 +853,7 @@ def render_next_actions(level: str) -> str:
             "Lock candidate coordinates before scoring.",
             "Populate source, raw row, normalized row, independence, bias, null model, and result contracts.",
             "Maintain build ledger, checkpoint reviews, claim trace matrix, trust debt, and trust status summary.",
-            "Run `check`, `gate`, and `leak-scan` before release review.",
+            "Run `check`, `leak-scan`, and `gate` before release review.",
         ]
     return "# Next Actions\n\n" + "\n".join(f"- {item}" for item in actions)
 
@@ -546,19 +891,32 @@ def create_common_package_controls(package: Path, domain: dict, level: str, stud
     write_text(package / "PACKAGE_README.md", render_package_readme(domain, level, study_id, title))
     write_text(package / "domain_context" / "DOMAIN_REFERENCE.md", render_domain_reference(domain))
     write_text(package / "ai_controls" / "AI_OPERATOR_BRIEF.md", render_ai_operator_brief(domain, level, study_id, title))
+    write_text(package / "ai_controls" / "AGENT_DEPLOYMENT_HELPER.md", render_agent_deployment_helper(domain, level, study_id, title))
     write_text(package / "ai_controls" / "GATE_DAG.md", render_gate_dag_doc(level))
     write_text(package / "ai_controls" / "LEAK_WATCH_SURFACES.md", render_leak_watch_doc())
     write_text(package / "ai_controls" / "QUARANTINE_PROTOCOL.md", render_quarantine_protocol())
     write_text(package / "NEXT_ACTIONS.md", render_next_actions(level))
+    agent_registry = package / "ai_controls" / "agent_registry.csv"
+    if not agent_registry.exists():
+        copy_file(ROOT / "templates" / "agent_registry.csv", agent_registry)
 
     for path, fields in [
         (package / "logs" / "ai_activity_log.csv", AI_LOG_FIELDS),
         (package / "logs" / "leak_watch_log.csv", LEAK_LOG_FIELDS),
         (package / "logs" / "quarantine_log.csv", QUARANTINE_LOG_FIELDS),
         (package / "ai_controls" / "term_prereq_ledger.csv", TERM_FIELDS),
+        (
+            package / "ai_controls" / "agent_deployment_plan.csv",
+            AGENT_DEPLOYMENT_PLAN_FIELDS,
+        ),
+        (
+            package / "ai_controls" / "agent_handoff_checklist.csv",
+            AGENT_HANDOFF_FIELDS,
+        ),
     ]:
         if not path.exists():
-            write_csv(path, fields, [])
+            rows = agent_deployment_plan_rows(domain, level, study_id) if fields == AGENT_DEPLOYMENT_PLAN_FIELDS else []
+            write_csv(path, fields, rows)
 
 
 def scaffold_preflight(package: Path, domain: dict, study_id: str, title: str, force: bool) -> None:

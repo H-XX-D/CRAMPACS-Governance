@@ -19,7 +19,7 @@ Do not spawn additional agents inside the preflight. Expanded agent deployment s
 
 ## Required Loop
 
-1. Read `cramps_project.json`, this brief, and `ai_controls/GATE_DAG.md`.
+1. Read `cramps_project.json`, this brief, `ai_controls/AGENT_DEPLOYMENT_HELPER.md`, and `ai_controls/GATE_DAG.md`.
 2. State the current level: lowercase `cramps-phy` preflight.
 3. Inspect `preflight_scope.md`, `preflight_sources.csv`, `preflight_rows.csv`, `preflight_gotchas.md`, and `preflight_decision.md`.
 4. Run `python tools/cramps_cli.py check worked_examples/preflight/cramps-phy-synthetic-coordinate-recurrence --level preflight` from the repo root.

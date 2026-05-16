@@ -35,6 +35,7 @@ Before doing package work, an AI operator must read:
 
 - `cramps_project.json`
 - `ai_controls/AI_OPERATOR_BRIEF.md`
+- `ai_controls/AGENT_DEPLOYMENT_HELPER.md`
 - `ai_controls/GATE_DAG.md`
 - `ai_controls/LEAK_WATCH_SURFACES.md`
 - `ai_controls/QUARANTINE_PROTOCOL.md`
@@ -47,8 +48,8 @@ The AI operator must:
 4. Leave unknown values blank instead of inventing values.
 5. Record material actions in `logs/ai_activity_log.csv`.
 6. Run sidecar checks after material edits.
-7. Run gate accounting before phase progress.
-8. Run leak scanning before export, escalation, release, or external sharing.
+7. Run leak scanning before gate accounting, export, escalation, release, or external sharing.
+8. Run gate accounting before phase progress.
 9. Quarantine the package if a critical leak, source-boundary breach, fabricated field, or overclaim appears.
 
 The AI operator must not:
@@ -59,6 +60,24 @@ The AI operator must not:
 - upgrade lowercase preflight language into uppercase full-assurance claims
 - claim proof, discovery, causality, safety, efficacy, fraud, exploitability, or compliance from CRAMPS alone
 - export restricted, private, sensitive, or source-contaminated material
+
+## Agent Deployment Controls
+
+The package-local deployment plan controls how agents may be used:
+
+- `ai_controls/AGENT_DEPLOYMENT_HELPER.md`
+- `ai_controls/agent_deployment_plan.csv`
+- `ai_controls/agent_handoff_checklist.csv`
+- `ai_controls/agent_registry.csv`
+
+A lowercase `cramps-*` preflight defaults to one accountable operator:
+`single_preflight_operator`. Additional agents require a documented deviation
+and may not turn the preflight into an uppercase assurance package.
+
+An uppercase `CRAMPS-*` package may use role-specific agents only inside their
+assigned gate spans. Material handoffs must be recorded in the handoff
+checklist. Agent identity, model or tool version, prompt or SOP version, review
+requirement, and audit-log path must be recorded in the agent registry.
 
 ## DAG Gate Accounting
 
