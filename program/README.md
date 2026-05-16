@@ -83,6 +83,12 @@ agent-audit report, leak-watch report, acceptance-audit report, reviewer packet,
 quarantine protocol, sidecar metrics, and checksums. The source kit remains
 sanitized for reuse.
 
+For source-kit handoff, run:
+
+```bash
+python tools/cramps_cli.py source-audit
+```
+
 Use the lower-level scaffold tool only when you need the full evidence-binder
 structure without the CLI operating controls:
 

@@ -21,6 +21,7 @@ Use before pushing a CRAMPS source-kit update.
 | Generated artifacts | domain packs, printouts, and workbooks regenerated when generators change | generator run log or commit diff |
 | Python tools | CLI and sidecar compile | `python -m py_compile ...` |
 | CLI health | source kit reports no doctor issues | `python tools/cramps_cli.py doctor` |
+| Source audit | source kit has no release blockers | `python tools/cramps_cli.py source-audit` |
 | Agent audit | fresh package agent controls audit without blockers | `python tools/cramps_cli.py agent-audit <package>` |
 | Acceptance audit | package acceptance audit has no blockers and no wrong-level or stale-gate artifacts | `python tools/cramps_cli.py acceptance-audit <package>` |
 | Review packet | package reviewer handoff has no blockers and no post-acceptance material changes | `python tools/cramps_cli.py review-packet <package>` |
@@ -118,6 +119,7 @@ Source kit:
 ```bash
 python -m py_compile tools/cramps_cli.py tools/cramps_sidecar.py tools/scaffold_cramps_package.py tools/generate_domain_packs.py
 python tools/cramps_cli.py doctor
+python tools/cramps_cli.py source-audit
 node tools/verify_workbooks.mjs
 git diff --check
 ```

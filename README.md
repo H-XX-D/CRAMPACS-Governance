@@ -175,6 +175,12 @@ status, prerequisite accounting, agent-audit reports, leak-watch reports,
 acceptance-audit reports, reviewer packets, quarantine logs, sidecar metrics,
 and checksums.
 
+Before publishing or handing off the reusable source kit itself, run:
+
+```bash
+python tools/cramps_cli.py source-audit
+```
+
 To compose a lowercase preflight into an uppercase full package without changing
 the original preflight:
 

@@ -280,3 +280,20 @@ Artifacts:
 Outcome:
 
 - reviewers receive a package index with hashes, control status, reliance limits, and blocker checks instead of a loose folder handoff.
+
+## Post-Build Round 9: Source-kit audit hardening
+
+Focus:
+
+- give the reusable CRAMPS source kit its own audit path, separate from study-package audits
+- detect stale legacy names, missing domain artifacts, template-contract drift, controlled-source contamination, local junk files, generated package leftovers, and dirty worktrees
+- make pre-push and handoff hygiene inspectable with one command
+
+Artifacts:
+
+- `tools/cramps_cli.py source-audit`
+- updated README, program README, tools README, and release acceptance checklist
+
+Outcome:
+
+- a maintainer can now ask whether the source kit itself is coherent enough to publish or hand off before running package-specific controls.

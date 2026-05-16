@@ -164,6 +164,62 @@ REVIEW_PACKET_MANIFEST_FIELDS = [
     "notes",
 ]
 
+SOURCE_AUDIT_SKIP_DIRS = {
+    ".git",
+    "__pycache__",
+    ".pytest_cache",
+    ".mypy_cache",
+    "node_modules",
+    "cramps_projects",
+}
+
+SOURCE_AUDIT_SKIP_SUFFIXES = {
+    ".xlsx",
+    ".pdf",
+    ".png",
+    ".jpg",
+    ".jpeg",
+    ".gif",
+    ".zip",
+    ".pyc",
+}
+
+SOURCE_AUDIT_SKIP_NAMES = {
+    ".DS_Store",
+    "cramps_sidecar_metrics.json",
+    "cramps_sidecar_metrics.md",
+    "gate_status.json",
+    "gate_status.md",
+    "leak_scan_status.json",
+    "leak_scan_report.md",
+    "acceptance_audit_status.json",
+    "acceptance_audit_report.md",
+    "review_packet_status.json",
+}
+
+STALE_NAME_PATTERNS = [
+    re.compile(pattern)
+    for pattern in [
+        "CRAMP" + "ACS",
+        "CRAMP" + "AS",
+        "CRAMP" + "aS",
+        "cramp" + "acs",
+        "cramp" + "as",
+    ]
+]
+
+EXPECTED_DOMAIN_PACK_FILES = [
+    "README.md",
+    "{full}_DOMAIN_GOVERNANCE_PRINTABLE.md",
+    "{full}_FULL_PROTOCOL_ADDENDUM.md",
+    "{full}_RELEASE_GATE_PRINTABLE.md",
+    "{light}_PREFLIGHT_DECISION.md",
+    "{light}_PREFLIGHT_GOTCHAS_PRINTABLE.md",
+    "{light}_PREFLIGHT_ROWS.csv",
+    "{light}_PREFLIGHT_SCOPE.md",
+    "{light}_PREFLIGHT_SOURCES.csv",
+]
+
 AGENT_PLAN_REQUIRED_FIELDS = [
     "study_id",
     "package_level",
@@ -1717,6 +1773,287 @@ def build_review_packet(package: Path, level: str, out: Path | None, allow_hold:
     return status
 
 
+def add_source_audit_check(
+    checks: list[dict[str, str]],
+    check_id: str,
+    status: str,
+    severity: str,
+    evidence: str,
+    message: str,
+) -> None:
+    checks.append(
+        {
+            "check_id": check_id,
+            "status": status,
+            "severity": severity,
+            "evidence": evidence,
+            "message": message,
+        }
+    )
+
+
+def iter_source_text_files() -> list[Path]:
+    files = []
+    for path in sorted(ROOT.rglob("*")):
+        if not path.is_file():
+            continue
+        if any(part in SOURCE_AUDIT_SKIP_DIRS for part in path.parts):
+            continue
+        if path.suffix.lower() in SOURCE_AUDIT_SKIP_SUFFIXES:
+            continue
+        if path.name in SOURCE_AUDIT_SKIP_NAMES:
+            continue
+        files.append(path)
+    return files
+
+
+def find_stale_source_names() -> list[str]:
+    hits = []
+    for path in iter_source_text_files():
+        try:
+            text = path.read_text(encoding="utf-8", errors="ignore")
+        except Exception:
+            continue
+        for line_number, line in enumerate(text.splitlines(), start=1):
+            if any(pattern.search(line) for pattern in STALE_NAME_PATTERNS):
+                hits.append(f"{relative_artifact(ROOT, path)}:{line_number}")
+                break
+    return hits
+
+
+def source_junk_files() -> list[str]:
+    return [
+        relative_artifact(ROOT, path)
+        for path in sorted(ROOT.rglob(".DS_Store"))
+        if ".git" not in path.parts
+    ]
+
+
+def controlled_source_contamination() -> list[str]:
+    contamination = []
+    runtime_names = {
+        STATE_FILE,
+        "cramps_sidecar_metrics.json",
+        "cramps_sidecar_metrics.md",
+        "gate_status.json",
+        "gate_status.md",
+        "leak_scan_status.json",
+        "acceptance_audit_status.json",
+        "review_packet_status.json",
+    }
+    runtime_dirs = {"ai_controls", "exports", "quarantine"}
+    for dirname in CONTROLLED_SOURCE_DIRS:
+        base = ROOT / dirname
+        if not base.exists():
+            continue
+        for path in sorted(base.rglob("*")):
+            rel = relative_artifact(ROOT, path)
+            if path.is_dir() and path.name in runtime_dirs:
+                contamination.append(rel)
+            elif path.is_file() and path.name in runtime_names:
+                contamination.append(rel)
+    return contamination
+
+
+def missing_domain_artifacts(domains: list[dict]) -> list[str]:
+    missing = []
+    for domain in domains:
+        pack_dir = ROOT / "domain_packs" / domain["slug"]
+        for pattern in EXPECTED_DOMAIN_PACK_FILES:
+            expected = pattern.format(full=domain["full"], light=domain["light"])
+            path = pack_dir / expected
+            if not path.exists():
+                missing.append(relative_artifact(ROOT, path))
+        overlay_matches = list((ROOT / "domain_overlays").glob(f"CRAMPS_{domain['slug'].upper()}_*_OVERLAY.md"))
+        if not overlay_matches:
+            missing.append(f"domain_overlays/CRAMPS_{domain['slug'].upper()}_*_OVERLAY.md")
+        workbook = ROOT / "spreadsheets" / "domains" / f"{domain['light']}_{domain['full']}_Workbook.xlsx"
+        if not workbook.exists():
+            missing.append(relative_artifact(ROOT, workbook))
+        printout = ROOT / "printouts" / f"{domain['slug']}_field_printout.md"
+        if not printout.exists():
+            missing.append(relative_artifact(ROOT, printout))
+    return missing
+
+
+def template_header_issues() -> list[str]:
+    checks = {
+        "templates/agent_deployment_plan.csv": AGENT_DEPLOYMENT_PLAN_FIELDS,
+        "templates/agent_handoff_checklist.csv": AGENT_HANDOFF_FIELDS,
+        "templates/agent_registry.csv": AGENT_REGISTRY_FIELDS,
+    }
+    issues = []
+    for rel, expected in checks.items():
+        header = read_csv_header(ROOT / rel)
+        if header != expected:
+            issues.append(f"{rel} header mismatch")
+    return issues
+
+
+def source_audit_status() -> dict:
+    checks: list[dict[str, str]] = []
+    domains = load_domains()
+    gitignore = ROOT / ".gitignore"
+    gitignore_text = gitignore.read_text(encoding="utf-8") if gitignore.exists() else ""
+    required_gitignore = [".DS_Store", "cramps_projects/", "node_modules", "__pycache__/"]
+    missing_gitignore = [item for item in required_gitignore if item not in gitignore_text]
+    add_source_audit_check(
+        checks,
+        "gitignore_release_hygiene",
+        "pass" if not missing_gitignore else "fail",
+        "blocker",
+        ".gitignore",
+        "gitignore covers generated and local runtime artifacts"
+        if not missing_gitignore
+        else f"missing gitignore entries: {', '.join(missing_gitignore)}",
+    )
+
+    required_paths = [
+        "README.md",
+        "tools/cramps_cli.py",
+        "tools/cramps_sidecar.py",
+        "tools/cramps_domains.json",
+        "program/README.md",
+        "program/RELEASE_ACCEPTANCE_CHECKLIST.md",
+        "program/AUDIT_AND_INSPECTION_PACKET.md",
+        "policies/CRAMPS_NAMING_AND_ASSURANCE_LEVELS_2026-05-15.md",
+        "templates/README.md",
+        "spreadsheets/CRAMPS_Governance_Master.xlsx",
+    ]
+    missing_required = [rel for rel in required_paths if not (ROOT / rel).exists()]
+    add_source_audit_check(
+        checks,
+        "required_source_documents",
+        "pass" if not missing_required else "fail",
+        "blocker",
+        "source tree",
+        "required source-kit documents are present"
+        if not missing_required
+        else f"missing required paths: {', '.join(missing_required)}",
+    )
+
+    stale_hits = find_stale_source_names()
+    add_source_audit_check(
+        checks,
+        "stale_name_scan",
+        "pass" if not stale_hits else "fail",
+        "blocker",
+        "source text scan",
+        "no stale legacy project names found"
+        if not stale_hits
+        else f"stale names found at: {', '.join(stale_hits[:10])}",
+    )
+
+    contamination = controlled_source_contamination()
+    add_source_audit_check(
+        checks,
+        "controlled_source_contamination",
+        "pass" if not contamination else "fail",
+        "blocker",
+        "controlled source directories",
+        "no package runtime outputs found inside controlled source material"
+        if not contamination
+        else f"package runtime artifacts found: {', '.join(contamination[:10])}",
+    )
+
+    missing_domains = missing_domain_artifacts(domains)
+    add_source_audit_check(
+        checks,
+        "domain_artifact_matrix",
+        "pass" if not missing_domains else "fail",
+        "blocker",
+        "domain packs, overlays, printouts, workbooks",
+        f"all {len(domains)} configured domains have expected artifacts"
+        if not missing_domains
+        else f"missing domain artifacts: {', '.join(missing_domains[:12])}",
+    )
+
+    header_issues = template_header_issues()
+    add_source_audit_check(
+        checks,
+        "template_header_contracts",
+        "pass" if not header_issues else "fail",
+        "blocker",
+        "templates/*.csv",
+        "agent template headers match CLI contracts"
+        if not header_issues
+        else f"template header issues: {', '.join(header_issues)}",
+    )
+
+    junk = source_junk_files()
+    add_source_audit_check(
+        checks,
+        "local_junk_files",
+        "pass" if not junk else "warn",
+        "warning",
+        "source tree",
+        "no local .DS_Store files outside .git"
+        if not junk
+        else f"local junk files present: {', '.join(junk[:10])}",
+    )
+
+    generated_projects = [relative_artifact(ROOT, path) for path in sorted((ROOT / "cramps_projects").glob("*"))] if (ROOT / "cramps_projects").exists() else []
+    add_source_audit_check(
+        checks,
+        "local_generated_projects",
+        "pass" if not generated_projects else "warn",
+        "warning",
+        "cramps_projects/",
+        "no local generated package directories present"
+        if not generated_projects
+        else f"local generated packages are present but ignored: {', '.join(generated_projects[:8])}",
+    )
+
+    add_source_audit_check(
+        checks,
+        "git_worktree_clean",
+        "pass" if not source_dirty() else "warn",
+        "warning",
+        "git status --short",
+        "git worktree is clean" if not source_dirty() else "git worktree has uncommitted source changes",
+    )
+
+    blockers = [check for check in checks if check["severity"] == "blocker" and check["status"] != "pass"]
+    warnings = [check for check in checks if check["severity"] == "warning" and check["status"] != "pass"]
+    return {
+        "generated_at": utc_now(),
+        "source_repo": str(ROOT),
+        "source_commit": git_value("rev-parse", "HEAD"),
+        "source_dirty": source_dirty(),
+        "domain_count": len(domains),
+        "decision": "source_kit_release_candidate" if not blockers else "hold_source_kit_release",
+        "all_clear": not blockers,
+        "blocker_count": len(blockers),
+        "warning_count": len(warnings),
+        "checks": checks,
+    }
+
+
+def render_source_audit_report(status: dict) -> str:
+    lines = [
+        "# CRAMPS Source Kit Audit Report",
+        "",
+        f"Generated: {status['generated_at']}",
+        f"Decision: `{status['decision']}`",
+        f"Source commit: `{status['source_commit']}`",
+        f"Source dirty: `{status['source_dirty']}`",
+        f"Domain count: `{status['domain_count']}`",
+        f"Blockers: `{status['blocker_count']}`",
+        f"Warnings: `{status['warning_count']}`",
+        "",
+        "This audit checks the reusable source kit, not a study package. It does not replace package `check`, `agent-audit`, `leak-scan`, `gate`, `acceptance-audit`, or `review-packet`.",
+        "",
+        "| check | status | severity | evidence | message |",
+        "|---|---|---|---|---|",
+    ]
+    for check in status["checks"]:
+        lines.append(
+            f"| `{check['check_id']}` | `{check['status']}` | `{check['severity']}` | `{check['evidence']}` | {check['message']} |"
+        )
+    lines.append("")
+    return "\n".join(lines)
+
+
 def render_gate_dag_doc(level: str) -> str:
     specs = gate_specs(level)
     lines = [
@@ -2687,6 +3024,32 @@ def command_review_packet(args: argparse.Namespace) -> int:
     return int(status["exit_code"])
 
 
+def command_source_audit(args: argparse.Namespace) -> int:
+    status = source_audit_status()
+    if args.report:
+        write_text(args.report.resolve(), render_source_audit_report(status))
+    print(
+        json.dumps(
+            {
+                "decision": status["decision"],
+                "all_clear": status["all_clear"],
+                "blocker_count": status["blocker_count"],
+                "warning_count": status["warning_count"],
+                "source_commit": status["source_commit"],
+                "source_dirty": status["source_dirty"],
+            },
+            indent=2,
+        )
+    )
+    if args.verbose:
+        print(json.dumps(status, indent=2, sort_keys=True))
+    if status["blocker_count"]:
+        return 1
+    if args.fail_on_warning and status["warning_count"]:
+        return 2
+    return 0
+
+
 def render_leak_report(status: dict) -> str:
     lines = [
         "# CRAMPS Leak Scan Report",
@@ -2859,7 +3222,7 @@ def command_doctor(_args: argparse.Namespace) -> int:
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="cramps",
-        description="Create, operate, check, audit, gate, leak-scan, accept, packet, and quarantine CRAMPS packages.",
+        description="Create, operate, check, audit, gate, leak-scan, accept, packet, quarantine, and source-audit CRAMPS packages.",
     )
     sub = parser.add_subparsers(dest="command", required=True)
 
@@ -2943,6 +3306,12 @@ def build_parser() -> argparse.ArgumentParser:
 
     domains = sub.add_parser("domains", help="List configured CRAMPS domains.")
     domains.set_defaults(func=command_domains)
+
+    source_audit = sub.add_parser("source-audit", help="Audit the reusable CRAMPS source kit before handoff or push.")
+    source_audit.add_argument("--fail-on-warning", action="store_true")
+    source_audit.add_argument("--report", type=Path, default=None, help="Optional Markdown report output path.")
+    source_audit.add_argument("--verbose", action="store_true", help="Print full check details after the summary.")
+    source_audit.set_defaults(func=command_source_audit)
 
     doctor = sub.add_parser("doctor", help="Check source-kit readiness for CLI operation.")
     doctor.set_defaults(func=command_doctor)
