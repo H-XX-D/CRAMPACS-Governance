@@ -834,6 +834,7 @@ python {ROOT / "tools" / "cramps_cli.py"} check .
 python {ROOT / "tools" / "cramps_cli.py"} agent-audit .
 python {ROOT / "tools" / "cramps_cli.py"} leak-scan .
 python {ROOT / "tools" / "cramps_cli.py"} gate . --level {level}
+python {ROOT / "tools" / "cramps_cli.py"} acceptance-audit . --level {level}
 python {ROOT / "tools" / "cramps_cli.py"} status .
 ```
 """
@@ -1136,6 +1137,254 @@ def render_agent_audit_report(status: dict) -> str:
     return "\n".join(lines)
 
 
+def load_json_artifact(path: Path) -> dict | None:
+    if not path.exists():
+        return None
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def add_acceptance_check(
+    checks: list[dict[str, str]],
+    check_id: str,
+    status: str,
+    evidence: str,
+    message: str,
+    severity: str = "blocker",
+) -> None:
+    checks.append(
+        {
+            "check_id": check_id,
+            "status": status,
+            "severity": severity,
+            "evidence": evidence,
+            "message": message,
+        }
+    )
+
+
+def acceptance_audit(package: Path, level: str) -> dict:
+    if not package.exists():
+        raise SystemExit(f"Package not found: {package}")
+    if package == ROOT or any(is_relative_to(package, ROOT / dirname) for dirname in CONTROLLED_SOURCE_DIRS):
+        raise SystemExit("Refusing to write acceptance-audit outputs inside controlled source material.")
+
+    checks: list[dict[str, str]] = []
+    now = utc_now()
+    controls_dir = package / "ai_controls"
+    state = load_state(package, required=False)
+
+    metrics_path = package / "cramps_sidecar_metrics.json"
+    agent_path = package / "ai_controls" / "agent_audit_status.json"
+    leak_path = package / "ai_controls" / "leak_scan_status.json"
+    gate_path = package / "ai_controls" / "gate_status.json"
+
+    metrics = load_json_artifact(metrics_path)
+    agent = load_json_artifact(agent_path)
+    leak = load_json_artifact(leak_path)
+    gate = load_json_artifact(gate_path)
+
+    state_status = state.get("status", "missing")
+    add_acceptance_check(
+        checks,
+        "state_active",
+        "pass" if state_status == "active" else "fail",
+        STATE_FILE if state else "",
+        "package state is active" if state_status == "active" else f"package state is {state_status}",
+    )
+
+    boundary_clear = not (
+        package == ROOT or any(is_relative_to(package, ROOT / dirname) for dirname in CONTROLLED_SOURCE_DIRS)
+    )
+    add_acceptance_check(
+        checks,
+        "source_boundary",
+        "pass" if boundary_clear else "fail",
+        STATE_FILE if boundary_clear else "",
+        "package is outside controlled source material" if boundary_clear else "package is inside controlled source material",
+    )
+
+    if not metrics:
+        add_acceptance_check(checks, "sidecar_metrics_present", "fail", "", "sidecar metrics have not been run")
+    else:
+        expected_metrics_level = "cramps_preflight" if level == "preflight" else "CRAMPS_full"
+        metrics_level = metrics.get("level", "")
+        add_acceptance_check(
+            checks,
+            "sidecar_level_matches",
+            "pass" if metrics_level == expected_metrics_level else "fail",
+            "cramps_sidecar_metrics.json",
+            "sidecar level matches acceptance level"
+            if metrics_level == expected_metrics_level
+            else f"sidecar level is {metrics_level}; expected {expected_metrics_level}",
+        )
+        sidecar_blockers = metrics.get("blockers", [])
+        add_acceptance_check(
+            checks,
+            "sidecar_blockers",
+            "pass" if not sidecar_blockers else "fail",
+            "cramps_sidecar_metrics.json",
+            "sidecar has no blockers" if not sidecar_blockers else f"sidecar blockers: {', '.join(sidecar_blockers)}",
+        )
+        add_acceptance_check(
+            checks,
+            "readiness_score",
+            "pass" if float(metrics.get("readiness_score", 0) or 0) >= (80 if level == "preflight" else 90) else "warn",
+            "cramps_sidecar_metrics.json",
+            f"readiness score is {metrics.get('readiness_score', 0)}",
+            "warning",
+        )
+
+    if not agent:
+        add_acceptance_check(checks, "agent_audit_present", "fail", "", "agent audit has not been run")
+    else:
+        agent_level = agent.get("level", "")
+        add_acceptance_check(
+            checks,
+            "agent_audit_level_matches",
+            "pass" if agent_level == level else "fail",
+            "ai_controls/agent_audit_status.json",
+            "agent audit level matches acceptance level"
+            if agent_level == level
+            else f"agent audit level is {agent_level}; expected {level}",
+        )
+        agent_blockers = int(agent.get("blocker_count", 0) or 0)
+        add_acceptance_check(
+            checks,
+            "agent_audit_blockers",
+            "pass" if agent_blockers == 0 else "fail",
+            "ai_controls/agent_audit_status.json",
+            "agent audit has no blockers" if agent_blockers == 0 else f"agent audit has {agent_blockers} blockers",
+        )
+
+    if not leak:
+        add_acceptance_check(checks, "leak_scan_present", "fail", "", "leak scan has not been run")
+    else:
+        quarantine_required = bool(leak.get("quarantine_required"))
+        critical = int(leak.get("open_critical_findings", 0) or 0)
+        major = int(leak.get("open_major_findings", 0) or 0)
+        add_acceptance_check(
+            checks,
+            "leak_scan_clear",
+            "pass" if not quarantine_required else "fail",
+            "ai_controls/leak_scan_status.json",
+            "leak scan has no quarantine-triggering findings"
+            if not quarantine_required
+            else f"leak scan requires quarantine: {critical} critical, {major} major",
+        )
+
+    if not gate:
+        add_acceptance_check(checks, "gate_status_present", "fail", "", "gate status has not been run")
+    else:
+        summary = gate.get("summary", {})
+        gate_level = summary.get("level", "")
+        add_acceptance_check(
+            checks,
+            "gate_level_matches",
+            "pass" if gate_level == level else "fail",
+            "ai_controls/gate_status.json",
+            "gate level matches acceptance level" if gate_level == level else f"gate level is {gate_level}; expected {level}",
+        )
+        all_clear = bool(summary.get("all_clear"))
+        add_acceptance_check(
+            checks,
+            "gate_all_clear",
+            "pass" if all_clear else "fail",
+            "ai_controls/gate_status.json",
+            "all gates are clear" if all_clear else f"next blocked gate: {summary.get('next_blocked_gate', 'unknown')}",
+        )
+
+    if gate and agent_path.exists() and gate_path.exists():
+        gate_mtime = gate_path.stat().st_mtime
+        agent_mtime = agent_path.stat().st_mtime
+        add_acceptance_check(
+            checks,
+            "gate_after_agent_audit",
+            "pass" if gate_mtime >= agent_mtime else "fail",
+            "ai_controls/gate_status.json",
+            "gate status was generated after agent audit"
+            if gate_mtime >= agent_mtime
+            else "gate status is stale relative to agent audit",
+        )
+
+    if gate and metrics_path.exists() and gate_path.exists():
+        gate_mtime = gate_path.stat().st_mtime
+        metrics_mtime = metrics_path.stat().st_mtime
+        add_acceptance_check(
+            checks,
+            "gate_after_sidecar_metrics",
+            "pass" if gate_mtime >= metrics_mtime else "fail",
+            "ai_controls/gate_status.json",
+            "gate status was generated after sidecar metrics"
+            if gate_mtime >= metrics_mtime
+            else "gate status is stale relative to sidecar metrics",
+        )
+
+    if gate and leak_path.exists() and gate_path.exists():
+        gate_mtime = gate_path.stat().st_mtime
+        leak_mtime = leak_path.stat().st_mtime
+        add_acceptance_check(
+            checks,
+            "gate_after_leak_scan",
+            "pass" if gate_mtime >= leak_mtime else "fail",
+            "ai_controls/gate_status.json",
+            "gate status was generated after leak scan"
+            if gate_mtime >= leak_mtime
+            else "gate status is stale relative to leak scan",
+        )
+
+    blockers = [check for check in checks if check["severity"] == "blocker" and check["status"] != "pass"]
+    warnings = [check for check in checks if check["severity"] == "warning" and check["status"] != "pass"]
+    all_clear = not blockers
+    if level == "preflight":
+        decision = "accepted_for_preflight_decision" if all_clear else "hold_preflight"
+        reliance = "preflight decision only; no uppercase assurance"
+    else:
+        decision = "ready_for_release_review" if all_clear else "hold_release_review"
+        reliance = "release review only; no domain confirmation by itself"
+
+    status = {
+        "generated_at": now,
+        "package": str(package),
+        "level": level,
+        "decision": decision,
+        "reliance": reliance,
+        "all_clear": all_clear,
+        "blocker_count": len(blockers),
+        "warning_count": len(warnings),
+        "checks": checks,
+    }
+    controls_dir.mkdir(parents=True, exist_ok=True)
+    (controls_dir / "acceptance_audit_status.json").write_text(
+        json.dumps(status, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
+    write_text(controls_dir / "acceptance_audit_report.md", render_acceptance_audit_report(status))
+    return status
+
+
+def render_acceptance_audit_report(status: dict) -> str:
+    lines = [
+        "# CRAMPS Acceptance Audit Report",
+        "",
+        f"Generated: {status['generated_at']}",
+        f"Level: `{status['level']}`",
+        f"Decision: `{status['decision']}`",
+        f"Reliance: {status['reliance']}",
+        f"All clear: `{status['all_clear']}`",
+        f"Blockers: `{status['blocker_count']}`",
+        f"Warnings: `{status['warning_count']}`",
+        "",
+        "| check | status | severity | evidence | message |",
+        "|---|---|---|---|---|",
+    ]
+    for check in status["checks"]:
+        lines.append(
+            f"| `{check['check_id']}` | `{check['status']}` | `{check['severity']}` | `{check['evidence']}` | {check['message']} |"
+        )
+    lines.append("")
+    return "\n".join(lines)
+
+
 def render_gate_dag_doc(level: str) -> str:
     specs = gate_specs(level)
     lines = [
@@ -1233,7 +1482,7 @@ def render_next_actions(level: str) -> str:
             "Add searched and included sources to `preflight_sources.csv`.",
             "Extract weak observation, residual, null, non-event, exclusion, and near-miss rows into `preflight_rows.csv`.",
             "Complete `preflight_gotchas.md` as the failure-mode worksheet before making an escalation decision.",
-            "Run `check`, `agent-audit`, `leak-scan`, and `gate` before deciding whether to promote.",
+            "Run `check`, `agent-audit`, `leak-scan`, `gate`, and `acceptance-audit` before deciding whether to promote.",
         ]
     else:
         actions = [
@@ -1241,7 +1490,7 @@ def render_next_actions(level: str) -> str:
             "Lock candidate coordinates before scoring.",
             "Populate source, raw row, normalized row, independence, bias, null model, and result contracts.",
             "Maintain build ledger, checkpoint reviews, claim trace matrix, trust debt, and trust status summary.",
-            "Run `check`, `agent-audit`, `leak-scan`, and `gate` before release review.",
+            "Run `check`, `agent-audit`, `leak-scan`, `gate`, and `acceptance-audit` before release review.",
         ]
     return "# Next Actions\n\n" + "\n".join(f"- {item}" for item in actions)
 
@@ -2043,6 +2292,41 @@ def command_agent_audit(args: argparse.Namespace) -> int:
     return 0
 
 
+def command_acceptance_audit(args: argparse.Namespace) -> int:
+    package = args.package.resolve()
+    level = package_level(package, args.level)
+    status = acceptance_audit(package, level)
+    append_history(
+        package,
+        "acceptance_audit",
+        {
+            "level": level,
+            "decision": status["decision"],
+            "all_clear": status["all_clear"],
+            "blocker_count": status["blocker_count"],
+            "warning_count": status["warning_count"],
+        },
+    )
+    print(
+        json.dumps(
+            {
+                "level": status["level"],
+                "decision": status["decision"],
+                "all_clear": status["all_clear"],
+                "blocker_count": status["blocker_count"],
+                "warning_count": status["warning_count"],
+                "reliance": status["reliance"],
+            },
+            indent=2,
+        )
+    )
+    if status["blocker_count"]:
+        return 1
+    if args.fail_on_warning and status["warning_count"]:
+        return 2
+    return 0
+
+
 def render_leak_report(status: dict) -> str:
     lines = [
         "# CRAMPS Leak Scan Report",
@@ -2152,6 +2436,7 @@ def command_status(args: argparse.Namespace) -> int:
     gate_path = package / "ai_controls" / "gate_status.json"
     leak_path = package / "ai_controls" / "leak_scan_status.json"
     agent_audit_path = package / "ai_controls" / "agent_audit_status.json"
+    acceptance_audit_path = package / "ai_controls" / "acceptance_audit_status.json"
     result = {
         "package": str(package),
         "state": {
@@ -2164,6 +2449,7 @@ def command_status(args: argparse.Namespace) -> int:
         "gate": json.loads(gate_path.read_text(encoding="utf-8"))["summary"] if gate_path.exists() else None,
         "leak_scan": json.loads(leak_path.read_text(encoding="utf-8")) if leak_path.exists() else None,
         "agent_audit": json.loads(agent_audit_path.read_text(encoding="utf-8")) if agent_audit_path.exists() else None,
+        "acceptance_audit": json.loads(acceptance_audit_path.read_text(encoding="utf-8")) if acceptance_audit_path.exists() else None,
     }
     print(json.dumps(result, indent=2, sort_keys=True))
     return 0
@@ -2211,7 +2497,7 @@ def command_doctor(_args: argparse.Namespace) -> int:
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="cramps",
-        description="Create, operate, check, audit agents, gate, leak-scan, and quarantine CRAMPS packages.",
+        description="Create, operate, check, audit, gate, leak-scan, accept, and quarantine CRAMPS packages.",
     )
     sub = parser.add_subparsers(dest="command", required=True)
 
@@ -2255,6 +2541,12 @@ def build_parser() -> argparse.ArgumentParser:
     agent_audit.add_argument("--fail-on-warning", action="store_true")
     agent_audit.set_defaults(func=command_agent_audit)
 
+    acceptance_audit_parser = sub.add_parser("acceptance-audit", help="Synthesize package readiness into an acceptance decision.")
+    acceptance_audit_parser.add_argument("package", type=Path)
+    acceptance_audit_parser.add_argument("--level", choices=["preflight", "full", "auto"], default="auto")
+    acceptance_audit_parser.add_argument("--fail-on-warning", action="store_true")
+    acceptance_audit_parser.set_defaults(func=command_acceptance_audit)
+
     quarantine = sub.add_parser("quarantine", help="Place a package into no-release quarantine.")
     quarantine.add_argument("package", type=Path)
     quarantine.add_argument("--reason", required=True)
@@ -2270,7 +2562,7 @@ def build_parser() -> argparse.ArgumentParser:
     clear.add_argument("--scope", default="")
     clear.set_defaults(func=command_clear_quarantine)
 
-    status = sub.add_parser("status", help="Print package state, sidecar, gate, and leak summaries.")
+    status = sub.add_parser("status", help="Print package state, sidecar, agent, gate, leak, and acceptance summaries.")
     status.add_argument("package", type=Path)
     status.set_defaults(func=command_status)
 

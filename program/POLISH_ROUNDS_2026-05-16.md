@@ -240,3 +240,22 @@ Artifacts:
 Outcome:
 
 - packages can now be inspected for agent deployment consistency before gates rely on agent-produced work.
+
+## Post-Build Round 7: Acceptance audit synthesis
+
+Focus:
+
+- turn separate package checks into a single reviewer-facing acceptance decision
+- distinguish preflight-decision acceptance from full release-review readiness
+- make stale or missing sidecar, agent-audit, leak-scan, and gate artifacts visible before reliance
+
+Artifacts:
+
+- `tools/cramps_cli.py acceptance-audit`
+- package-local `ai_controls/acceptance_audit_status.json`
+- package-local `ai_controls/acceptance_audit_report.md`
+- updated pilot runbook, release checklist, operator guides, and worked example commands
+
+Outcome:
+
+- operators can ask one final package-level question before promotion or release review: is this package control-complete enough for the reliance being requested?

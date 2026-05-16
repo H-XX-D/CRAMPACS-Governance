@@ -51,7 +51,8 @@ The AI operator must:
 7. Run agent-control audit after deployment-plan, registry, or handoff changes.
 8. Run leak scanning before gate accounting, export, escalation, release, or external sharing.
 9. Run gate accounting before phase progress.
-10. Quarantine the package if a critical leak, source-boundary breach, fabricated field, or overclaim appears.
+10. Run acceptance audit before promotion, release review, external sharing, or reliance upgrade.
+11. Quarantine the package if a critical leak, source-boundary breach, fabricated field, or overclaim appears.
 
 The AI operator must not:
 
@@ -89,6 +90,19 @@ python tools/cramps_cli.py agent-audit <package_dir>
 The command writes `ai_controls/agent_audit_status.json` and
 `ai_controls/agent_audit_report.md`. Blockers mean the agent deployment layer is
 not consistent enough to support phase progress.
+
+Before promotion or release review, run:
+
+```bash
+python tools/cramps_cli.py acceptance-audit <package_dir>
+```
+
+The command writes `ai_controls/acceptance_audit_status.json` and
+`ai_controls/acceptance_audit_report.md`. It does not prove the domain claim. It
+states whether the package controls are coherent enough for the requested
+preflight decision or full-system release review. It also checks that sidecar,
+agent-audit, and gate artifacts match the requested level and that the gate was
+run after the sidecar, agent audit, and leak scan.
 
 ## DAG Gate Accounting
 

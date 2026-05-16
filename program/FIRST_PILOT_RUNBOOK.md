@@ -112,9 +112,10 @@ python tools/cramps_cli.py check <package> --level preflight
 python tools/cramps_cli.py agent-audit <package> --level preflight
 python tools/cramps_cli.py leak-scan <package>
 python tools/cramps_cli.py gate <package> --level preflight
+python tools/cramps_cli.py acceptance-audit <package> --level preflight
 ```
 
-Run `check`, then `agent-audit`, then `leak-scan`, then `gate` in that order. The gate command depends on the latest agent-control and leak-scan status.
+Run `check`, then `agent-audit`, then `leak-scan`, then `gate`, then `acceptance-audit` in that order. The acceptance audit depends on the latest sidecar, agent-control, leak-scan, and gate status.
 
 Preflight output must be one of:
 
@@ -172,9 +173,10 @@ python tools/cramps_cli.py check <full_package> --level full
 python tools/cramps_cli.py agent-audit <full_package> --level full
 python tools/cramps_cli.py leak-scan <full_package>
 python tools/cramps_cli.py gate <full_package> --level full
+python tools/cramps_cli.py acceptance-audit <full_package> --level full
 ```
 
-Run these commands sequentially. Do not evaluate gates from stale or missing agent-audit or leak-scan output.
+Run these commands sequentially. Do not evaluate acceptance from stale or missing sidecar, agent-audit, leak-scan, or gate output.
 
 ### Step 5: Closeout
 

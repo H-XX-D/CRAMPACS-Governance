@@ -271,6 +271,8 @@ Output:
 - `ai_controls/gate_status.json`
 - `ai_controls/term_prereq_ledger.csv`
 - `ai_controls/leak_scan_status.json`
+- `ai_controls/acceptance_audit_status.json`
+- `ai_controls/acceptance_audit_report.md`
 - Package manifest with hashes.
 - Readiness score.
 - Blocker list.
