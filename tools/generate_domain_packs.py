@@ -120,6 +120,7 @@ Use the lowercase documents for a one to two day triage pass. Use the uppercase 
 - `{domain["lower"]}_PREFLIGHT_DECISION.md`
 - `{domain["upper"]}_FULL_PROTOCOL_ADDENDUM.md`
 - `{domain["upper"]}_RELEASE_GATE_PRINTABLE.md`
+- `{domain["upper"]}_DOMAIN_GOVERNANCE_PRINTABLE.md`
 
 ## Domain Coordinates
 
@@ -268,7 +269,7 @@ def full_addendum(domain: dict[str, str]) -> str:
 
 **Domain:** {domain["label"]}
 
-Use this addendum with `templates/CRAMPACS_PROTOCOL_TEMPLATE.md`.
+Use this addendum with `../../templates/CRAMPACS_PROTOCOL_TEMPLATE.md`.
 
 ## Domain Coordinate Families
 
@@ -299,6 +300,43 @@ List required hashes for domain-specific source systems, units, transforms, voca
 ## Claim Limits
 
 This `{domain["upper"]}` study can produce a full CRAMPACS evidence package only after protocol lock, full source flow, null inclusion, independence review, bias review, null-model analysis, sensitivity tests, checksum reproduction, and signoff.
+"""
+
+
+def domain_governance_printable(domain: dict[str, str]) -> str:
+    return f"""
+# {domain["upper"]} / {domain["lower"]} Domain Governance Printable
+
+**Domain:** {domain["label"]}
+
+## Assurance Split
+
+- `{domain["lower"]}`: one to two day preflight.
+- `{domain["upper"]}`: full assurance system after protocol lock.
+
+## Coordinates
+
+{chr(10).join(f"- {x.strip()}" for x in domain["coordinates"].split(","))}
+
+## Nulls and Non-Events
+
+{chr(10).join(f"- {x.strip()}" for x in domain["nulls"].split(","))}
+
+## Gotchas
+
+{chr(10).join(f"- {x.strip()}" for x in domain["gotcha"].split(","))}
+
+## Field Gate
+
+| Gate | Pass/Hold/Fail | Notes |
+|---|---|---|
+| Coordinate specified |  |  |
+| Nulls found |  |  |
+| Dependence mapped |  |  |
+| Bias reviewed |  |  |
+| Units checked |  |  |
+| Sidecar run |  |  |
+| Escalation decision made |  |  |
 """
 
 
@@ -404,6 +442,7 @@ def main() -> int:
         write(folder / f"{domain['lower']}_PREFLIGHT_DECISION.md", decision(domain))
         write(folder / f"{domain['upper']}_FULL_PROTOCOL_ADDENDUM.md", full_addendum(domain))
         write(folder / f"{domain['upper']}_RELEASE_GATE_PRINTABLE.md", release_gate(domain))
+        write(folder / f"{domain['upper']}_DOMAIN_GOVERNANCE_PRINTABLE.md", domain_governance_printable(domain))
         write(ROOT / "printouts" / f"{domain['slug']}_field_printout.md", field_printout(domain))
 
     write(
@@ -429,6 +468,7 @@ def main() -> int:
 | preflight_rows.csv |  |  |
 | preflight_gotchas.md |  |  |
 | preflight_decision.md |  |  |
+| preflight_manifest.csv |  |  |
 | sidecar metrics |  |  |
 
 ## Stop Signs
@@ -501,6 +541,7 @@ def main() -> int:
 | preflight_rows.csv |  |  |  |
 | preflight_gotchas.md |  |  |  |
 | preflight_decision.md |  |  |  |
+| preflight_manifest.csv |  |  |  |
 | sidecar metrics |  |  |  |
 
 ## Dispositions
@@ -521,4 +562,3 @@ The preflight can seed the full system. The full-system claim begins only after 
 
 if __name__ == "__main__":
     raise SystemExit(main())
-

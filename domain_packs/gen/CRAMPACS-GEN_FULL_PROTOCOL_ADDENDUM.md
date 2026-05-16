@@ -2,7 +2,7 @@
 
 **Domain:** Genomics and omics
 
-Use this addendum with `templates/CRAMPACS_PROTOCOL_TEMPLATE.md`.
+Use this addendum with `../../templates/CRAMPACS_PROTOCOL_TEMPLATE.md`.
 
 ## Domain Coordinate Families
 

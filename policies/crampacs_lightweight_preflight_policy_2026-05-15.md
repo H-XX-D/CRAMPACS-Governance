@@ -112,8 +112,8 @@ Run the sidecar package checker.
 
 Output:
 
-- `preflight_metrics.json`
-- `preflight_metrics.md`
+- `crampacs_sidecar_metrics.json`
+- `crampacs_sidecar_metrics.md`
 
 ### Hour 18-24: Decision
 
@@ -144,7 +144,7 @@ Output:
 
 Required claim boundary:
 
-> This is a lowercase crampacs preflight. It is not a confirmatory CRAMPACS result.
+> This is a lowercase crampacs-* preflight. It is not a confirmatory CRAMPACS-* result.
 
 ## 6. Preflight Stop Signs
 
@@ -172,8 +172,8 @@ Composable preflight artifacts:
 - `preflight_sources.csv`
 - `preflight_rows.csv`
 - `preflight_gotchas.md`
-- `preflight_metrics.json`
-- `preflight_metrics.md`
+- `crampacs_sidecar_metrics.json`
+- `crampacs_sidecar_metrics.md`
 - `preflight_decision.md`
 - `preflight_manifest.csv`
 

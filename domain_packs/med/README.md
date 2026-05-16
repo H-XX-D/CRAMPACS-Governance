@@ -18,6 +18,7 @@ Use the lowercase documents for a one to two day triage pass. Use the uppercase 
 - `crampacs-med_PREFLIGHT_DECISION.md`
 - `CRAMPACS-MED_FULL_PROTOCOL_ADDENDUM.md`
 - `CRAMPACS-MED_RELEASE_GATE_PRINTABLE.md`
+- `CRAMPACS-MED_DOMAIN_GOVERNANCE_PRINTABLE.md`
 
 ## Domain Coordinates
 

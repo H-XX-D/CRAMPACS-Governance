@@ -9,6 +9,7 @@
 | preflight_rows.csv |  |  |  |
 | preflight_gotchas.md |  |  |  |
 | preflight_decision.md |  |  |  |
+| preflight_manifest.csv |  |  |  |
 | sidecar metrics |  |  |  |
 
 ## Dispositions

@@ -26,13 +26,19 @@ The naming distinction is an assurance boundary.
 | lowercase `crampacs-*` | Lightweight preflight | Triage and escalation recommendation |
 | uppercase `CRAMPACS-*` | Full assurance system | Defensible evidence package under registered protocol |
 
-Examples:
+Included examples:
 
 - `crampacs-med` can compose into `CRAMPACS-MED`.
+- `crampacs-gen` can compose into `CRAMPACS-GEN`.
+- `crampacs-clim` can compose into `CRAMPACS-CLIM`.
+- `crampacs-mat` can compose into `CRAMPACS-MAT`.
+- `crampacs-eng` can compose into `CRAMPACS-ENG`.
 - `crampacs-fin` can compose into `CRAMPACS-FIN`.
 - `crampacs-cyb` can compose into `CRAMPACS-CYB`.
-- `crampacs-eng` can compose into `CRAMPACS-ENG`.
-- The pattern extends to any field.
+- `crampacs-ast` can compose into `CRAMPACS-AST`.
+- `crampacs-phy` can compose into `CRAMPACS-PHY`.
+
+The pattern extends to any field.
 
 ## 3. Documentation Layers
 
@@ -72,6 +78,7 @@ Documents:
 - `templates/preflight_gotchas.md`
 - `templates/preflight_decision.md`
 - `templates/preflight_manifest.csv`
+- Conversion artifact: `templates/preflight_import_log.csv`
 
 Output:
 
@@ -80,7 +87,10 @@ Output:
 - Row sketch.
 - Gotcha register.
 - Sidecar metrics.
+- Preflight manifest.
 - Escalation decision.
+
+`preflight_import_log.csv` is created during conversion into the full system.
 
 ### Layer 2: Gotcha and Sanity Layer
 

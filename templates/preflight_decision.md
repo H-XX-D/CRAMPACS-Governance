@@ -40,5 +40,4 @@ State the next operational step.
 
 ## Claim Boundary
 
-This is a lowercase crampacs preflight. It is not a confirmatory CRAMPACS result.
-
+This is a lowercase crampacs-* preflight. It is not a confirmatory CRAMPACS-* result.

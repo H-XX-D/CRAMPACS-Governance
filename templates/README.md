@@ -1,6 +1,6 @@
 # CRAMPACS Templates
 
-These templates implement the data contracts defined in `../CRAMPACS_PROGRAM_SOP_2026-05-15.md`.
+These templates implement the data contracts defined in `../policies/CRAMPACS_PROGRAM_SOP_2026-05-15.md`.
 
 Use them by copying this directory into a study workspace such as:
 
@@ -28,10 +28,18 @@ Use these for a one to two day `crampacs-*` preflight:
 - `preflight_decision.md`
 - `preflight_manifest.csv`
 
-If the preflight escalates, use `preflight_import_log.csv` in the uppercase `CRAMPACS-*` package to record which preflight artifacts were accepted, reworked, rejected, or quarantined.
+If the preflight escalates, use `preflight_import_log.csv` in the uppercase `CRAMPACS-*` package to record which preflight artifacts were accepted, reworked, rejected, or quarantined. It is a conversion/full-system artifact, not a required preflight artifact.
 
 ## Uppercase Full-System Templates
 
 Use the remaining CSV templates and `CRAMPACS_PROTOCOL_TEMPLATE.md` for a full `CRAMPACS-*` study.
 
 Lowercase templates can seed uppercase templates, but they do not carry full assurance until reviewed under the full protocol.
+
+Core full-system narrative templates:
+
+- `coordinate_ontology.md`
+- `statistical_analysis_plan.md`
+- `null_model_specification.md`
+- `independence_policy.md`
+- `bias_assessment_policy.md`

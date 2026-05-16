@@ -3,7 +3,7 @@
 
 This tool performs lightweight package checks for either:
 
-- lowercase crampacs preflight packages
+- lowercase crampacs-* preflight packages
 - uppercase CRAMPACS full study packages
 
 It does not validate scientific truth. It checks whether the package has the
@@ -393,7 +393,11 @@ def main() -> int:
         raise SystemExit(f"Package directory not found: {root}")
 
     if args.level == "auto":
-        if find_file(root, "preflight_rows.csv"):
+        preflight_present = sum(1 for name in PREFLIGHT_REQUIRED if find_file(root, name))
+        full_present = sum(1 for name in FULL_REQUIRED if find_file(root, name))
+        if preflight_present and full_present:
+            level = "full" if full_present >= preflight_present else "preflight"
+        elif find_file(root, "preflight_rows.csv"):
             level = "preflight"
         else:
             level = "full"
