@@ -1,8 +1,8 @@
 .DS_Store
 *.tmp
 *.log
-crampacs_sidecar_metrics.json
-crampacs_sidecar_metrics.md
+cramps_sidecar_metrics.json
+cramps_sidecar_metrics.md
 __pycache__/
 node_modules
-crampacs_projects/
+cramps_projects/

@@ -1,27 +1,27 @@
-# CRAMPACS Governance Package
+# CRAMPS Governance Package
 
-CRAMPACS means **Coordinate-Resolved Anomaly Meta-analysis with Pre-specified Anomaly Cluster Statistics**.
+CRAMPS means **Coordinate-Resolved Anomaly Meta-analysis with Pre-specified Statistics**.
 
 This repository contains a domain-general governance, methodology, and data-contract package for testing whether weak signals, anomalies, residuals, nulls, exclusions, failures, or near-misses recur at pre-specified coordinates more often than expected under registered null models.
 
-CRAMPACS is not a discovery shortcut. It is a disciplined evidence-synthesis framework for building defensible anomaly-prioritization results.
+CRAMPS is not a discovery shortcut. It is a disciplined evidence-synthesis framework for building defensible anomaly-prioritization results.
 
 ## Start Here
 
 | Need | Use |
 |---|---|
-| Understand the brand and claim boundary | `brand/CRAMPACS_BRAND_SYSTEM.md` |
-| Teach the method to a team | `training/CRAMPACS_TRAINING_GUIDE.md` |
+| Understand the brand and claim boundary | `brand/CRAMPS_BRAND_SYSTEM.md` |
+| Teach the method to a team | `training/CRAMPS_TRAINING_GUIDE.md` |
 | Run the assurance program | `program/README.md` |
-| Create isolated AI-operable packages | `tools/crampacs_cli.py` |
-| Start a full evidence package | `tools/scaffold_crampacs_package.py` |
-| Run package readiness checks | `tools/crampacs_sidecar.py` |
-| Adapt CRAMPACS to a field | `domain_packs/` and `domain_overlays/` |
+| Create isolated AI-operable packages | `tools/cramps_cli.py` |
+| Start a full evidence package | `tools/scaffold_cramps_package.py` |
+| Run package readiness checks | `tools/cramps_sidecar.py` |
+| Adapt CRAMPS to a field | `domain_packs/` and `domain_overlays/` |
 | Review research-backed design choices | `research/SUCCESSFUL_FRAMEWORK_PATTERNS.md` |
 
 ## Program Spine
 
-Start here if you are deploying CRAMPACS inside an organization.
+Start here if you are deploying CRAMPS inside an organization.
 
 - `program/README.md`
   Entry point for the operational assurance program.
@@ -36,13 +36,13 @@ Start here if you are deploying CRAMPACS inside an organization.
 - `program/DEVIATION_AND_CAPA_PROCEDURE.md`
   Deviation, containment, root-cause, corrective-action, preventive-action, effectiveness-check, and reopening procedure.
 - `program/ASSURANCE_CASE_FRAMEWORK.md`
-  Claim, evidence, rebuttal, and residual-risk framework for defending a CRAMPACS result.
+  Claim, evidence, rebuttal, and residual-risk framework for defending a CRAMPS result.
 - `program/EVIDENCE_PACKAGE_SPEC.md`
   Required binder structure for a complete evidence package.
 - `program/PACKAGE_SCAFFOLD_MANIFEST.md`
   Exact scaffold structure and sidecar expectations for full evidence packages.
 - `program/DEPLOYMENT_PLAYBOOK.md`
-  Practical rollout sequence for introducing CRAMPACS inside an organization.
+  Practical rollout sequence for introducing CRAMPS inside an organization.
 - `program/SAFETY_SUPERVISOR_PACKET.md`
   Practical approval/hold/reject packet for safety supervisors, government program officers, and risk owners.
 - `program/AUDIT_AND_INSPECTION_PACKET.md`
@@ -64,11 +64,11 @@ Start here if you are deploying CRAMPACS inside an organization.
 
 ## Brand and Training
 
-The `brand/` directory defines the CRAMPACS identity, message architecture, visual roles, document style, decision language, and claim-boundary patterns.
+The `brand/` directory defines the CRAMPS identity, message architecture, visual roles, document style, decision language, and claim-boundary patterns.
 
 The `training/` directory contains a teachable training kit:
 
-- `CRAMPACS_TRAINING_GUIDE.md`
+- `CRAMPS_TRAINING_GUIDE.md`
 - `INSTRUCTOR_GUIDE.md`
 - `LEARNER_WORKBOOK.md`
 - `EXERCISE_PACKETS.md`
@@ -79,21 +79,21 @@ The `research/` directory records source-backed design lessons from PRISMA, Coch
 
 ## Supporting Documents
 
-- `CRAMPACS_DOCUMENTATION_LAYER_MAP_2026-05-15.md`
+- `CRAMPS_DOCUMENTATION_LAYER_MAP_2026-05-15.md`
   Explains the documentation layers and how lowercase preflights compose into uppercase full systems.
-- `policies/CRAMPACS_NAMING_AND_ASSURANCE_LEVELS_2026-05-15.md`
-  Defines uppercase `CRAMPACS-*` as full assurance and lowercase `crampacs-*` as lightweight preflight.
-- `policies/CRAMPACS_PROGRAM_SOP_2026-05-15.md`
+- `policies/CRAMPS_NAMING_AND_ASSURANCE_LEVELS_2026-05-15.md`
+  Defines uppercase `CRAMPS-*` as full assurance and lowercase `cramps-*` as lightweight preflight.
+- `policies/CRAMPS_PROGRAM_SOP_2026-05-15.md`
   End-to-end SOP from study charter to external review.
-- `policies/CRAMPACS_STANDARDS_AND_PRACTICES_POLICY_2026-05-15.md`
+- `policies/CRAMPS_STANDARDS_AND_PRACTICES_POLICY_2026-05-15.md`
   Standards stack, quality gates, document control, accreditation-ready controls.
-- `policies/CRAMPACS_METHODOLOGY_POLICY_2026-05-15.md`
+- `policies/CRAMPS_METHODOLOGY_POLICY_2026-05-15.md`
   Domain-general methodology rules, claim tiers, null models, sensitivity requirements.
-- `policies/CRAMPACS_CROSS_UNIT_EXPERIMENT_CHECKSUM_GUIDELINES_2026-05-15.md`
+- `policies/CRAMPS_CROSS_UNIT_EXPERIMENT_CHECKSUM_GUIDELINES_2026-05-15.md`
   Cross-unit, cross-site, and cross-measurement checksum rules.
-- `policies/crampacs_lightweight_preflight_policy_2026-05-15.md`
+- `policies/cramps_lightweight_preflight_policy_2026-05-15.md`
   One to two day lightweight preflight system.
-- `policies/crampacs_gotchas_and_sanity_checks_2026-05-15.md`
+- `policies/cramps_gotchas_and_sanity_checks_2026-05-15.md`
   Failure-mode and sanity-check guide.
 
 ## Domain Names
@@ -102,15 +102,15 @@ Every domain has two names. Use lowercase for the lightweight preflight and uppe
 
 | Lightweight preflight | Full assurance | Domain |
 |---|---|---|
-| `crampacs-med` | `CRAMPACS-MED` | Medicine and clinical evidence |
-| `crampacs-gen` | `CRAMPACS-GEN` | Genomics and omics |
-| `crampacs-clim` | `CRAMPACS-CLIM` | Climate and Earth systems |
-| `crampacs-mat` | `CRAMPACS-MAT` | Materials science |
-| `crampacs-eng` | `CRAMPACS-ENG` | Engineering reliability |
-| `crampacs-fin` | `CRAMPACS-FIN` | Finance, fraud, and risk |
-| `crampacs-cyb` | `CRAMPACS-CYB` | Cybersecurity |
-| `crampacs-ast` | `CRAMPACS-AST` | Astronomy and astrophysics |
-| `crampacs-phy` | `CRAMPACS-PHY` | Physics and physical anomaly catalogs |
+| `cramps-med` | `CRAMPS-MED` | Medicine and clinical evidence |
+| `cramps-gen` | `CRAMPS-GEN` | Genomics and omics |
+| `cramps-clim` | `CRAMPS-CLIM` | Climate and Earth systems |
+| `cramps-mat` | `CRAMPS-MAT` | Materials science |
+| `cramps-eng` | `CRAMPS-ENG` | Engineering reliability |
+| `cramps-fin` | `CRAMPS-FIN` | Finance, fraud, and risk |
+| `cramps-cyb` | `CRAMPS-CYB` | Cybersecurity |
+| `cramps-ast` | `CRAMPS-AST` | Astronomy and astrophysics |
+| `cramps-phy` | `CRAMPS-PHY` | Physics and physical anomaly catalogs |
 
 The `domain_overlays/` directory adapts the full system to each domain. The `domain_packs/` directory gives each domain both lowercase preflight templates and uppercase full-system addenda.
 
@@ -141,14 +141,14 @@ The `printouts/` directory contains practitioner-facing checklists:
 
 ## End-To-End CLI
 
-Use the CLI when an AI agent or practitioner needs to run a reusable CRAMPACS
+Use the CLI when an AI agent or practitioner needs to run a reusable CRAMPS
 system without contaminating the sanitized source kit.
 
 ```bash
-python tools/crampacs_cli.py init --level preflight --domain phy --study-id STUDY001
-python tools/crampacs_cli.py check ./crampacs_projects/<package>
-python tools/crampacs_cli.py leak-scan ./crampacs_projects/<package>
-python tools/crampacs_cli.py gate ./crampacs_projects/<package>
+python tools/cramps_cli.py init --level preflight --domain phy --study-id STUDY001
+python tools/cramps_cli.py check ./cramps_projects/<package>
+python tools/cramps_cli.py leak-scan ./cramps_projects/<package>
+python tools/cramps_cli.py gate ./cramps_projects/<package>
 ```
 
 The CLI writes package-local AI instructions, gate DAG status, prerequisite
@@ -158,10 +158,10 @@ To compose a lowercase preflight into an uppercase full package without changing
 the original preflight:
 
 ```bash
-python tools/crampacs_cli.py promote <preflight_package> --study-id STUDY001-FULL
+python tools/cramps_cli.py promote <preflight_package> --study-id STUDY001-FULL
 ```
 
-Package outputs created under `crampacs_projects/` are ignored by git so the
+Package outputs created under `cramps_projects/` are ignored by git so the
 source kit remains reusable.
 
 ## Sidecar Runner
@@ -169,32 +169,32 @@ source kit remains reusable.
 The sidecar runner keeps package metrics as a preflight or full study comes together.
 
 ```bash
-python tools/crampacs_sidecar.py <package_dir> --level preflight
-python tools/crampacs_sidecar.py <package_dir> --level full
+python tools/cramps_sidecar.py <package_dir> --level preflight
+python tools/cramps_sidecar.py <package_dir> --level full
 ```
 
 It writes:
 
-- `crampacs_sidecar_metrics.json`
-- `crampacs_sidecar_metrics.md`
+- `cramps_sidecar_metrics.json`
+- `cramps_sidecar_metrics.md`
 
 The sidecar reports readiness, blockers, null/non-event coverage, dependence coverage, bias coverage, and package checksums.
 
 For full packages, start from the evidence-binder scaffold:
 
 ```bash
-python tools/scaffold_crampacs_package.py <package_dir> --domain med --study-id STUDY001
+python tools/scaffold_cramps_package.py <package_dir> --domain med --study-id STUDY001
 ```
 
 The full-system sidecar checks both scientific data contracts and program controls: binder coverage, required records, control evidence, gate review records, decision records, row provenance, null/non-event coverage, dependence, bias, null-model runs, and checksums.
 
 ## Claim Boundary
 
-CRAMPACS can support statements like:
+CRAMPS can support statements like:
 
 > A pre-specified coordinate shows unusual cross-catalog recurrence under the registered null model and should be prioritized for prospective validation.
 
-CRAMPACS cannot by itself support statements like:
+CRAMPS cannot by itself support statements like:
 
 > This proves a clinical, financial, physical, cyber, materials, or engineering causal claim.
 
@@ -204,7 +204,7 @@ Domain-standard confirmation remains required.
 
 Start with a lowercase preflight:
 
-1. Pick a domain suffix, for example `crampacs-fin`.
+1. Pick a domain suffix, for example `cramps-fin`.
 2. Fill the preflight templates.
 3. Run the gotcha checklist.
 4. Run the sidecar metrics runner.

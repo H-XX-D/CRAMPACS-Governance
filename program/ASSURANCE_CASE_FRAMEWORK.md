@@ -1,10 +1,10 @@
-# CRAMPACS Assurance Case Framework
+# CRAMPS Assurance Case Framework
 
-**Document ID:** CRAMPACS-ACF-001
+**Document ID:** CRAMPS-ACF-001
 
 ## 1. Purpose
 
-A CRAMPACS result should be defended as an assurance case, not as a loose report.
+A CRAMPS result should be defended as an assurance case, not as a loose report.
 
 An assurance case links:
 
@@ -20,7 +20,7 @@ This structure makes the package inspectable by safety supervisors, auditors, an
 
 ## 2. Top Claim
 
-For a full `CRAMPACS-*` study, the top claim is:
+For a full `CRAMPS-*` study, the top claim is:
 
 > The study provides a reproducible, pre-specified, dependence-aware, bias-reviewed test of recurrence at registered coordinates under a documented null model.
 
@@ -62,7 +62,7 @@ status: open / accepted / accepted_with_residual_risk / rejected
 
 ## 5. Release Rule
 
-A full `CRAMPACS-*` package may not be released externally with any open Critical assurance claim.
+A full `CRAMPS-*` package may not be released externally with any open Critical assurance claim.
 
 Major unresolved claims require either:
 

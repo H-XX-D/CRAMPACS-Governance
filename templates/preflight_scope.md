@@ -1,10 +1,10 @@
-# crampacs Preflight Scope
+# cramps Preflight Scope
 
 **Preflight ID:**  
 **Domain suffix:**  
 **Date:**  
 **Decision owner:**  
-**Target full system if escalated:** CRAMPACS-  
+**Target full system if escalated:** CRAMPS-  
 
 ## Question
 
@@ -27,7 +27,7 @@ What is out of scope for this preflight?
 
 Choose one:
 
-- advance_to_CRAMPACS-<DOMAIN>
+- advance_to_CRAMPS-<DOMAIN>
 - hold_coordinate_lock
 - hold_source_completeness
 - hold_dependence_or_bias
@@ -35,4 +35,4 @@ Choose one:
 
 ## Claim Boundary
 
-This is a lowercase crampacs-* preflight. It is not a confirmatory CRAMPACS-* result.
+This is a lowercase cramps-* preflight. It is not a confirmatory CRAMPS-* result.

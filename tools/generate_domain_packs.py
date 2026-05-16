@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate domain-specific CRAMPACS starter packs and printouts."""
+"""Generate domain-specific CRAMPS starter packs and printouts."""
 
 from __future__ import annotations
 
@@ -11,7 +11,7 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 def load_domains() -> list[dict[str, str]]:
-    raw = json.loads((ROOT / "tools" / "crampacs_domains.json").read_text(encoding="utf-8"))
+    raw = json.loads((ROOT / "tools" / "cramps_domains.json").read_text(encoding="utf-8"))
     domains = []
     for item in raw:
         domains.append(
@@ -212,7 +212,7 @@ def full_addendum(domain: dict[str, str]) -> str:
 
 **Domain:** {domain["label"]}
 
-Use this addendum with `../../templates/CRAMPACS_PROTOCOL_TEMPLATE.md`.
+Use this addendum with `../../templates/CRAMPS_PROTOCOL_TEMPLATE.md`.
 
 ## Domain Coordinate Families
 
@@ -246,7 +246,7 @@ List required hashes for domain-specific source systems, units, transforms, voca
 
 ## Claim Limits
 
-This `{domain["upper"]}` study can produce a full CRAMPACS evidence package only after protocol lock, full source flow, null inclusion, independence review, bias review, null-model analysis, sensitivity tests, checksum reproduction, and signoff.
+This `{domain["upper"]}` study can produce a full CRAMPS evidence package only after protocol lock, full source flow, null inclusion, independence review, bias review, null-model analysis, sensitivity tests, checksum reproduction, and signoff.
 """
 
 
@@ -329,7 +329,7 @@ Choose one:
 
 ## Required Boundary
 
-CRAMPACS does not replace domain-standard confirmation.
+CRAMPS does not replace domain-standard confirmation.
 """
 
 
@@ -401,12 +401,12 @@ def main() -> int:
         write(ROOT / "printouts" / f"{domain['slug']}_field_printout.md", field_printout(domain))
 
     write(
-        ROOT / "printouts" / "crampacs_preflight_1_to_2_day_printout.md",
+        ROOT / "printouts" / "cramps_preflight_1_to_2_day_printout.md",
         """
-# crampacs-* 1-2 Day Preflight Printout
+# cramps-* 1-2 Day Preflight Printout
 
-Use this only for the lowercase preflight route, for example `crampacs-med`.
-If escalated, the decision must name the matching uppercase full system, for example `CRAMPACS-MED`.
+Use this only for the lowercase preflight route, for example `cramps-med`.
+If escalated, the decision must name the matching uppercase full system, for example `CRAMPS-MED`.
 
 ## Inputs
 
@@ -441,7 +441,7 @@ If escalated, the decision must name the matching uppercase full system, for exa
 
 ## Decision
 
-- advance_to_CRAMPACS-<DOMAIN>
+- advance_to_CRAMPS-<DOMAIN>
 - hold_coordinate_lock
 - hold_source_completeness
 - hold_dependence_or_bias
@@ -450,9 +450,9 @@ If escalated, the decision must name the matching uppercase full system, for exa
     )
 
     write(
-        ROOT / "printouts" / "CRAMPACS_full_assurance_gate_printout.md",
+        ROOT / "printouts" / "CRAMPS_full_assurance_gate_printout.md",
         """
-# CRAMPACS Full Assurance Gate Printout
+# CRAMPS Full Assurance Gate Printout
 
 | Gate | Pass/Hold/Fail | Evidence |
 |---|---|---|
@@ -488,7 +488,7 @@ If escalated, the decision must name the matching uppercase full system, for exa
     write(
         ROOT / "printouts" / "preflight_to_full_composition_printout.md",
         """
-# Preflight to Full CRAMPACS Composition Printout
+# Preflight to Full CRAMPS Composition Printout
 
 ## Preflight Import
 

@@ -1,12 +1,12 @@
 # Trust Checkpoint Map
 
-**Document ID:** CRAMPACS-TRUST-MAP-001  
+**Document ID:** CRAMPS-TRUST-MAP-001  
 **Version:** 0.1  
 **Status:** Draft checkpoint map
 
 ## 1. Purpose
 
-This map tells teams what to check while a CRAMPACS package is being built.
+This map tells teams what to check while a CRAMPS package is being built.
 
 It complements the canonical G0-G7 gate map. Gates decide whether a package can advance. Trust checkpoints keep the work honest before each gate decision.
 

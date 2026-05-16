@@ -7,7 +7,7 @@
 
 ## 1. Scope
 
-State which CRAMPACS workflow, tool, template, or domain overlay is validated.
+State which CRAMPS workflow, tool, template, or domain overlay is validated.
 
 ## 2. Test Batteries
 

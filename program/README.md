@@ -1,14 +1,14 @@
-# CRAMPACS Program Spine
+# CRAMPS Program Spine
 
-This directory is the operational spine of CRAMPACS.
+This directory is the operational spine of CRAMPS.
 
 The repository has templates, domain packs, printouts, and spreadsheets. Those are supporting artifacts. The files in this directory define the actual assurance program a team can run.
 
 ## Operating Principle
 
-Lowercase `crampacs-*` is a lightweight preflight. It answers whether a suspected coordinate recurrence deserves investment.
+Lowercase `cramps-*` is a lightweight preflight. It answers whether a suspected coordinate recurrence deserves investment.
 
-Uppercase `CRAMPACS-*` is the full assurance system. It produces a defensible evidence package only after protocol lock, source accounting, null evidence, dependence and bias review, statistical analysis, reproducibility, and signoff.
+Uppercase `CRAMPS-*` is the full assurance system. It produces a defensible evidence package only after protocol lock, source accounting, null evidence, dependence and bias review, statistical analysis, reproducibility, and signoff.
 
 ## Core Program Documents
 
@@ -52,17 +52,17 @@ Use these when running a real engagement:
 
 The `registers/` folder contains CSV logs for evidence, controls, risk, CAPA, gate reviews, training, decisions, and assurance claims.
 
-These are not decorative. A CRAMPACS package is not release-ready unless the relevant registers are filled and reviewed.
+These are not decorative. A CRAMPS package is not release-ready unless the relevant registers are filled and reviewed.
 
 ## Package Scaffold
 
 Use the end-to-end CLI when an AI agent or practitioner is operating a package:
 
 ```bash
-python tools/crampacs_cli.py init --level preflight --domain med --study-id STUDY001
-python tools/crampacs_cli.py check ./crampacs_projects/<package>
-python tools/crampacs_cli.py leak-scan ./crampacs_projects/<package>
-python tools/crampacs_cli.py gate ./crampacs_projects/<package>
+python tools/cramps_cli.py init --level preflight --domain med --study-id STUDY001
+python tools/cramps_cli.py check ./cramps_projects/<package>
+python tools/cramps_cli.py leak-scan ./cramps_projects/<package>
+python tools/cramps_cli.py gate ./cramps_projects/<package>
 ```
 
 The CLI creates a package-local AI operator brief, DAG gate map,
@@ -73,17 +73,17 @@ Use the lower-level scaffold tool only when you need the full evidence-binder
 structure without the CLI operating controls:
 
 ```bash
-python tools/scaffold_crampacs_package.py ./packages/CRAMPACS_MED_STUDY001 --domain med --study-id STUDY001
-python tools/crampacs_sidecar.py ./packages/CRAMPACS_MED_STUDY001 --level full
+python tools/scaffold_cramps_package.py ./packages/CRAMPS_MED_STUDY001 --domain med --study-id STUDY001
+python tools/cramps_sidecar.py ./packages/CRAMPS_MED_STUDY001 --level full
 ```
 
 The first command creates the binder. The second command shows what is still missing before the package can be treated as release-ready.
 
 ## Teaching and Adoption
 
-Use the training kit when introducing CRAMPACS to a team:
+Use the training kit when introducing CRAMPS to a team:
 
-- `../training/CRAMPACS_TRAINING_GUIDE.md`
+- `../training/CRAMPS_TRAINING_GUIDE.md`
 - `../training/INSTRUCTOR_GUIDE.md`
 - `../training/LEARNER_WORKBOOK.md`
 - `../training/EXERCISE_PACKETS.md`
@@ -91,6 +91,6 @@ Use the training kit when introducing CRAMPACS to a team:
 
 Use the brand kit when writing public, internal, or platform-facing material:
 
-- `../brand/CRAMPACS_BRAND_SYSTEM.md`
-- `../brand/CRAMPACS_DOCUMENT_STYLE_GUIDE.md`
-- `../brand/CRAMPACS_MESSAGE_ARCHITECTURE.md`
+- `../brand/CRAMPS_BRAND_SYSTEM.md`
+- `../brand/CRAMPS_DOCUMENT_STYLE_GUIDE.md`
+- `../brand/CRAMPS_MESSAGE_ARCHITECTURE.md`

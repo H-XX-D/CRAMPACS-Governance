@@ -1,12 +1,12 @@
 # Audit Procedure
 
-**Document ID:** CRAMPACS-AUD-PROC-001  
+**Document ID:** CRAMPS-AUD-PROC-001  
 **Version:** 0.1  
 **Status:** Draft procedure  
 
 ## 1. Purpose
 
-This procedure defines how CRAMPACS audits are planned, executed, reported, and closed.
+This procedure defines how CRAMPS audits are planned, executed, reported, and closed.
 
 ## 2. Auditor Independence
 

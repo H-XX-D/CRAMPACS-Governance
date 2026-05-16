@@ -1,15 +1,15 @@
-# CRAMPACS Deployment Playbook
+# CRAMPS Deployment Playbook
 
-**Document ID:** CRAMPACS-DPLY-001
+**Document ID:** CRAMPS-DPLY-001
 
 ## 1. Deployment Modes
 
 | Mode | Use when | Typical duration | Output |
 |---|---|---:|---|
-| `crampacs-*` preflight | Team needs fast triage | 1-2 days | proceed, hold, stop |
-| CRAMPACS pilot | Narrow question, limited sources | 1-4 weeks | limited evidence package |
-| CRAMPACS standard | Serious internal decision or publication support | 1-3 months | full evidence package |
-| CRAMPACS regulated | Safety/security/regulated operating environment | project-specific | audit-ready decision package |
+| `cramps-*` preflight | Team needs fast triage | 1-2 days | proceed, hold, stop |
+| CRAMPS pilot | Narrow question, limited sources | 1-4 weeks | limited evidence package |
+| CRAMPS standard | Serious internal decision or publication support | 1-3 months | full evidence package |
+| CRAMPS regulated | Safety/security/regulated operating environment | project-specific | audit-ready decision package |
 
 ## 2. Preflight Deployment
 
@@ -76,7 +76,7 @@ Phase 5, assurance:
 
 ## 4. Regulated Deployment Additions
 
-Use `REGULATED_DEPLOYMENT_ADDENDUM.md` before CRAMPACS supports a safety, security, regulated research, public agency, financial, clinical, or operational decision.
+Use `REGULATED_DEPLOYMENT_ADDENDUM.md` before CRAMPS supports a safety, security, regulated research, public agency, financial, clinical, or operational decision.
 
 Add:
 

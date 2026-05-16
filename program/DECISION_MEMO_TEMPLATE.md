@@ -1,8 +1,8 @@
-# CRAMPACS Decision Memo Template
+# CRAMPS Decision Memo Template
 
 **Study ID:**  
 **Domain:**  
-**Assurance level:** crampacs-* preflight / CRAMPACS pilot / CRAMPACS standard / CRAMPACS regulated  
+**Assurance level:** cramps-* preflight / CRAMPS pilot / CRAMPS standard / CRAMPS regulated  
 **Decision owner:**  
 **Date:**  
 

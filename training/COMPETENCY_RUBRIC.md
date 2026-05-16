@@ -1,6 +1,6 @@
 # Competency Rubric
 
-**Document ID:** CRAMPACS-TRN-RUBRIC-001  
+**Document ID:** CRAMPS-TRN-RUBRIC-001  
 **Version:** 0.1  
 **Status:** Draft competency rubric
 
@@ -25,8 +25,8 @@ Minimum pass:
 
 | Skill | Evidence | Score |
 |---|---|---:|
-| Explains CRAMPACS accurately | one-sentence definition |  |
-| Distinguishes `crampacs-*` and `CRAMPACS-*` | route selection exercise |  |
+| Explains CRAMPS accurately | one-sentence definition |  |
+| Distinguishes `cramps-*` and `CRAMPS-*` | route selection exercise |  |
 | Writes precise coordinate and tolerance | coordinate worksheet |  |
 | Identifies null and non-event evidence | source universe worksheet |  |
 | Detects dependence | evidence-family exercise |  |
@@ -94,6 +94,6 @@ Record successful completion in:
 Recommended note format:
 
 ```text
-Completed CRAMPACS practitioner practical. Average score: __. Required 3-level skills passed: yes/no. Reviewer: __.
+Completed CRAMPS practitioner practical. Average score: __. Required 3-level skills passed: yes/no. Reviewer: __.
 ```
 

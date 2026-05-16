@@ -5,7 +5,7 @@
 **Date:**  
 **Prepared by:**  
 **Reviewer:**  
-**Current assurance route:** `crampacs-*` / `CRAMPACS-*`  
+**Current assurance route:** `cramps-*` / `CRAMPS-*`  
 
 ## 1. Current Package Trust State
 
@@ -44,7 +44,7 @@ not encode release status as a trust state.
 
 ## 6. Sidecar Blockers
 
-Paste current sidecar blocker list or link to `crampacs_sidecar_metrics.md`.
+Paste current sidecar blocker list or link to `cramps_sidecar_metrics.md`.
 
 ## 7. Open CAPA
 

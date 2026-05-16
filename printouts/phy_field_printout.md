@@ -1,10 +1,10 @@
-# crampacs-phy / CRAMPACS-PHY Field Printout
+# cramps-phy / CRAMPS-PHY Field Printout
 
 **Domain:** Physics and physical anomaly catalogs
 
 ## Use Lowercase When
 
-Use `crampacs-phy` when the team needs a one to two day triage pass.
+Use `cramps-phy` when the team needs a one to two day triage pass.
 
 Output:
 
@@ -16,7 +16,7 @@ Output:
 
 ## Use Uppercase When
 
-Use `CRAMPACS-PHY` when the result may support formal research, audit-ready decision support, safety/security escalation, regulated review, or external reporting.
+Use `CRAMPS-PHY` when the result may support formal research, audit-ready decision support, safety/security escalation, regulated review, or external reporting.
 
 Output:
 

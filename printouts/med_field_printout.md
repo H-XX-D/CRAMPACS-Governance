@@ -1,10 +1,10 @@
-# crampacs-med / CRAMPACS-MED Field Printout
+# cramps-med / CRAMPS-MED Field Printout
 
 **Domain:** Medicine and clinical evidence
 
 ## Use Lowercase When
 
-Use `crampacs-med` when the team needs a one to two day triage pass.
+Use `cramps-med` when the team needs a one to two day triage pass.
 
 Output:
 
@@ -16,7 +16,7 @@ Output:
 
 ## Use Uppercase When
 
-Use `CRAMPACS-MED` when the result may support formal research, audit-ready decision support, safety/security escalation, regulated review, or external reporting.
+Use `CRAMPS-MED` when the result may support formal research, audit-ready decision support, safety/security escalation, regulated review, or external reporting.
 
 Output:
 

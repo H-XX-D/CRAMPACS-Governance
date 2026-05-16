@@ -1,4 +1,4 @@
-# CRAMPACS Statistical Analysis Plan
+# CRAMPS Statistical Analysis Plan
 
 **Study ID:**  
 **Version:**  

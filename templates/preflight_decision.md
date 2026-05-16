@@ -1,4 +1,4 @@
-# crampacs Preflight Decision
+# cramps Preflight Decision
 
 **Preflight ID:**  
 **Date:**  
@@ -8,7 +8,7 @@
 
 Choose one:
 
-- advance_to_CRAMPACS-<DOMAIN>
+- advance_to_CRAMPS-<DOMAIN>
 - hold_coordinate_lock
 - hold_source_completeness
 - hold_dependence_or_bias
@@ -40,4 +40,4 @@ State the next operational step.
 
 ## Claim Boundary
 
-This is a lowercase crampacs-* preflight. It is not a confirmatory CRAMPACS-* result.
+This is a lowercase cramps-* preflight. It is not a confirmatory CRAMPS-* result.

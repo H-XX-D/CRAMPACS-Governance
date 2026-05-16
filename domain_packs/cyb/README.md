@@ -1,24 +1,24 @@
-# crampacs-cyb / CRAMPACS-CYB Starter Pack
+# cramps-cyb / CRAMPS-CYB Starter Pack
 
 **Domain:** Cybersecurity
 
 This pack contains domain-specific printable templates for both:
 
-- `crampacs-cyb` lightweight preflight
-- `CRAMPACS-CYB` full assurance study
+- `cramps-cyb` lightweight preflight
+- `CRAMPS-CYB` full assurance study
 
 Use the lowercase documents for a one to two day triage pass. Use the uppercase documents only after creating a full protocol lock and importing the preflight package with review disposition.
 
 ## Files
 
-- `crampacs-cyb_PREFLIGHT_SCOPE.md`
-- `crampacs-cyb_PREFLIGHT_SOURCES.csv`
-- `crampacs-cyb_PREFLIGHT_ROWS.csv`
-- `crampacs-cyb_PREFLIGHT_GOTCHAS_PRINTABLE.md`
-- `crampacs-cyb_PREFLIGHT_DECISION.md`
-- `CRAMPACS-CYB_FULL_PROTOCOL_ADDENDUM.md`
-- `CRAMPACS-CYB_RELEASE_GATE_PRINTABLE.md`
-- `CRAMPACS-CYB_DOMAIN_GOVERNANCE_PRINTABLE.md`
+- `cramps-cyb_PREFLIGHT_SCOPE.md`
+- `cramps-cyb_PREFLIGHT_SOURCES.csv`
+- `cramps-cyb_PREFLIGHT_ROWS.csv`
+- `cramps-cyb_PREFLIGHT_GOTCHAS_PRINTABLE.md`
+- `cramps-cyb_PREFLIGHT_DECISION.md`
+- `CRAMPS-CYB_FULL_PROTOCOL_ADDENDUM.md`
+- `CRAMPS-CYB_RELEASE_GATE_PRINTABLE.md`
+- `CRAMPS-CYB_DOMAIN_GOVERNANCE_PRINTABLE.md`
 
 ## Domain Coordinates
 

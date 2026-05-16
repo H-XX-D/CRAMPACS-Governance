@@ -1,12 +1,12 @@
 # Register Data Dictionary
 
-**Document ID:** CRAMPACS-REG-001  
+**Document ID:** CRAMPS-REG-001  
 **Version:** 0.1  
 **Status:** Draft procedure
 
 ## 1. Purpose
 
-This document defines required fields, allowed values, and ownership for CRAMPACS registers.
+This document defines required fields, allowed values, and ownership for CRAMPS registers.
 
 ## 2. Common Rules
 
@@ -51,7 +51,7 @@ Gate decisions:
 Default retention:
 
 - preflight package: 3 years unless superseded by full package
-- full CRAMPACS package: 7 years
+- full CRAMPS package: 7 years
 - regulated package: domain retention rule, minimum 7 years
 - training and approval records: duration of active role plus 7 years
 

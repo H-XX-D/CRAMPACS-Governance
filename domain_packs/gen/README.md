@@ -1,24 +1,24 @@
-# crampacs-gen / CRAMPACS-GEN Starter Pack
+# cramps-gen / CRAMPS-GEN Starter Pack
 
 **Domain:** Genomics and omics
 
 This pack contains domain-specific printable templates for both:
 
-- `crampacs-gen` lightweight preflight
-- `CRAMPACS-GEN` full assurance study
+- `cramps-gen` lightweight preflight
+- `CRAMPS-GEN` full assurance study
 
 Use the lowercase documents for a one to two day triage pass. Use the uppercase documents only after creating a full protocol lock and importing the preflight package with review disposition.
 
 ## Files
 
-- `crampacs-gen_PREFLIGHT_SCOPE.md`
-- `crampacs-gen_PREFLIGHT_SOURCES.csv`
-- `crampacs-gen_PREFLIGHT_ROWS.csv`
-- `crampacs-gen_PREFLIGHT_GOTCHAS_PRINTABLE.md`
-- `crampacs-gen_PREFLIGHT_DECISION.md`
-- `CRAMPACS-GEN_FULL_PROTOCOL_ADDENDUM.md`
-- `CRAMPACS-GEN_RELEASE_GATE_PRINTABLE.md`
-- `CRAMPACS-GEN_DOMAIN_GOVERNANCE_PRINTABLE.md`
+- `cramps-gen_PREFLIGHT_SCOPE.md`
+- `cramps-gen_PREFLIGHT_SOURCES.csv`
+- `cramps-gen_PREFLIGHT_ROWS.csv`
+- `cramps-gen_PREFLIGHT_GOTCHAS_PRINTABLE.md`
+- `cramps-gen_PREFLIGHT_DECISION.md`
+- `CRAMPS-GEN_FULL_PROTOCOL_ADDENDUM.md`
+- `CRAMPS-GEN_RELEASE_GATE_PRINTABLE.md`
+- `CRAMPS-GEN_DOMAIN_GOVERNANCE_PRINTABLE.md`
 
 ## Domain Coordinates
 

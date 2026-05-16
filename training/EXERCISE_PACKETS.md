@@ -1,6 +1,6 @@
 # Exercise Packets
 
-**Document ID:** CRAMPACS-TRN-EX-001  
+**Document ID:** CRAMPS-TRN-EX-001  
 **Version:** 0.1  
 **Status:** Draft exercise set
 
@@ -18,8 +18,8 @@ A team has noticed several weak signals around the same parameter value across p
 
 Choose the correct route:
 
-- `crampacs-*`
-- `CRAMPACS-*`
+- `cramps-*`
+- `CRAMPS-*`
 
 ### Learner answer
 
@@ -33,7 +33,7 @@ Choose the correct route:
 
 ### Expected answer
 
-Use `crampacs-*`. The team is not ready for uppercase assurance.
+Use `cramps-*`. The team is not ready for uppercase assurance.
 
 ### Debrief
 
@@ -159,7 +159,7 @@ Open bias and possibly CAPA. Hold or demote until missing-evidence impact is ass
 
 ### Scenario
 
-A draft report says: "CRAMPACS proves this intervention causes the adverse event."
+A draft report says: "CRAMPS proves this intervention causes the adverse event."
 
 ### Task
 
@@ -177,7 +177,7 @@ Rewrite the claim.
 
 ### Expected answer
 
-"A pre-specified coordinate shows unusual recurrence under the registered CRAMPACS analysis and should be prioritized for domain-standard validation."
+"A pre-specified coordinate shows unusual recurrence under the registered CRAMPS analysis and should be prioritized for domain-standard validation."
 
 ## Exercise 7: Sidecar Blockers
 
@@ -226,11 +226,11 @@ Do not release. Complete null-model runs, gate review records, and decision reco
 
 ### Scenario
 
-A safety supervisor believes immediate operational action is needed before CRAMPACS is complete.
+A safety supervisor believes immediate operational action is needed before CRAMPS is complete.
 
 ### Task
 
-State what CRAMPACS permits.
+State what CRAMPS permits.
 
 ### Learner answer
 

@@ -1,10 +1,10 @@
 # Training and Competency Plan
 
-**Document ID:** CRAMPACS-TRN-001
+**Document ID:** CRAMPS-TRN-001
 
 ## 1. Purpose
 
-A CRAMPACS program is only credible if the people applying it understand the controls.
+A CRAMPS program is only credible if the people applying it understand the controls.
 
 ## 2. Required Training by Role
 

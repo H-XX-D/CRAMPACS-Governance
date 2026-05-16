@@ -1,4 +1,4 @@
-# 90-Day CRAMPACS Implementation Roadmap
+# 90-Day CRAMPS Implementation Roadmap
 
 ## Days 0-15: Program Setup
 
@@ -19,8 +19,8 @@ Exit criteria:
 ## Days 16-45: Pilot
 
 - Select a narrow coordinate family.
-- Run `crampacs-*` preflight.
-- Convert accepted preflight artifacts into `CRAMPACS-*` pilot.
+- Run `cramps-*` preflight.
+- Convert accepted preflight artifacts into `CRAMPS-*` pilot.
 - Lock protocol.
 - Extract bounded sources.
 - Run independence and bias review.

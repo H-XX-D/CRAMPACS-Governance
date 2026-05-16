@@ -1,10 +1,10 @@
-# crampacs-fin / CRAMPACS-FIN Field Printout
+# cramps-fin / CRAMPS-FIN Field Printout
 
 **Domain:** Finance, fraud, and risk
 
 ## Use Lowercase When
 
-Use `crampacs-fin` when the team needs a one to two day triage pass.
+Use `cramps-fin` when the team needs a one to two day triage pass.
 
 Output:
 
@@ -16,7 +16,7 @@ Output:
 
 ## Use Uppercase When
 
-Use `CRAMPACS-FIN` when the result may support formal research, audit-ready decision support, safety/security escalation, regulated review, or external reporting.
+Use `CRAMPS-FIN` when the result may support formal research, audit-ready decision support, safety/security escalation, regulated review, or external reporting.
 
 Output:
 

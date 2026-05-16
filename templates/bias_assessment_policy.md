@@ -1,4 +1,4 @@
-# CRAMPACS Bias Assessment Policy
+# CRAMPS Bias Assessment Policy
 
 **Study ID:**  
 **Version:**  

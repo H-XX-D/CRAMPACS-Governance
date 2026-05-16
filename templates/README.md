@@ -1,11 +1,11 @@
-# CRAMPACS Templates
+# CRAMPS Templates
 
-These templates implement the data contracts defined in `../policies/CRAMPACS_PROGRAM_SOP_2026-05-15.md`.
+These templates implement the data contracts defined in `../policies/CRAMPS_PROGRAM_SOP_2026-05-15.md`.
 
 Use them by copying this directory into a study workspace such as:
 
 ```text
-crampacs/CRAMPACS_<domain>_<YYYY-MM-DD>/
+cramps/CRAMPS_<domain>_<YYYY-MM-DD>/
 ```
 
 Rules:
@@ -19,7 +19,7 @@ Rules:
 
 ## Lowercase Preflight Templates
 
-Use these for a one to two day `crampacs-*` preflight:
+Use these for a one to two day `cramps-*` preflight:
 
 - `preflight_scope.md`
 - `preflight_sources.csv`
@@ -28,11 +28,11 @@ Use these for a one to two day `crampacs-*` preflight:
 - `preflight_decision.md`
 - `preflight_manifest.csv`
 
-If the preflight escalates, use `preflight_import_log.csv` in the uppercase `CRAMPACS-*` package to record which preflight artifacts were accepted, reworked, rejected, or quarantined. It is a conversion/full-system artifact, not a required preflight artifact.
+If the preflight escalates, use `preflight_import_log.csv` in the uppercase `CRAMPS-*` package to record which preflight artifacts were accepted, reworked, rejected, or quarantined. It is a conversion/full-system artifact, not a required preflight artifact.
 
 ## Uppercase Full-System Templates
 
-Use the remaining CSV templates and `CRAMPACS_PROTOCOL_TEMPLATE.md` for a full `CRAMPACS-*` study.
+Use the remaining CSV templates and `CRAMPS_PROTOCOL_TEMPLATE.md` for a full `CRAMPS-*` study.
 
 Lowercase templates can seed uppercase templates, but they do not carry full assurance until reviewed under the full protocol.
 

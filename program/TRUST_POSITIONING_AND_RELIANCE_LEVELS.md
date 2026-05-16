@@ -1,13 +1,13 @@
 # Trust Positioning and Reliance Levels
 
-**Document ID:** CRAMPACS-TRUST-POS-001  
+**Document ID:** CRAMPS-TRUST-POS-001  
 **Version:** 0.1  
 **Status:** Draft positioning standard  
-**Applies to:** all CRAMPACS communication, training, preflights, full packages, and releases
+**Applies to:** all CRAMPS communication, training, preflights, full packages, and releases
 
 ## 1. Core Rule
 
-Never say a CRAMPACS package is simply "trustworthy."
+Never say a CRAMPS package is simply "trustworthy."
 
 Always say what it is trustworthy for.
 
@@ -20,18 +20,18 @@ Trustworthy positioning requires four parts:
 
 Example:
 
-> This `crampacs-med` preflight is trustworthy for deciding whether to invest in a full `CRAMPACS-MED` study. It is not trustworthy for clinical action, causal inference, or public safety claims.
+> This `cramps-med` preflight is trustworthy for deciding whether to invest in a full `CRAMPS-MED` study. It is not trustworthy for clinical action, causal inference, or public safety claims.
 
 ## 2. Trustworthy For What?
 
 | Package state | Trustworthy for | Not trustworthy for |
 |---|---|---|
-| idea sketch | conversation and scoping | CRAMPACS claim, preflight decision, operational decision |
-| `crampacs-*` draft | internal triage work | escalation, publication, safety action |
-| `crampacs-*` checked | deciding continue, hold, stop, or full-study escalation | domain conclusion, full assurance, external claim |
-| `CRAMPACS-*` scaffold | organizing work | evidence reliance or release |
-| `CRAMPACS-*` gate-accepted | advancing to the next gate | release unless G7 is complete |
-| `CRAMPACS-*` release-ready | decision support within assigned evidence tier | proof of causality or regulatory compliance by itself |
+| idea sketch | conversation and scoping | CRAMPS claim, preflight decision, operational decision |
+| `cramps-*` draft | internal triage work | escalation, publication, safety action |
+| `cramps-*` checked | deciding continue, hold, stop, or full-study escalation | domain conclusion, full assurance, external claim |
+| `CRAMPS-*` scaffold | organizing work | evidence reliance or release |
+| `CRAMPS-*` gate-accepted | advancing to the next gate | release unless G7 is complete |
+| `CRAMPS-*` release-ready | decision support within assigned evidence tier | proof of causality or regulatory compliance by itself |
 | externally validated | stronger prioritization and confidence in process reproducibility | domain proof unless domain-standard confirmation is complete |
 
 ## 3. Positioning Ladder
@@ -40,10 +40,10 @@ Use this ladder in reports, training, and supervisor decisions.
 
 | Level | Name | Positioning language |
 |---|---|---|
-| P0 | not positioned | "This is not a CRAMPACS output." |
+| P0 | not positioned | "This is not a CRAMPS output." |
 | P1 | exploration | "This is an exploratory observation." |
-| P2 | preflight | "This is a lowercase `crampacs-*` triage result." |
-| P3 | full package in progress | "This is a full `CRAMPACS-*` package under construction and is not release-ready." |
+| P2 | preflight | "This is a lowercase `cramps-*` triage result." |
+| P3 | full package in progress | "This is a full `CRAMPS-*` package under construction and is not release-ready." |
 | P4 | gate accepted | "This package has passed specified gates but is not yet a release result." |
 | P5 | release result | "This package is approved for the stated decision within the assigned evidence tier." |
 | P6 | externally validated | "This package has independent reproduction or external audit support." |
@@ -55,7 +55,7 @@ Every decision memo, supervisor packet, and release-facing report must include:
 ```text
 This package is trustworthy for: [specific reliance].
 This package is not trustworthy for: [specific prohibited reliance].
-Current assurance route: [crampacs-* or CRAMPACS-*].
+Current assurance route: [cramps-* or CRAMPS-*].
 Current trust state: [draft / unchecked / checked_with_limits / accepted / blocked / superseded / quarantined].
 Current evidence tier: [0-4].
 ```
@@ -101,16 +101,16 @@ When briefing a supervisor, use this structure:
 
 Preflight:
 
-> This `crampacs-*` preflight is trustworthy for deciding whether a full CRAMPACS package is worth funding. It is not trustworthy for domain action or external claims.
+> This `cramps-*` preflight is trustworthy for deciding whether a full CRAMPS package is worth funding. It is not trustworthy for domain action or external claims.
 
 Full package in progress:
 
-> This `CRAMPACS-*` package is under construction. It may be useful for internal review, but it is not trustworthy for release until G7, sidecar, trust summary, and decision memo are complete.
+> This `CRAMPS-*` package is under construction. It may be useful for internal review, but it is not trustworthy for release until G7, sidecar, trust summary, and decision memo are complete.
 
 Release-ready:
 
-> This `CRAMPACS-*` package is trustworthy for the decision named in the decision memo, within the assigned evidence tier and stated limitations. It does not establish domain causality or compliance by itself.
+> This `CRAMPS-*` package is trustworthy for the decision named in the decision memo, within the assigned evidence tier and stated limitations. It does not establish domain causality or compliance by itself.
 
 Externally validated:
 
-> This CRAMPACS result has additional process confidence from independent reproduction or external audit. Domain-standard confirmation is still required for domain proof.
+> This CRAMPS result has additional process confidence from independent reproduction or external audit. Domain-standard confirmation is still required for domain proof.

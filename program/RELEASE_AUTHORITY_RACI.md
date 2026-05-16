@@ -1,18 +1,18 @@
 # Release Authority RACI
 
-**Document ID:** CRAMPACS-RACI-001  
+**Document ID:** CRAMPS-RACI-001  
 **Version:** 0.1  
 **Status:** Draft procedure  
-**Owner:** CRAMPACS method owner  
+**Owner:** CRAMPS method owner  
 **Approver:** accountable release authority  
 
 ## 1. Purpose
 
-This document defines who can release, hold, demote, or reject a CRAMPACS package.
+This document defines who can release, hold, demote, or reject a CRAMPS package.
 
 ## 2. Release Board
 
-For a full `CRAMPACS-*` package, the release board must include:
+For a full `CRAMPS-*` package, the release board must include:
 
 - accountable release authority
 - domain or safety supervisor
@@ -55,14 +55,14 @@ Any of these roles can hold release.
 
 ## 5. Emergency Override
 
-Emergency operational action may occur before CRAMPACS completion only when:
+Emergency operational action may occur before CRAMPS completion only when:
 
 - delay creates material safety, security, legal, or operational risk
 - action is explicitly temporary
 - approving authority signs risk acceptance
 - compensating controls are defined
-- retrospective CRAMPACS review is required
+- retrospective CRAMPS review is required
 - CAPA is opened if controls were bypassed
 
-Emergency action does not convert incomplete CRAMPACS evidence into full assurance.
+Emergency action does not convert incomplete CRAMPS evidence into full assurance.
 

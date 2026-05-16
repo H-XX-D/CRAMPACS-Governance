@@ -1,9 +1,9 @@
-# CRAMPACS Governance Master Printout
+# CRAMPS Governance Master Printout
 
 ## System Rule
 
-- Uppercase `CRAMPACS-*` is the full assurance system.
-- Lowercase `crampacs-*` is the one to two day preflight.
+- Uppercase `CRAMPS-*` is the full assurance system.
+- Lowercase `cramps-*` is the one to two day preflight.
 - A preflight can seed the full system, but only the full system can carry full assurance after protocol lock.
 
 ## Documentation Layers
@@ -117,8 +117,8 @@
 
 | Control | Rule |
 | --- | --- |
-| Assurance boundary | Every artifact states whether it is crampacs-* or CRAMPACS-* |
-| Claim boundary | Every release-facing artifact states what CRAMPACS does not prove |
+| Assurance boundary | Every artifact states whether it is cramps-* or CRAMPS-* |
+| Claim boundary | Every release-facing artifact states what CRAMPS does not prove |
 | Decision language | Approve, approve_with_limits, hold, demote, reject, stop, emergency_parallel_action |
 | Severity language | Critical, Major, Minor, Observation |
 | Stop signs | Preflight and full package stop rules are easy to find |
@@ -131,13 +131,13 @@
 | --- | --- | --- | --- |
 | Executive briefing | Sponsor, agency lead, director | 60 minutes | adoption decision and pilot scope |
 | Supervisor orientation | Safety supervisor, risk owner, program officer | 2 hours | approval, hold, demote, reject literacy |
-| Preflight workshop | Analyst, domain reviewer, project lead | 1 day | completed mock crampacs-* preflight |
+| Preflight workshop | Analyst, domain reviewer, project lead | 1 day | completed mock cramps-* preflight |
 | Practitioner course | Data scientist, evidence reviewer, auditor | 3 days | full package walkthrough and gate practice |
 | Instructor course | Internal trainer, quality lead | 2 days after practitioner course | teach-back and scoring consistency |
 
 ## Framework Patterns
 
-| Framework | Pattern | CRAMPACS adoption |
+| Framework | Pattern | CRAMPS adoption |
 | --- | --- | --- |
 | PRISMA | Checklist plus flow diagrams | Use checklists, printouts, and package flow |
 | Cochrane | Missing-evidence risk | Treat nulls, non-events, and missing evidence as release issues |
@@ -164,11 +164,11 @@
 
 | Package state | Trustworthy for | Not trustworthy for |
 | --- | --- | --- |
-| idea sketch | conversation and scoping | CRAMPACS claim, preflight decision, operational decision |
-| crampacs-* checked | continue, hold, stop, or full-study escalation | domain conclusion, full assurance, external claim |
-| CRAMPACS-* scaffold | organizing work | evidence reliance or release |
-| CRAMPACS-* gate-accepted | advancing to the next gate | release unless G7 is complete |
-| CRAMPACS-* release-ready | decision support within assigned evidence tier | proof of causality or regulatory compliance by itself |
+| idea sketch | conversation and scoping | CRAMPS claim, preflight decision, operational decision |
+| cramps-* checked | continue, hold, stop, or full-study escalation | domain conclusion, full assurance, external claim |
+| CRAMPS-* scaffold | organizing work | evidence reliance or release |
+| CRAMPS-* gate-accepted | advancing to the next gate | release unless G7 is complete |
+| CRAMPS-* release-ready | decision support within assigned evidence tier | proof of causality or regulatory compliance by itself |
 | externally validated | stronger prioritization and process confidence | domain proof unless domain-standard confirmation is complete |
 
 ## Trust Checkpoints

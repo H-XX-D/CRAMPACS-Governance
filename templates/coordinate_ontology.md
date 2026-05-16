@@ -1,4 +1,4 @@
-# CRAMPACS Coordinate Ontology
+# CRAMPS Coordinate Ontology
 
 **Study ID:**  
 **Domain suffix:**  

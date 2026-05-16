@@ -1,15 +1,15 @@
-# CRAMPACS AI Trusted Use, Gate DAG, Leak Watch, and Quarantine Policy
+# CRAMPS AI Trusted Use, Gate DAG, Leak Watch, and Quarantine Policy
 
 ## Purpose
 
-This policy governs AI-assisted operation of CRAMPACS packages. It exists to
+This policy governs AI-assisted operation of CRAMPS packages. It exists to
 keep the reusable source kit sanitized, make package progress inspectable, and
 prevent weak-signal synthesis from turning into uncontrolled pattern claims.
 
 The policy applies to both:
 
-- lowercase `crampacs-*` preflight packages
-- uppercase `CRAMPACS-*` full assurance packages
+- lowercase `cramps-*` preflight packages
+- uppercase `CRAMPS-*` full assurance packages
 
 ## Source-Kit Boundary
 
@@ -19,8 +19,8 @@ program files, domain packs, training material, printouts, and tools.
 A study package is a separate working directory created by:
 
 ```bash
-python tools/crampacs_cli.py init --level preflight --domain med --study-id STUDY001
-python tools/crampacs_cli.py init --level full --domain med --study-id STUDY001
+python tools/cramps_cli.py init --level preflight --domain med --study-id STUDY001
+python tools/cramps_cli.py init --level full --domain med --study-id STUDY001
 ```
 
 Package operators, including AI agents, write inside the package directory.
@@ -33,7 +33,7 @@ not as an accidental byproduct of a study.
 
 Before doing package work, an AI operator must read:
 
-- `crampacs_project.json`
+- `cramps_project.json`
 - `ai_controls/AI_OPERATOR_BRIEF.md`
 - `ai_controls/GATE_DAG.md`
 - `ai_controls/LEAK_WATCH_SURFACES.md`
@@ -57,12 +57,12 @@ The AI operator must not:
 - hide or delete adverse evidence
 - remove rows to improve a score
 - upgrade lowercase preflight language into uppercase full-assurance claims
-- claim proof, discovery, causality, safety, efficacy, fraud, exploitability, or compliance from CRAMPACS alone
+- claim proof, discovery, causality, safety, efficacy, fraud, exploitability, or compliance from CRAMPS alone
 - export restricted, private, sensitive, or source-contaminated material
 
 ## DAG Gate Accounting
 
-CRAMPACS gates are dependency gates. A later phase cannot progress merely
+CRAMPS gates are dependency gates. A later phase cannot progress merely
 because its own files exist. It progresses only when:
 
 - all dependency gates are clear
@@ -103,7 +103,7 @@ phase is blocked even when its local terms appear complete.
 | `P5` | decision and leak clearance | decision record exists, sidecar required-artifact blockers are clear, and leak scan has no open critical finding |
 
 A lowercase preflight can recommend escalation only after `P5` clears. It cannot
-make an uppercase `CRAMPACS-*` claim.
+make an uppercase `CRAMPS-*` claim.
 
 ## Uppercase Full-System Gate DAG
 
@@ -156,14 +156,14 @@ Quarantine is required when any of the following occurs:
 Run:
 
 ```bash
-python tools/crampacs_cli.py quarantine <package_dir> --reason "<reason>"
+python tools/cramps_cli.py quarantine <package_dir> --reason "<reason>"
 ```
 
 Quarantine writes:
 
 - `quarantine/QUARANTINE_NOTICE.md`
 - `logs/quarantine_log.csv`
-- updated `crampacs_project.json`
+- updated `cramps_project.json`
 
 Clearance requires:
 
@@ -175,14 +175,14 @@ Clearance requires:
 Run:
 
 ```bash
-python tools/crampacs_cli.py clear-quarantine <package_dir> --reviewer-id <id> --basis "<basis>"
+python tools/cramps_cli.py clear-quarantine <package_dir> --reviewer-id <id> --basis "<basis>"
 ```
 
 Clearing quarantine does not clear gates by itself. The gate DAG must be rerun.
 
 ## Trusted Use Statement
 
-A CRAMPACS package is trustworthy only for the reliance it has earned. Gate
+A CRAMPS package is trustworthy only for the reliance it has earned. Gate
 clearance means prerequisites for the next phase are accounted for. It does not
 mean the underlying domain claim is true, causal, safe, compliant, or externally
 validated.

@@ -1,14 +1,14 @@
 # Trust Maintenance Protocol
 
-**Document ID:** CRAMPACS-TRUST-001  
+**Document ID:** CRAMPS-TRUST-001  
 **Version:** 0.1  
 **Status:** Draft procedure  
-**Owner:** CRAMPACS program owner  
-**Applies to:** `crampacs-*` preflight and `CRAMPACS-*` full assurance packages
+**Owner:** CRAMPS program owner  
+**Applies to:** `cramps-*` preflight and `CRAMPS-*` full assurance packages
 
 ## 1. Purpose
 
-CRAMPACS is fragile if trust is added only at the end.
+CRAMPS is fragile if trust is added only at the end.
 
 This protocol keeps trust visible while the package is being built. It requires teams to record what changed, what was checked, what remains uncertain, what was promoted, what was blocked, and what must not be relied on yet.
 
@@ -30,7 +30,7 @@ Every important package element must have one of these states:
 
 ## 3. Working Truth vs Release Truth
 
-CRAMPACS separates working truth from release truth.
+CRAMPS separates working truth from release truth.
 
 Working truth:
 
@@ -69,7 +69,7 @@ Run a trust checkpoint at:
 
 ## 5. Required Trust Records
 
-For full `CRAMPACS-*` packages, create binder `10_trust_maintenance/` with:
+For full `CRAMPS-*` packages, create binder `10_trust_maintenance/` with:
 
 - `build_ledger.csv`
 - `checkpoint_reviews.csv`
@@ -79,7 +79,7 @@ For full `CRAMPACS-*` packages, create binder `10_trust_maintenance/` with:
 - `trust_status_summary.md`
 - `open_questions.md`
 
-For `crampacs-*` preflights, use lightweight versions:
+For `cramps-*` preflights, use lightweight versions:
 
 - preflight decision notes
 - sidecar output
@@ -130,7 +130,7 @@ Every claim must trace to:
 - prohibited overclaim
 - reviewer
 
-A claim with no trace is not a CRAMPACS claim.
+A claim with no trace is not a CRAMPS claim.
 
 ## 9. Promotion Rule
 

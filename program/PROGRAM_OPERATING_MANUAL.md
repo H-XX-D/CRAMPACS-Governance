@@ -1,12 +1,12 @@
-# CRAMPACS Program Operating Manual
+# CRAMPS Program Operating Manual
 
-**Document ID:** CRAMPACS-POM-001  
+**Document ID:** CRAMPS-POM-001  
 **Status:** Operational draft  
-**Applies to:** all `crampacs-*` preflights and `CRAMPACS-*` full assurance studies
+**Applies to:** all `cramps-*` preflights and `CRAMPS-*` full assurance studies
 
 ## 1. Purpose
 
-CRAMPACS is an assurance program for deciding whether weak signals recur at pre-specified coordinates across heterogeneous evidence sources more often than expected under a registered null model.
+CRAMPS is an assurance program for deciding whether weak signals recur at pre-specified coordinates across heterogeneous evidence sources more often than expected under a registered null model.
 
 The program is designed for teams that cannot afford informal pattern-finding:
 
@@ -19,18 +19,18 @@ The program is designed for teams that cannot afford informal pattern-finding:
 - engineering reliability groups
 - scientific research groups
 
-CRAMPACS does not make final domain claims by itself. It produces an auditable evidence package that can support prioritization, escalation, rejection, or formal follow-up.
+CRAMPS does not make final domain claims by itself. It produces an auditable evidence package that can support prioritization, escalation, rejection, or formal follow-up.
 
 ## 2. Assurance Boundary
 
 | Level | Name | Meaning | Permitted output |
 |---|---|---|---|
-| L0 | Desk sketch | Informal idea or suspected pattern | No CRAMPACS output |
-| L1 | `crampacs-*` preflight | 1-2 day structured triage | Escalate, hold, stop, or re-scope |
-| L2 | CRAMPACS pilot | Narrow locked retrospective study | Limited evidence tier |
-| L3 | CRAMPACS standard | Full retrospective package | Defensible cross-catalog recurrence result |
-| L4 | CRAMPACS regulated | Full package plus domain regulatory controls | Audit-ready decision support |
-| L5 | CRAMPACS externally validated | Independent reproduction or external audit | Highest process assurance |
+| L0 | Desk sketch | Informal idea or suspected pattern | No CRAMPS output |
+| L1 | `cramps-*` preflight | 1-2 day structured triage | Escalate, hold, stop, or re-scope |
+| L2 | CRAMPS pilot | Narrow locked retrospective study | Limited evidence tier |
+| L3 | CRAMPS standard | Full retrospective package | Defensible cross-catalog recurrence result |
+| L4 | CRAMPS regulated | Full package plus domain regulatory controls | Audit-ready decision support |
+| L5 | CRAMPS externally validated | Independent reproduction or external audit | Highest process assurance |
 
 Lowercase outputs cannot be sold or described as uppercase assurance.
 
@@ -166,7 +166,7 @@ Pass criteria:
 
 Failure condition:
 
-- The report implies a domain conclusion that CRAMPACS cannot support.
+- The report implies a domain conclusion that CRAMPS cannot support.
 
 ## 5. Finding Severity
 
@@ -191,10 +191,10 @@ Controlled document approval, versioning, effective dates, and retirement are co
 | 3 | Prospective or holdout recurrence | Escalation to formal validation |
 | 4 | Domain confirmation | Domain claim possible under field rules |
 
-CRAMPACS can support Tiers 0-3. Tier 4 requires domain-standard confirmation.
+CRAMPS can support Tiers 0-3. Tier 4 requires domain-standard confirmation.
 
 ## 7. Required Release Statement
 
 Every released package must include:
 
-> CRAMPACS is an evidence-control and anomaly-prioritization method. It does not establish clinical, legal, safety, financial, security, engineering, or scientific causality by itself. Domain-standard confirmation remains required.
+> CRAMPS is an evidence-control and anomaly-prioritization method. It does not establish clinical, legal, safety, financial, security, engineering, or scientific causality by itself. Domain-standard confirmation remains required.

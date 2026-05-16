@@ -1,12 +1,12 @@
 # Regulated Deployment Addendum
 
-**Document ID:** CRAMPACS-REGDEP-001  
+**Document ID:** CRAMPS-REGDEP-001  
 **Version:** 0.1  
 **Status:** Draft procedure
 
 ## 1. Purpose
 
-This addendum defines controls required when CRAMPACS supports safety, security, regulated research, public agency, financial, clinical, or operational decisions.
+This addendum defines controls required when CRAMPS supports safety, security, regulated research, public agency, financial, clinical, or operational decisions.
 
 ## 2. Required Additions
 
@@ -85,5 +85,5 @@ Open an incident if:
 
 ## 4. Boundary
 
-This addendum makes CRAMPACS more audit-ready. It does not by itself create legal, regulatory, clinical, safety, or security compliance.
+This addendum makes CRAMPS more audit-ready. It does not by itself create legal, regulatory, clinical, safety, or security compliance.
 

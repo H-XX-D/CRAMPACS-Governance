@@ -1,14 +1,14 @@
 # Slide Outline
 
-**Document ID:** CRAMPACS-TRN-SLIDES-001  
+**Document ID:** CRAMPS-TRN-SLIDES-001  
 **Version:** 0.1  
 **Status:** Draft slide outline
 
 ## 1. Executive Briefing Deck
 
-1. CRAMPACS in one sentence
+1. CRAMPS in one sentence
 2. Why weak-signal recurrence needs controls
-3. The assurance boundary: `crampacs-*` vs `CRAMPACS-*`
+3. The assurance boundary: `cramps-*` vs `CRAMPS-*`
 4. What the system produces
 5. What it does not prove
 6. Adoption path: preflight, pilot, standard, regulated

@@ -9,7 +9,7 @@ const domainFiles = (await fs.readdir(domainDir))
   .map((file) => path.join(domainDir, file));
 
 const files = [
-  "spreadsheets/CRAMPACS_Governance_Master.xlsx",
+  "spreadsheets/CRAMPS_Governance_Master.xlsx",
   ...domainFiles,
 ];
 

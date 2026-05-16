@@ -1,4 +1,4 @@
-# CRAMPACS Independence Policy
+# CRAMPS Independence Policy
 
 **Study ID:**  
 **Version:**  

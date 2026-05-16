@@ -1,4 +1,4 @@
-# CRAMPACS Trust Positioning Printout
+# CRAMPS Trust Positioning Printout
 
 Never say a package is simply "trustworthy." State what it is trustworthy for and what it is not trustworthy for.
 
@@ -6,11 +6,11 @@ Never say a package is simply "trustworthy." State what it is trustworthy for an
 
 | Package state | Trustworthy for | Not trustworthy for |
 | --- | --- | --- |
-| idea sketch | conversation and scoping | CRAMPACS claim, preflight decision, operational decision |
-| crampacs-* checked | continue, hold, stop, or full-study escalation | domain conclusion, full assurance, external claim |
-| CRAMPACS-* scaffold | organizing work | evidence reliance or release |
-| CRAMPACS-* gate-accepted | advancing to the next gate | release unless G7 is complete |
-| CRAMPACS-* release-ready | decision support within assigned evidence tier | proof of causality or regulatory compliance by itself |
+| idea sketch | conversation and scoping | CRAMPS claim, preflight decision, operational decision |
+| cramps-* checked | continue, hold, stop, or full-study escalation | domain conclusion, full assurance, external claim |
+| CRAMPS-* scaffold | organizing work | evidence reliance or release |
+| CRAMPS-* gate-accepted | advancing to the next gate | release unless G7 is complete |
+| CRAMPS-* release-ready | decision support within assigned evidence tier | proof of causality or regulatory compliance by itself |
 | externally validated | stronger prioritization and process confidence | domain proof unless domain-standard confirmation is complete |
 
 ## Trust States

@@ -1,14 +1,14 @@
 # Package Scaffold Manifest
 
-**Document ID:** CRAMPACS-SCAF-001  
+**Document ID:** CRAMPS-SCAF-001  
 **Version:** 0.1  
 **Status:** Draft procedure
 
 ## 1. Purpose
 
-This manifest defines the files created by `tools/scaffold_crampacs_package.py`.
+This manifest defines the files created by `tools/scaffold_cramps_package.py`.
 
-The scaffold is the starting structure for an uppercase `CRAMPACS-*` full assurance package. It is intentionally incomplete at creation. The sidecar should report blockers until evidence, registers, gate reviews, and decision records are populated.
+The scaffold is the starting structure for an uppercase `CRAMPS-*` full assurance package. It is intentionally incomplete at creation. The sidecar should report blockers until evidence, registers, gate reviews, and decision records are populated.
 
 ## 2. Required Binder Directories
 

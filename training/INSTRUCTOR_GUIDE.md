@@ -1,12 +1,12 @@
 # Instructor Guide
 
-**Document ID:** CRAMPACS-TRN-INST-001  
+**Document ID:** CRAMPS-TRN-INST-001  
 **Version:** 0.1  
 **Status:** Draft instructor guide
 
 ## 1. Instructor Goal
 
-Teach CRAMPACS as a controlled decision system, not as an exciting anomaly story.
+Teach CRAMPS as a controlled decision system, not as an exciting anomaly story.
 
 The instructor should repeatedly anchor learners to three questions:
 
@@ -30,7 +30,7 @@ The instructor should repeatedly anchor learners to three questions:
 
 Emphasize:
 
-- CRAMPACS is not a discovery shortcut.
+- CRAMPS is not a discovery shortcut.
 - Lowercase preflight is not full assurance.
 - A result can be interesting and still not releasable.
 

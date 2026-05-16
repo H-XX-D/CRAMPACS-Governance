@@ -1,8 +1,8 @@
-# CRAMPACS Tools
+# CRAMPS Tools
 
 ## End-To-End CLI
 
-`crampacs_cli.py` is the primary operating surface for AI-assisted package work.
+`cramps_cli.py` is the primary operating surface for AI-assisted package work.
 It creates isolated project packages, keeps the source kit sanitized, runs
 sidecar checks, evaluates DAG gates, writes term/prerequisite accounting, scans
 leak surfaces, and records quarantine state.
@@ -10,25 +10,25 @@ leak surfaces, and records quarantine state.
 Examples:
 
 ```bash
-python3 tools/crampacs_cli.py domains
-python3 tools/crampacs_cli.py init --level preflight --domain phy --study-id STUDY001
-python3 tools/crampacs_cli.py check ./crampacs_projects/<package>
-python3 tools/crampacs_cli.py leak-scan ./crampacs_projects/<package>
-python3 tools/crampacs_cli.py gate ./crampacs_projects/<package>
-python3 tools/crampacs_cli.py promote ./crampacs_projects/<preflight_package> --study-id STUDY001-FULL
+python3 tools/cramps_cli.py domains
+python3 tools/cramps_cli.py init --level preflight --domain phy --study-id STUDY001
+python3 tools/cramps_cli.py check ./cramps_projects/<package>
+python3 tools/cramps_cli.py leak-scan ./cramps_projects/<package>
+python3 tools/cramps_cli.py gate ./cramps_projects/<package>
+python3 tools/cramps_cli.py promote ./cramps_projects/<preflight_package> --study-id STUDY001-FULL
 ```
 
-See `CRAMPACS_CLI_AI_OPERATOR_GUIDE.md` for the AI operator loop.
+See `CRAMPS_CLI_AI_OPERATOR_GUIDE.md` for the AI operator loop.
 
 ## Portable Tool
 
-`crampacs_sidecar.py` uses only the Python standard library. It checks preflight or full-study package completeness, writes package metrics, and produces a hash manifest.
+`cramps_sidecar.py` uses only the Python standard library. It checks preflight or full-study package completeness, writes package metrics, and produces a hash manifest.
 
 Examples:
 
 ```bash
-python3 tools/crampacs_sidecar.py domain_packs/med --level preflight
-python3 tools/crampacs_sidecar.py templates --level full
+python3 tools/cramps_sidecar.py domain_packs/med --level preflight
+python3 tools/cramps_sidecar.py templates --level full
 ```
 
 Use explicit `--level preflight` or `--level full` for governance audits. Auto-detection is intended for completed study package directories, not the repository root.

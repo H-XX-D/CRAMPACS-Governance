@@ -1,6 +1,6 @@
 # Learner Workbook
 
-**Document ID:** CRAMPACS-TRN-WB-001  
+**Document ID:** CRAMPS-TRN-WB-001  
 **Version:** 0.1  
 **Status:** Draft learner workbook
 
@@ -15,13 +15,13 @@
 | Dependence | shared dataset, pipeline, instrument, vendor, model, calibration, or source family |
 | Bias | process that can create or hide apparent recurrence |
 | Sidecar | package readiness and blocker runner |
-| Evidence tier | permitted strength of CRAMPACS claim |
+| Evidence tier | permitted strength of CRAMPS claim |
 
 ## 2. Assurance Boundary
 
-`crampacs-*` is a 1 to 2 day preflight.
+`cramps-*` is a 1 to 2 day preflight.
 
-`CRAMPACS-*` is a full assurance package after protocol lock, evidence package assembly, gate review, and release decision.
+`CRAMPS-*` is a full assurance package after protocol lock, evidence package assembly, gate review, and release decision.
 
 ## 3. Exercise Worksheet: Coordinate Lock
 
@@ -84,8 +84,8 @@ Controlled decision words:
 
 | Route | Allowed terms |
 |---|---|
-| `crampacs-*` preflight | `advance_to_CRAMPACS-<DOMAIN>`, `hold_coordinate_lock`, `hold_source_completeness`, `hold_dependence_or_bias`, `stop` |
-| `CRAMPACS-*` full release | `release`, `release_with_conditions`, `hold_for_rework`, `demote_to_exploratory`, `reject`, `stop` |
+| `cramps-*` preflight | `advance_to_CRAMPS-<DOMAIN>`, `hold_coordinate_lock`, `hold_source_completeness`, `hold_dependence_or_bias`, `stop` |
+| `CRAMPS-*` full release | `release`, `release_with_conditions`, `hold_for_rework`, `demote_to_exploratory`, `reject`, `stop` |
 | supervisor action | `approve`, `approve_with_limits`, `hold`, `demote`, `reject`, `emergency_parallel_action` |
 
 ## 7. Trust Positioning Worksheet
@@ -107,7 +107,7 @@ Before claiming competency, confirm:
 
 | Skill | I can do this |
 |---|---|
-| explain CRAMPACS in one sentence |  |
+| explain CRAMPS in one sentence |  |
 | distinguish lowercase and uppercase routes |  |
 | write a precise coordinate |  |
 | identify null and non-event evidence |  |

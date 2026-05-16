@@ -1,10 +1,10 @@
-# crampacs-ast / CRAMPACS-AST Field Printout
+# cramps-ast / CRAMPS-AST Field Printout
 
 **Domain:** Astronomy and astrophysics
 
 ## Use Lowercase When
 
-Use `crampacs-ast` when the team needs a one to two day triage pass.
+Use `cramps-ast` when the team needs a one to two day triage pass.
 
 Output:
 
@@ -16,7 +16,7 @@ Output:
 
 ## Use Uppercase When
 
-Use `CRAMPACS-AST` when the result may support formal research, audit-ready decision support, safety/security escalation, regulated review, or external reporting.
+Use `CRAMPS-AST` when the result may support formal research, audit-ready decision support, safety/security escalation, regulated review, or external reporting.
 
 Output:
 

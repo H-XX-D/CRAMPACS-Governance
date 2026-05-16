@@ -1,4 +1,4 @@
-# CRAMPACS Null Model Specification
+# CRAMPS Null Model Specification
 
 **Study ID:**  
 **Version:**  

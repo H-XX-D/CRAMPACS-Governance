@@ -1,4 +1,4 @@
-# CRAMPACS Governance Gotchas Printout
+# CRAMPS Governance Gotchas Printout
 
 | Gotcha | Symptom | Fast sanity check |
 | --- | --- | --- |

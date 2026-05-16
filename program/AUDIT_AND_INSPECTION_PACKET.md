@@ -1,10 +1,10 @@
 # Audit and Inspection Packet
 
-**Document ID:** CRAMPACS-AUD-001
+**Document ID:** CRAMPS-AUD-001
 
 ## 1. Audit Objective
 
-Determine whether the CRAMPACS package followed its own controls and whether the evidence supports the assigned assurance level.
+Determine whether the CRAMPS package followed its own controls and whether the evidence supports the assigned assurance level.
 
 For audit execution mechanics, use `AUDIT_PROCEDURE.md`. For the written record, use `AUDIT_REPORT_TEMPLATE.md`.
 

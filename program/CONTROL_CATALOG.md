@@ -1,9 +1,9 @@
-# CRAMPACS Control Catalog
+# CRAMPS Control Catalog
 
-**Document ID:** CRAMPACS-CTRL-001  
-**Purpose:** Define auditable controls for CRAMPACS operation.
+**Document ID:** CRAMPS-CTRL-001  
+**Purpose:** Define auditable controls for CRAMPS operation.
 
-Controls are mandatory unless explicitly marked optional. Each full `CRAMPACS-*` study must map evidence to every applicable control.
+Controls are mandatory unless explicitly marked optional. Each full `CRAMPS-*` study must map evidence to every applicable control.
 
 ## Control Summary
 
@@ -57,7 +57,7 @@ Controls are mandatory unless explicitly marked optional. Each full `CRAMPACS-*`
 
 ## Minimum Control Sets
 
-### `crampacs-*` Preflight
+### `cramps-*` Preflight
 
 Required:
 
@@ -75,7 +75,7 @@ Required:
 
 Preflight controls may be satisfied at lightweight depth. Output is triage only.
 
-### `CRAMPACS-*` Full System
+### `CRAMPS-*` Full System
 
 Required:
 

@@ -1,10 +1,10 @@
-# CRAMPACS Validation and Benchmarking Plan
+# CRAMPS Validation and Benchmarking Plan
 
-**Document ID:** CRAMPACS-VAL-001
+**Document ID:** CRAMPS-VAL-001
 
 ## 1. Purpose
 
-The CRAMPACS program must be validated before strong institutional claims are made about its effectiveness.
+The CRAMPS program must be validated before strong institutional claims are made about its effectiveness.
 
 Validation asks whether the method detects real planted recurrence, rejects false recurrence, and remains stable under reviewer and source variation.
 
@@ -97,7 +97,7 @@ These targets should tighten after pilot experience.
 
 ## 5. Minimum Validation Protocol
 
-Before an organization uses CRAMPACS for safety, regulated, public, financial, clinical, security, or operational decisions, run at least:
+Before an organization uses CRAMPS for safety, regulated, public, financial, clinical, security, or operational decisions, run at least:
 
 | Battery | Minimum cases | Minimum seeds or reviewers | Acceptance threshold |
 |---|---:|---:|---|

@@ -1,10 +1,10 @@
-# crampacs-clim / CRAMPACS-CLIM Field Printout
+# cramps-clim / CRAMPS-CLIM Field Printout
 
 **Domain:** Climate and Earth systems
 
 ## Use Lowercase When
 
-Use `crampacs-clim` when the team needs a one to two day triage pass.
+Use `cramps-clim` when the team needs a one to two day triage pass.
 
 Output:
 
@@ -16,7 +16,7 @@ Output:
 
 ## Use Uppercase When
 
-Use `CRAMPACS-CLIM` when the result may support formal research, audit-ready decision support, safety/security escalation, regulated review, or external reporting.
+Use `CRAMPS-CLIM` when the result may support formal research, audit-ready decision support, safety/security escalation, regulated review, or external reporting.
 
 Output:
 

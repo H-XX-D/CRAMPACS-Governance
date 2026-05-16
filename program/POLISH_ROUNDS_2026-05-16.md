@@ -1,29 +1,29 @@
-# CRAMPACS Polish Rounds
+# CRAMPS Polish Rounds
 
-**Document ID:** CRAMPACS-POLISH-2026-05-16  
+**Document ID:** CRAMPS-POLISH-2026-05-16  
 **Version:** 0.1  
 **Status:** Completed polish log  
 **Date:** 2026-05-16
 
 ## Purpose
 
-This log records ten rounds of aesthetic, teaching, and system polish applied to the CRAMPACS package.
+This log records ten rounds of aesthetic, teaching, and system polish applied to the CRAMPS package.
 
 ## Round 1: Brand identity
 
 Focus:
 
-- make CRAMPACS feel like a controlled technical method
+- make CRAMPS feel like a controlled technical method
 - define voice, visual roles, color roles, and message architecture
 
 Artifacts:
 
-- `brand/CRAMPACS_BRAND_SYSTEM.md`
-- `brand/CRAMPACS_MESSAGE_ARCHITECTURE.md`
+- `brand/CRAMPS_BRAND_SYSTEM.md`
+- `brand/CRAMPS_MESSAGE_ARCHITECTURE.md`
 
 Outcome:
 
-- CRAMPACS now has a consistent identity and claim boundary.
+- CRAMPS now has a consistent identity and claim boundary.
 
 ## Round 2: Document style
 
@@ -34,7 +34,7 @@ Focus:
 
 Artifacts:
 
-- `brand/CRAMPACS_DOCUMENT_STYLE_GUIDE.md`
+- `brand/CRAMPS_DOCUMENT_STYLE_GUIDE.md`
 
 Outcome:
 
@@ -44,7 +44,7 @@ Outcome:
 
 Focus:
 
-- benchmark CRAMPACS against mature reporting, evidence, quality, risk, and systems-engineering frameworks
+- benchmark CRAMPS against mature reporting, evidence, quality, risk, and systems-engineering frameworks
 
 Artifacts:
 
@@ -62,12 +62,12 @@ Focus:
 
 Artifacts:
 
-- `training/CRAMPACS_TRAINING_GUIDE.md`
+- `training/CRAMPS_TRAINING_GUIDE.md`
 - `training/SLIDE_OUTLINE.md`
 
 Outcome:
 
-- CRAMPACS can be taught as a 60 minute briefing, 2 hour orientation, 1 day workshop, or 3 day practitioner course.
+- CRAMPS can be taught as a 60 minute briefing, 2 hour orientation, 1 day workshop, or 3 day practitioner course.
 
 ## Round 5: Instructor enablement
 
@@ -140,7 +140,7 @@ Artifacts:
 
 - `tools/build_printouts_and_spreadsheets.mjs`
 - `printouts/governance_master_printout.md`
-- `spreadsheets/CRAMPACS_Governance_Master.xlsx`
+- `spreadsheets/CRAMPS_Governance_Master.xlsx`
 
 Outcome:
 

@@ -1,15 +1,15 @@
-# CRAMPACS Evidence Package Specification
+# CRAMPS Evidence Package Specification
 
-**Document ID:** CRAMPACS-EPS-001
+**Document ID:** CRAMPS-EPS-001
 
 ## 1. Purpose
 
-This specification defines what a complete CRAMPACS evidence package must contain.
+This specification defines what a complete CRAMPS evidence package must contain.
 
 ## 2. Package Layout
 
 ```text
-CRAMPACS_<domain>_<study_id>/
+CRAMPS_<domain>_<study_id>/
   00_charter/
   01_protocol_lock/
   02_sources/

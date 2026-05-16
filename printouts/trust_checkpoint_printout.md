@@ -1,4 +1,4 @@
-# CRAMPACS Trust Checkpoint Printout
+# CRAMPS Trust Checkpoint Printout
 
 ## Required Positioning Sentence
 

@@ -4,7 +4,7 @@ import { SpreadsheetFile, Workbook } from "@oai/artifact-tool";
 
 const root = path.resolve(path.dirname(new URL(import.meta.url).pathname), "..");
 
-const domains = JSON.parse(await fs.readFile(path.join(root, "tools", "crampacs_domains.json"), "utf8"));
+const domains = JSON.parse(await fs.readFile(path.join(root, "tools", "cramps_domains.json"), "utf8"));
 
 const layers = [
   ["0", "Concept", "Vocabulary, claim boundary, uppercase/lowercase distinction", "README, naming policy"],
@@ -112,8 +112,8 @@ const programRegisters = [
 ];
 
 const brandControls = [
-  ["Assurance boundary", "Every artifact states whether it is crampacs-* or CRAMPACS-*"],
-  ["Claim boundary", "Every release-facing artifact states what CRAMPACS does not prove"],
+  ["Assurance boundary", "Every artifact states whether it is cramps-* or CRAMPS-*"],
+  ["Claim boundary", "Every release-facing artifact states what CRAMPS does not prove"],
   ["Decision language", "Approve, approve_with_limits, hold, demote, reject, stop, emergency_parallel_action"],
   ["Severity language", "Critical, Major, Minor, Observation"],
   ["Stop signs", "Preflight and full package stop rules are easy to find"],
@@ -124,7 +124,7 @@ const brandControls = [
 const trainingPaths = [
   ["Executive briefing", "Sponsor, agency lead, director", "60 minutes", "adoption decision and pilot scope"],
   ["Supervisor orientation", "Safety supervisor, risk owner, program officer", "2 hours", "approval, hold, demote, reject literacy"],
-  ["Preflight workshop", "Analyst, domain reviewer, project lead", "1 day", "completed mock crampacs-* preflight"],
+  ["Preflight workshop", "Analyst, domain reviewer, project lead", "1 day", "completed mock cramps-* preflight"],
   ["Practitioner course", "Data scientist, evidence reviewer, auditor", "3 days", "full package walkthrough and gate practice"],
   ["Instructor course", "Internal trainer, quality lead", "2 days after practitioner course", "teach-back and scoring consistency"],
 ];
@@ -151,11 +151,11 @@ const trustStates = [
 ];
 
 const relianceLevels = [
-  ["idea sketch", "conversation and scoping", "CRAMPACS claim, preflight decision, operational decision"],
-  ["crampacs-* checked", "continue, hold, stop, or full-study escalation", "domain conclusion, full assurance, external claim"],
-  ["CRAMPACS-* scaffold", "organizing work", "evidence reliance or release"],
-  ["CRAMPACS-* gate-accepted", "advancing to the next gate", "release unless G7 is complete"],
-  ["CRAMPACS-* release-ready", "decision support within assigned evidence tier", "proof of causality or regulatory compliance by itself"],
+  ["idea sketch", "conversation and scoping", "CRAMPS claim, preflight decision, operational decision"],
+  ["cramps-* checked", "continue, hold, stop, or full-study escalation", "domain conclusion, full assurance, external claim"],
+  ["CRAMPS-* scaffold", "organizing work", "evidence reliance or release"],
+  ["CRAMPS-* gate-accepted", "advancing to the next gate", "release unless G7 is complete"],
+  ["CRAMPS-* release-ready", "decision support within assigned evidence tier", "proof of causality or regulatory compliance by itself"],
   ["externally validated", "stronger prioritization and process confidence", "domain proof unless domain-standard confirmation is complete"],
 ];
 
@@ -254,10 +254,10 @@ async function exportWorkbook(workbook, file) {
 function governanceWorkbook() {
   const wb = Workbook.create();
   addSheet(wb, "Dashboard", [
-    ["CRAMPACS Governance Master", ""],
+    ["CRAMPS Governance Master", ""],
     ["Purpose", "Coordinate-resolved weak-signal recurrence governance"],
-    ["Uppercase", "CRAMPACS-* = full assurance system"],
-    ["Lowercase", "crampacs-* = 1-2 day preflight"],
+    ["Uppercase", "CRAMPS-* = full assurance system"],
+    ["Lowercase", "cramps-* = 1-2 day preflight"],
     ["Domain count", domains.length],
     ["Layer count", layers.length],
     ["Core rule", "Lowercase can seed uppercase; only uppercase after full protocol lock carries assurance."],
@@ -307,7 +307,7 @@ function governanceWorkbook() {
     ...trainingPaths.map((r) => [...r, "", ""]),
   ]);
   addSheet(wb, "Framework Patterns", [
-    ["Framework", "Pattern", "CRAMPACS adoption"],
+    ["Framework", "Pattern", "CRAMPS adoption"],
     ...frameworkPatterns,
   ]);
   addSheet(wb, "Trust States", [
@@ -420,12 +420,12 @@ async function buildPrintouts() {
   await writeText(
     path.join(printoutDir, "governance_master_printout.md"),
     `
-# CRAMPACS Governance Master Printout
+# CRAMPS Governance Master Printout
 
 ## System Rule
 
-- Uppercase \`CRAMPACS-*\` is the full assurance system.
-- Lowercase \`crampacs-*\` is the one to two day preflight.
+- Uppercase \`CRAMPS-*\` is the full assurance system.
+- Lowercase \`cramps-*\` is the one to two day preflight.
 - A preflight can seed the full system, but only the full system can carry full assurance after protocol lock.
 
 ## Documentation Layers
@@ -462,7 +462,7 @@ ${mdTable(["Track", "Audience", "Duration", "Output"], trainingPaths)}
 
 ## Framework Patterns
 
-${mdTable(["Framework", "Pattern", "CRAMPACS adoption"], frameworkPatterns)}
+${mdTable(["Framework", "Pattern", "CRAMPS adoption"], frameworkPatterns)}
 
 ## Trust States
 
@@ -481,7 +481,7 @@ ${mdTable(["Checkpoint", "Package point", "Main honesty risk", "Minimum review"]
   await writeText(
     path.join(printoutDir, "domain_matrix_printout.md"),
     `
-# CRAMPACS Domain Matrix Printout
+# CRAMPS Domain Matrix Printout
 
 ${mdTable(
   ["Preflight", "Full System", "Domain", "Coordinates", "Nulls", "Primary Gotchas"],
@@ -493,7 +493,7 @@ ${mdTable(
   await writeText(
     path.join(printoutDir, "governance_gotchas_printout.md"),
     `
-# CRAMPACS Governance Gotchas Printout
+# CRAMPS Governance Gotchas Printout
 
 ${mdTable(["Gotcha", "Symptom", "Fast sanity check"], gotchas)}
 `
@@ -502,7 +502,7 @@ ${mdTable(["Gotcha", "Symptom", "Fast sanity check"], gotchas)}
   await writeText(
     path.join(printoutDir, "trust_checkpoint_printout.md"),
     `
-# CRAMPACS Trust Checkpoint Printout
+# CRAMPS Trust Checkpoint Printout
 
 ## Required Positioning Sentence
 
@@ -542,7 +542,7 @@ ${mdTable(["Checkpoint", "Package point", "Main honesty risk", "Minimum review"]
   await writeText(
     path.join(printoutDir, "trust_positioning_printout.md"),
     `
-# CRAMPACS Trust Positioning Printout
+# CRAMPS Trust Positioning Printout
 
 Never say a package is simply "trustworthy." State what it is trustworthy for and what it is not trustworthy for.
 
@@ -570,11 +570,11 @@ ${mdTable(["Trust state", "Meaning", "Reliance rule"], trustStates)}
   await writeText(
     path.join(printoutDir, "governance_spreadsheet_index_printout.md"),
     `
-# CRAMPACS Spreadsheet Index Printout
+# CRAMPS Spreadsheet Index Printout
 
 ## Master Workbook
 
-- \`spreadsheets/CRAMPACS_Governance_Master.xlsx\`
+- \`spreadsheets/CRAMPS_Governance_Master.xlsx\`
 
 ## Domain Workbooks
 
@@ -629,7 +629,7 @@ ${d.standards.map((x) => `- ${x}`).join("\n")}
 
 async function main() {
   await buildPrintouts();
-  await exportWorkbook(governanceWorkbook(), path.join(root, "spreadsheets", "CRAMPACS_Governance_Master.xlsx"));
+  await exportWorkbook(governanceWorkbook(), path.join(root, "spreadsheets", "CRAMPS_Governance_Master.xlsx"));
   for (const domain of domains) {
     await exportWorkbook(domainWorkbook(domain), path.join(root, "spreadsheets", "domains", `${domain.light}_${domain.full}_Workbook.xlsx`));
   }

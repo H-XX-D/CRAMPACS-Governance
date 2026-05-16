@@ -1,13 +1,13 @@
 # Canonical Gate Map
 
-**Document ID:** CRAMPACS-GATE-001  
+**Document ID:** CRAMPS-GATE-001  
 **Version:** 0.1  
 **Status:** Draft procedure  
-**Owner:** CRAMPACS method owner  
+**Owner:** CRAMPS method owner  
 
 ## 1. Purpose
 
-This is the canonical gate taxonomy for CRAMPACS. Older SOP stage names and printout checklist items must map back to these gates.
+This is the canonical gate taxonomy for CRAMPS. Older SOP stage names and printout checklist items must map back to these gates.
 
 ## 2. Canonical Gates
 

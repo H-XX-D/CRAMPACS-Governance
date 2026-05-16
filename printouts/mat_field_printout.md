@@ -1,10 +1,10 @@
-# crampacs-mat / CRAMPACS-MAT Field Printout
+# cramps-mat / CRAMPS-MAT Field Printout
 
 **Domain:** Materials science
 
 ## Use Lowercase When
 
-Use `crampacs-mat` when the team needs a one to two day triage pass.
+Use `cramps-mat` when the team needs a one to two day triage pass.
 
 Output:
 
@@ -16,7 +16,7 @@ Output:
 
 ## Use Uppercase When
 
-Use `CRAMPACS-MAT` when the result may support formal research, audit-ready decision support, safety/security escalation, regulated review, or external reporting.
+Use `CRAMPS-MAT` when the result may support formal research, audit-ready decision support, safety/security escalation, regulated review, or external reporting.
 
 Output:
 

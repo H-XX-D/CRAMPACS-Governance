@@ -1,10 +1,10 @@
-# crampacs-cyb / CRAMPACS-CYB Field Printout
+# cramps-cyb / CRAMPS-CYB Field Printout
 
 **Domain:** Cybersecurity
 
 ## Use Lowercase When
 
-Use `crampacs-cyb` when the team needs a one to two day triage pass.
+Use `cramps-cyb` when the team needs a one to two day triage pass.
 
 Output:
 
@@ -16,7 +16,7 @@ Output:
 
 ## Use Uppercase When
 
-Use `CRAMPACS-CYB` when the result may support formal research, audit-ready decision support, safety/security escalation, regulated review, or external reporting.
+Use `CRAMPS-CYB` when the result may support formal research, audit-ready decision support, safety/security escalation, regulated review, or external reporting.
 
 Output:
 

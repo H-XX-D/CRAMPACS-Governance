@@ -1,18 +1,18 @@
 # Document Control Procedure
 
-**Document ID:** CRAMPACS-DOC-001  
+**Document ID:** CRAMPS-DOC-001  
 **Version:** 0.1  
 **Status:** Draft procedure  
-**Owner:** CRAMPACS method owner  
+**Owner:** CRAMPS method owner  
 **Approver:** accountable release authority or delegated quality owner  
 **Effective date:** not effective until approved  
 **Review cadence:** at least annually, and after any Critical deviation  
 
 ## 1. Purpose
 
-This procedure controls CRAMPACS program documents, templates, registers, reports, and release packages.
+This procedure controls CRAMPS program documents, templates, registers, reports, and release packages.
 
-An organization may not claim an effective CRAMPACS quality system until it assigns owners, approvers, effective dates, and review records to the documents it uses.
+An organization may not claim an effective CRAMPS quality system until it assigns owners, approvers, effective dates, and review records to the documents it uses.
 
 ## 2. Controlled Document Header
 

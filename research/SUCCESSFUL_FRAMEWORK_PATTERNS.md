@@ -1,10 +1,10 @@
 # Successful Framework Patterns
 
-**Document ID:** CRAMPACS-RSCH-001  
+**Document ID:** CRAMPS-RSCH-001  
 **Version:** 0.1  
 **Status:** Research synthesis  
 **Date:** 2026-05-16  
-**Purpose:** Identify design patterns CRAMPACS should adopt from durable, teachable, and auditable frameworks.
+**Purpose:** Identify design patterns CRAMPS should adopt from durable, teachable, and auditable frameworks.
 
 ## 1. Sources Reviewed
 
@@ -23,9 +23,9 @@
 
 ### Lesson 1: A framework needs a small core and supporting artifacts
 
-PRISMA is not just a paper. It has checklists and flow-diagram templates. NIST CSF separates core outcomes, implementation examples, and informative references. CRAMPACS should keep the core method compact while giving practitioners checklists, registers, examples, and templates.
+PRISMA is not just a paper. It has checklists and flow-diagram templates. NIST CSF separates core outcomes, implementation examples, and informative references. CRAMPS should keep the core method compact while giving practitioners checklists, registers, examples, and templates.
 
-CRAMPACS adoption:
+CRAMPS adoption:
 
 - core operating manual
 - canonical gate map
@@ -37,13 +37,13 @@ CRAMPACS adoption:
 
 ### Lesson 2: Maturity levels help teams adopt without pretending they are finished
 
-NIST CSF uses tiers that move from informal to adaptive practice. CRAMPACS should preserve a similar progression from lowercase preflight to full externally validated packages.
+NIST CSF uses tiers that move from informal to adaptive practice. CRAMPS should preserve a similar progression from lowercase preflight to full externally validated packages.
 
-CRAMPACS adoption:
+CRAMPS adoption:
 
 | Level | Meaning |
 |---|---|
-| L1 `crampacs-*` | lightweight triage |
+| L1 `cramps-*` | lightweight triage |
 | L2 pilot | narrow locked package |
 | L3 standard | complete retrospective package |
 | L4 regulated | full package plus domain controls |
@@ -51,9 +51,9 @@ CRAMPACS adoption:
 
 ### Lesson 3: Missing evidence must be treated as a first-class risk
 
-Cochrane emphasizes that missing evidence can bias synthesis when result availability depends on direction, magnitude, or statistical significance. CRAMPACS should never treat positive anomaly rows alone as a credible package.
+Cochrane emphasizes that missing evidence can bias synthesis when result availability depends on direction, magnitude, or statistical significance. CRAMPS should never treat positive anomaly rows alone as a credible package.
 
-CRAMPACS adoption:
+CRAMPS adoption:
 
 - null and non-event rows required
 - source flow required
@@ -62,9 +62,9 @@ CRAMPACS adoption:
 
 ### Lesson 4: Certainty and action should be separated
 
-GRADE separates evidence certainty from recommendation strength. CRAMPACS should separate recurrence evidence tier from the decision requested by a supervisor.
+GRADE separates evidence certainty from recommendation strength. CRAMPS should separate recurrence evidence tier from the decision requested by a supervisor.
 
-CRAMPACS adoption:
+CRAMPS adoption:
 
 - evidence tier table
 - decision memo
@@ -74,9 +74,9 @@ CRAMPACS adoption:
 
 ### Lesson 5: Quality systems require ownership and improvement
 
-ISO quality management principles emphasize process, evidence-based decisions, leadership, and improvement. FDA quality-system guidance pairs process controls with risk management and regulatory boundaries. CRAMPACS should define owners, evidence records, CAPA, and review cadence.
+ISO quality management principles emphasize process, evidence-based decisions, leadership, and improvement. FDA quality-system guidance pairs process controls with risk management and regulatory boundaries. CRAMPS should define owners, evidence records, CAPA, and review cadence.
 
-CRAMPACS adoption:
+CRAMPS adoption:
 
 - document control procedure
 - release RACI
@@ -87,9 +87,9 @@ CRAMPACS adoption:
 
 ### Lesson 6: Practical playbooks make frameworks usable
 
-NIST AI RMF has a companion playbook and related implementation resources. CRAMPACS should teach "what to do Monday morning," not only define ideals.
+NIST AI RMF has a companion playbook and related implementation resources. CRAMPS should teach "what to do Monday morning," not only define ideals.
 
-CRAMPACS adoption:
+CRAMPS adoption:
 
 - deployment playbook
 - instructor guide
@@ -100,9 +100,9 @@ CRAMPACS adoption:
 
 ### Lesson 7: Lifecycle reviews prevent late-stage surprises
 
-NASA systems engineering uses lifecycle and technical reviews across design, development, operation, maintenance, and closeout. CRAMPACS should use gates as lifecycle reviews.
+NASA systems engineering uses lifecycle and technical reviews across design, development, operation, maintenance, and closeout. CRAMPS should use gates as lifecycle reviews.
 
-CRAMPACS adoption:
+CRAMPS adoption:
 
 - G0 charter
 - G1 coordinate lock
@@ -113,7 +113,7 @@ CRAMPACS adoption:
 - G6 reproducibility
 - G7 release
 
-## 3. CRAMPACS Framework Design Rules
+## 3. CRAMPS Framework Design Rules
 
 1. Keep the assurance boundary visible on every artifact.
 2. Separate fast preflight from full assurance.
@@ -124,13 +124,13 @@ CRAMPACS adoption:
 7. Use maturity levels so adoption can start small without overclaiming.
 8. Pair every framework principle with a practitioner artifact.
 9. Teach the method through exercises, not only policies.
-10. Preserve domain humility: CRAMPACS supports prioritization, not domain proof.
+10. Preserve domain humility: CRAMPS supports prioritization, not domain proof.
 
 ## 4. Gaps To Watch
 
-| Gap | Risk | CRAMPACS control |
+| Gap | Risk | CRAMPS control |
 |---|---|---|
-| Over-formalizing preflight | Teams avoid using the lightweight route | keep `crampacs-*` to 1 to 2 days |
+| Over-formalizing preflight | Teams avoid using the lightweight route | keep `cramps-*` to 1 to 2 days |
 | Under-formalizing full packages | Results are not defensible | enforce G0-G7 gates and sidecar blockers |
 | Training without assessment | People think attendance equals competence | competency rubric and practical exercise |
 | Pretty documents without evidence | Brand hides weak controls | control evidence register and audit procedure |
