@@ -109,11 +109,12 @@ Run:
 
 ```bash
 python tools/cramps_cli.py check <package> --level preflight
+python tools/cramps_cli.py agent-audit <package> --level preflight
 python tools/cramps_cli.py leak-scan <package>
 python tools/cramps_cli.py gate <package> --level preflight
 ```
 
-Run `check`, then `leak-scan`, then `gate` in that order. The gate command depends on the latest leak-scan status.
+Run `check`, then `agent-audit`, then `leak-scan`, then `gate` in that order. The gate command depends on the latest agent-control and leak-scan status.
 
 Preflight output must be one of:
 
@@ -168,11 +169,12 @@ Run after material work:
 
 ```bash
 python tools/cramps_cli.py check <full_package> --level full
+python tools/cramps_cli.py agent-audit <full_package> --level full
 python tools/cramps_cli.py leak-scan <full_package>
 python tools/cramps_cli.py gate <full_package> --level full
 ```
 
-Run these commands sequentially. Do not evaluate gates from stale or missing leak-scan output.
+Run these commands sequentially. Do not evaluate gates from stale or missing agent-audit or leak-scan output.
 
 ### Step 5: Closeout
 

@@ -108,6 +108,7 @@ Run from the repository root:
 
 ```bash
 python tools/cramps_cli.py check worked_examples/preflight/cramps-phy-synthetic-coordinate-recurrence --level preflight
+python tools/cramps_cli.py agent-audit worked_examples/preflight/cramps-phy-synthetic-coordinate-recurrence --level preflight
 python tools/cramps_cli.py leak-scan worked_examples/preflight/cramps-phy-synthetic-coordinate-recurrence
 python tools/cramps_cli.py gate worked_examples/preflight/cramps-phy-synthetic-coordinate-recurrence --level preflight
 ```

@@ -139,6 +139,86 @@ AGENT_HANDOFF_FIELDS = [
     "notes",
 ]
 
+AGENT_REGISTRY_FIELDS = [
+    "agent_id",
+    "agent_name",
+    "agent_type",
+    "purpose",
+    "allowed_inputs",
+    "prohibited_inputs",
+    "output_schema",
+    "model_or_tool_version",
+    "prompt_or_sop_version",
+    "human_review_required",
+    "audit_log_path",
+    "status",
+]
+
+AGENT_PLAN_REQUIRED_FIELDS = [
+    "study_id",
+    "package_level",
+    "deployment_mode",
+    "agent_id",
+    "agent_role",
+    "assigned_scope",
+    "allowed_inputs",
+    "prohibited_inputs",
+    "required_outputs",
+    "gate_start",
+    "gate_stop",
+    "can_write",
+    "can_export",
+    "human_review_required",
+    "status",
+]
+
+AGENT_REGISTRY_REQUIRED_FIELDS = [
+    "agent_id",
+    "agent_name",
+    "agent_type",
+    "purpose",
+    "allowed_inputs",
+    "prohibited_inputs",
+    "output_schema",
+    "model_or_tool_version",
+    "prompt_or_sop_version",
+    "human_review_required",
+    "audit_log_path",
+    "status",
+]
+
+AGENT_HANDOFF_REQUIRED_FIELDS = [
+    "handoff_id",
+    "study_id",
+    "from_agent_id",
+    "to_agent_id",
+    "artifact_path",
+    "artifact_state",
+    "gate_context",
+    "open_blockers",
+    "quarantine_status",
+    "reviewer_id",
+    "accepted_timestamp",
+]
+
+AGENT_ALLOWED_STATUSES = {"planned", "active", "complete", "deferred", "canceled", "cancelled"}
+AGENT_CLOSED_STATUSES = {"deferred", "canceled", "cancelled"}
+AGENT_REGISTRY_REQUIRED_STATUSES = {"active", "complete"}
+EMPTY_FIELD_VALUES = {"", "[fill]", "fill", "tbd", "todo", "placeholder"}
+
+FULL_AGENT_ROLES = (
+    "protocol_steward",
+    "source_search",
+    "row_extraction",
+    "coordinate_normalization",
+    "dependence_mapping",
+    "bias_and_missing_evidence",
+    "null_model_and_statistics",
+    "reproducibility",
+    "bounded_reporting",
+    "red_team_review",
+)
+
 
 LEAK_PATTERNS = [
     ("openai_api_key", "critical", re.compile(r"\bsk-[A-Za-z0-9_-]{20,}\b")),
@@ -212,6 +292,14 @@ def read_csv_rows(path: Path) -> list[dict[str, str]]:
         return []
     with path.open(newline="", encoding="utf-8") as handle:
         return list(csv.DictReader(handle))
+
+
+def read_csv_header(path: Path) -> list[str]:
+    if not path.exists():
+        return []
+    with path.open(newline="", encoding="utf-8") as handle:
+        reader = csv.reader(handle)
+        return next(reader, [])
 
 
 def write_csv(path: Path, fieldnames: list[str], rows: list[dict[str, str]], force: bool = True) -> None:
@@ -359,9 +447,10 @@ outside the package and must not be edited during package operation.
 1. Work only inside this package directory unless a human explicitly authorizes source-kit maintenance.
 2. Record material AI actions in `logs/ai_activity_log.csv`.
 3. Run `python {ROOT / "tools" / "cramps_cli.py"} check . --level {check_level}` after material edits.
-4. Run `python {ROOT / "tools" / "cramps_cli.py"} leak-scan .` before sharing, exporting, escalation, release, or gate evaluation.
-5. Run `python {ROOT / "tools" / "cramps_cli.py"} gate . --level {check_level}` before phase progress.
-6. If a critical leak, source-boundary breach, fabricated field, or prohibited claim is found, run quarantine.
+4. Run `python {ROOT / "tools" / "cramps_cli.py"} agent-audit . --level {check_level}` after agent-plan, registry, or handoff changes.
+5. Run `python {ROOT / "tools" / "cramps_cli.py"} leak-scan .` before sharing, exporting, escalation, release, or gate evaluation.
+6. Run `python {ROOT / "tools" / "cramps_cli.py"} gate . --level {check_level}` before phase progress.
+7. If a critical leak, source-boundary breach, fabricated field, or prohibited claim is found, run quarantine.
 
 ## Claim Boundary
 
@@ -419,9 +508,10 @@ while performing package work.
 3. Add or revise only package artifacts.
 4. Record material actions in `logs/ai_activity_log.csv`.
 5. Run sidecar checks with `cramps_cli.py check`.
-6. Run leak scanning with `cramps_cli.py leak-scan`.
-7. Run DAG accounting with `cramps_cli.py gate`.
-8. Stop and quarantine if a critical leak, contamination event, fabricated field, or prohibited claim appears.
+6. Run agent-control checks with `cramps_cli.py agent-audit`.
+7. Run leak scanning with `cramps_cli.py leak-scan`.
+8. Run DAG accounting with `cramps_cli.py gate`.
+9. Stop and quarantine if a critical leak, contamination event, fabricated field, or prohibited claim appears.
 
 ## Non-Negotiables
 
@@ -504,7 +594,7 @@ def agent_deployment_plan_rows(domain: dict, level: str, study_id: str) -> list[
             "protocol_steward",
             "Maintain protocol, amendment path, candidate-coordinate lock, and role boundaries.",
             "Charter, preflight import log, domain reference, reviewer instructions.",
-            "Scoring results; changing methods after seeing results; approving release alone.",
+            "Source-kit edits; scoring results; changing methods after seeing results; approving release alone.",
             "01_protocol_lock/protocol.md; 01_protocol_lock/candidate_coordinate_registry.csv; 01_protocol_lock/amendment_log.csv.",
             "F1",
             "F2",
@@ -519,7 +609,7 @@ def agent_deployment_plan_rows(domain: dict, level: str, study_id: str) -> list[
             "source_search",
             "Execute registered searches, record source universe, and preserve exclusions, nulls, and non-events.",
             "Locked protocol, search strategy, public or authorized databases.",
-            "Dropping adverse evidence; adding unregistered search criteria without amendment.",
+            "Source-kit edits; dropping adverse evidence; adding unregistered search criteria without amendment.",
             "02_sources/source_catalog.csv; 02_sources/search_strategy.md; 02_sources/source_flow.md.",
             "F2",
             "F3",
@@ -594,7 +684,7 @@ def agent_deployment_plan_rows(domain: dict, level: str, study_id: str) -> list[
             "null_model_and_statistics",
             "Run registered null models, correction accounting, negative controls, and sensitivity summaries.",
             "Locked protocol, normalized rows, dependence map, bias assessment, approved analysis environment.",
-            "Changing nulls after seeing results; release language; unregistered favorable reruns.",
+            "Source-kit edits; changing nulls after seeing results; release language; unregistered favorable reruns.",
             "06_statistics/null_model_runs.csv; 06_statistics/analysis_result.csv; 06_statistics/negative_controls.md; 06_statistics/sensitivity_results.md.",
             "F5",
             "F6",
@@ -609,7 +699,7 @@ def agent_deployment_plan_rows(domain: dict, level: str, study_id: str) -> list[
             "reproducibility",
             "Rebuild the package outputs from frozen inputs and record environment, hashes, and clean-run issues.",
             "Frozen package snapshot, analysis code, environment instructions.",
-            "Editing evidence to make reproduction pass; omitting failed rebuild notes.",
+            "Source-kit edits; editing evidence to make reproduction pass; omitting failed rebuild notes.",
             "07_reproducibility/checksum_manifest.csv; 07_reproducibility/environment_record.md; 07_reproducibility/clean_run_report.md.",
             "F6",
             "F7",
@@ -624,7 +714,7 @@ def agent_deployment_plan_rows(domain: dict, level: str, study_id: str) -> list[
             "bounded_reporting",
             "Draft claim-limited reports, decision memo text, and claim trace entries from reviewed evidence.",
             common_allowed,
-            "Proof, discovery, safety, efficacy, compliance, causality, fraud, or exploitability claims from CRAMPS alone.",
+            "Source-kit edits; proof, discovery, safety, efficacy, compliance, causality, fraud, or exploitability claims from CRAMPS alone.",
             "09_review_and_release/decision_memo.md; 10_trust_maintenance/claim_trace_matrix.csv; exports/.",
             "F7",
             "F8",
@@ -639,7 +729,7 @@ def agent_deployment_plan_rows(domain: dict, level: str, study_id: str) -> list[
             "red_team_review",
             "Attempt to break the package through dependence, leakage, null-model, missing-evidence, and claim-boundary attacks.",
             "Complete package, gate status, leak reports, sidecar metrics, claim drafts.",
-            "Rewriting the claim to hide a defect; closing findings without reviewer basis.",
+            "Source-kit edits; rewriting the claim to hide a defect; closing findings without reviewer basis.",
             "09_review_and_release/audit_report.md; 10_trust_maintenance/trust_debt_register.csv; logs/ai_activity_log.csv.",
             "F6",
             "F8",
@@ -715,8 +805,8 @@ Before deploying any agent beyond the default operator:
 2. Confirm the agent has a row in `agent_deployment_plan.csv`.
 3. Confirm allowed inputs and prohibited inputs are explicit.
 4. Confirm the agent's write scope is package-only.
-5. Run `cramps_cli.py check`, then `cramps_cli.py leak-scan`, then
-   `cramps_cli.py gate`.
+5. Run `cramps_cli.py check`, then `cramps_cli.py agent-audit`, then
+   `cramps_cli.py leak-scan`, then `cramps_cli.py gate`.
 6. Do not start work if the current gate or a dependency gate is blocked for a
    reason the agent would bypass rather than fix.
 
@@ -741,11 +831,309 @@ package assurance level.
 
 ```bash
 python {ROOT / "tools" / "cramps_cli.py"} check .
+python {ROOT / "tools" / "cramps_cli.py"} agent-audit .
 python {ROOT / "tools" / "cramps_cli.py"} leak-scan .
 python {ROOT / "tools" / "cramps_cli.py"} gate . --level {level}
 python {ROOT / "tools" / "cramps_cli.py"} status .
 ```
 """
+
+
+def is_blank_field(value: str | None) -> bool:
+    normalized = (value or "").strip().lower()
+    return normalized in EMPTY_FIELD_VALUES
+
+
+def add_agent_issue(
+    issues: list[dict[str, str]],
+    severity: str,
+    code: str,
+    artifact_path: str,
+    message: str,
+) -> None:
+    issues.append(
+        {
+            "severity": severity,
+            "code": code,
+            "artifact_path": artifact_path,
+            "message": message,
+        }
+    )
+
+
+def validate_csv_header(
+    issues: list[dict[str, str]],
+    package: Path,
+    rel: str,
+    required_fields: list[str],
+) -> None:
+    path = package / rel
+    if not path.exists():
+        add_agent_issue(issues, "blocker", "missing_agent_control_file", rel, f"missing {rel}")
+        return
+    header = set(read_csv_header(path))
+    missing = [field for field in required_fields if field not in header]
+    if missing:
+        add_agent_issue(
+            issues,
+            "blocker",
+            "agent_control_header_missing_fields",
+            rel,
+            f"missing columns: {', '.join(missing)}",
+        )
+
+
+def validate_required_fields(
+    issues: list[dict[str, str]],
+    rel: str,
+    row_index: int,
+    row: dict[str, str],
+    fields: list[str],
+    severity: str = "blocker",
+) -> None:
+    missing = [field for field in fields if is_blank_field(row.get(field, ""))]
+    if missing:
+        add_agent_issue(
+            issues,
+            severity,
+            "agent_row_missing_required_fields",
+            f"{rel}:{row_index}",
+            f"missing required fields: {', '.join(missing)}",
+        )
+
+
+def row_status(row: dict[str, str]) -> str:
+    return (row.get("status") or "").strip().lower()
+
+
+def agent_row_in_scope(row: dict[str, str]) -> bool:
+    return row_status(row) not in AGENT_CLOSED_STATUSES
+
+
+def audit_agent_controls(package: Path, level: str) -> dict:
+    issues: list[dict[str, str]] = []
+    now = utc_now()
+    controls_dir = package / "ai_controls"
+    helper_rel = "ai_controls/AGENT_DEPLOYMENT_HELPER.md"
+    plan_rel = "ai_controls/agent_deployment_plan.csv"
+    handoff_rel = "ai_controls/agent_handoff_checklist.csv"
+    registry_rel = "ai_controls/agent_registry.csv"
+
+    if not package.exists():
+        raise SystemExit(f"Package not found: {package}")
+    if package == ROOT or any(is_relative_to(package, ROOT / dirname) for dirname in CONTROLLED_SOURCE_DIRS):
+        raise SystemExit("Refusing to write agent-audit outputs inside controlled source material.")
+
+    if not (package / helper_rel).exists():
+        add_agent_issue(issues, "blocker", "missing_agent_deployment_helper", helper_rel, f"missing {helper_rel}")
+
+    validate_csv_header(issues, package, plan_rel, AGENT_DEPLOYMENT_PLAN_FIELDS)
+    validate_csv_header(issues, package, handoff_rel, AGENT_HANDOFF_FIELDS)
+    validate_csv_header(issues, package, registry_rel, AGENT_REGISTRY_FIELDS)
+
+    plan_rows = read_csv_rows(package / plan_rel)
+    registry_rows = read_csv_rows(package / registry_rel)
+    handoff_rows = read_csv_rows(package / handoff_rel)
+
+    if not plan_rows:
+        add_agent_issue(issues, "blocker", "agent_deployment_plan_empty", plan_rel, "agent deployment plan has no rows")
+
+    seen_agent_ids: set[str] = set()
+    duplicate_agent_ids: set[str] = set()
+    for index, row in enumerate(plan_rows, start=2):
+        agent_id = (row.get("agent_id") or "").strip()
+        if agent_id:
+            if agent_id in seen_agent_ids:
+                duplicate_agent_ids.add(agent_id)
+            seen_agent_ids.add(agent_id)
+        validate_required_fields(issues, plan_rel, index, row, AGENT_PLAN_REQUIRED_FIELDS)
+        status = row_status(row)
+        if status and status not in AGENT_ALLOWED_STATUSES:
+            add_agent_issue(
+                issues,
+                "warning",
+                "agent_plan_unknown_status",
+                f"{plan_rel}:{index}",
+                f"unknown status '{status}'",
+            )
+        if row.get("package_level") and row.get("package_level") != level:
+            add_agent_issue(
+                issues,
+                "warning",
+                "agent_plan_level_mismatch",
+                f"{plan_rel}:{index}",
+                f"plan row level is {row.get('package_level')} but package level is {level}",
+            )
+        prohibited = (row.get("prohibited_inputs") or "").lower()
+        if "source-kit" not in prohibited and "source kit" not in prohibited:
+            add_agent_issue(
+                issues,
+                "warning",
+                "source_kit_boundary_not_explicit",
+                f"{plan_rel}:{index}",
+                "prohibited_inputs should explicitly forbid source-kit edits or source-kit contamination",
+            )
+        can_write = (row.get("can_write") or "").lower()
+        if can_write and "package" not in can_write and can_write not in {"no", "read-only", "readonly"}:
+            add_agent_issue(
+                issues,
+                "warning",
+                "agent_write_scope_not_package_bound",
+                f"{plan_rel}:{index}",
+                "can_write should be package-only, no, or read-only",
+            )
+
+    for agent_id in sorted(duplicate_agent_ids):
+        add_agent_issue(
+            issues,
+            "blocker",
+            "duplicate_agent_plan_id",
+            plan_rel,
+            f"agent_id appears more than once: {agent_id}",
+        )
+
+    in_scope_plan_rows = [row for row in plan_rows if agent_row_in_scope(row)]
+    if level == "preflight":
+        single_rows = [row for row in in_scope_plan_rows if row.get("agent_id") == "single_preflight_operator"]
+        if not single_rows:
+            add_agent_issue(
+                issues,
+                "blocker",
+                "missing_single_preflight_operator",
+                plan_rel,
+                "lowercase preflight must include single_preflight_operator",
+            )
+        has_deviation = any("deviation" in (row.get("notes") or "").lower() for row in in_scope_plan_rows)
+        if len(in_scope_plan_rows) > 1 and not has_deviation:
+            add_agent_issue(
+                issues,
+                "blocker",
+                "preflight_multi_agent_without_deviation",
+                plan_rel,
+                "preflight has more than one in-scope agent without a documented deviation",
+            )
+
+    if level == "full":
+        roles = {row.get("agent_role", "").strip() for row in in_scope_plan_rows}
+        missing_roles = [role for role in FULL_AGENT_ROLES if role not in roles]
+        if missing_roles:
+            add_agent_issue(
+                issues,
+                "blocker",
+                "full_agent_roles_missing",
+                plan_rel,
+                f"missing full-system role plans: {', '.join(missing_roles)}",
+            )
+
+    registry_by_id: dict[str, dict[str, str]] = {}
+    for index, row in enumerate(registry_rows, start=2):
+        agent_id = (row.get("agent_id") or "").strip()
+        if not agent_id:
+            add_agent_issue(
+                issues,
+                "warning",
+                "agent_registry_row_missing_id",
+                f"{registry_rel}:{index}",
+                "registry row has no agent_id",
+            )
+            continue
+        if agent_id in registry_by_id:
+            add_agent_issue(
+                issues,
+                "blocker",
+                "duplicate_agent_registry_id",
+                f"{registry_rel}:{index}",
+                f"agent_id appears more than once in registry: {agent_id}",
+            )
+        registry_by_id[agent_id] = row
+        if row_status(row) in AGENT_REGISTRY_REQUIRED_STATUSES:
+            validate_required_fields(issues, registry_rel, index, row, AGENT_REGISTRY_REQUIRED_FIELDS)
+        if agent_id not in seen_agent_ids:
+            add_agent_issue(
+                issues,
+                "warning",
+                "registry_agent_not_in_plan",
+                f"{registry_rel}:{index}",
+                f"registry agent is not listed in deployment plan: {agent_id}",
+            )
+
+    for row in in_scope_plan_rows:
+        agent_id = (row.get("agent_id") or "").strip()
+        if not agent_id:
+            continue
+        if agent_id not in registry_by_id:
+            severity = "blocker" if row_status(row) in AGENT_REGISTRY_REQUIRED_STATUSES else "warning"
+            add_agent_issue(
+                issues,
+                severity,
+                "planned_agent_missing_registry_row",
+                registry_rel,
+                f"agent has no registry row: {agent_id}",
+            )
+
+    for index, row in enumerate(handoff_rows, start=2):
+        if not any((value or "").strip() for value in row.values()):
+            continue
+        validate_required_fields(issues, handoff_rel, index, row, AGENT_HANDOFF_REQUIRED_FIELDS)
+        for field in ["from_agent_id", "to_agent_id"]:
+            agent_id = (row.get(field) or "").strip()
+            if agent_id and agent_id not in seen_agent_ids:
+                add_agent_issue(
+                    issues,
+                    "warning",
+                    "handoff_agent_not_in_plan",
+                    f"{handoff_rel}:{index}",
+                    f"{field} is not listed in deployment plan: {agent_id}",
+                )
+
+    blocker_count = sum(1 for issue in issues if issue["severity"] == "blocker")
+    warning_count = sum(1 for issue in issues if issue["severity"] == "warning")
+    status = {
+        "generated_at": now,
+        "package": str(package),
+        "level": level,
+        "all_clear": blocker_count == 0,
+        "blocker_count": blocker_count,
+        "warning_count": warning_count,
+        "plan_row_count": len(plan_rows),
+        "registry_row_count": len(registry_rows),
+        "handoff_row_count": len(handoff_rows),
+        "issues": issues,
+    }
+    controls_dir.mkdir(parents=True, exist_ok=True)
+    (controls_dir / "agent_audit_status.json").write_text(
+        json.dumps(status, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
+    write_text(controls_dir / "agent_audit_report.md", render_agent_audit_report(status))
+    return status
+
+
+def render_agent_audit_report(status: dict) -> str:
+    lines = [
+        "# CRAMPS Agent Audit Report",
+        "",
+        f"Generated: {status['generated_at']}",
+        f"Level: `{status['level']}`",
+        f"All clear: `{status['all_clear']}`",
+        f"Blockers: `{status['blocker_count']}`",
+        f"Warnings: `{status['warning_count']}`",
+        f"Deployment plan rows: `{status['plan_row_count']}`",
+        f"Registry rows: `{status['registry_row_count']}`",
+        f"Handoff rows: `{status['handoff_row_count']}`",
+        "",
+        "| severity | code | artifact | message |",
+        "|---|---|---|---|",
+    ]
+    if status["issues"]:
+        for issue in status["issues"]:
+            lines.append(
+                f"| `{issue['severity']}` | `{issue['code']}` | `{issue['artifact_path']}` | {issue['message']} |"
+            )
+    else:
+        lines.append("| none | none | none | no agent-control issues detected |")
+    lines.append("")
+    return "\n".join(lines)
 
 
 def render_gate_dag_doc(level: str) -> str:
@@ -769,7 +1157,7 @@ def render_gate_dag_doc(level: str) -> str:
             "",
             f"```bash\npython {ROOT / 'tools' / 'cramps_cli.py'} gate <package_dir> --level {level}\n```",
             "",
-            "Run gate evaluation after `check` and `leak-scan` so the DAG sees current package metrics and leak status.",
+            "Run gate evaluation after `check`, `agent-audit`, and `leak-scan` so the DAG sees current package metrics, agent-control status, and leak status.",
             "",
             "The command writes `ai_controls/gate_status.json`, `ai_controls/gate_status.md`, and `ai_controls/term_prereq_ledger.csv`.",
         ]
@@ -845,7 +1233,7 @@ def render_next_actions(level: str) -> str:
             "Add searched and included sources to `preflight_sources.csv`.",
             "Extract weak observation, residual, null, non-event, exclusion, and near-miss rows into `preflight_rows.csv`.",
             "Complete `preflight_gotchas.md` as the failure-mode worksheet before making an escalation decision.",
-            "Run `check`, `leak-scan`, and `gate` before deciding whether to promote.",
+            "Run `check`, `agent-audit`, `leak-scan`, and `gate` before deciding whether to promote.",
         ]
     else:
         actions = [
@@ -853,7 +1241,7 @@ def render_next_actions(level: str) -> str:
             "Lock candidate coordinates before scoring.",
             "Populate source, raw row, normalized row, independence, bias, null model, and result contracts.",
             "Maintain build ledger, checkpoint reviews, claim trace matrix, trust debt, and trust status summary.",
-            "Run `check`, `leak-scan`, and `gate` before release review.",
+            "Run `check`, `agent-audit`, `leak-scan`, and `gate` before release review.",
         ]
     return "# Next Actions\n\n" + "\n".join(f"- {item}" for item in actions)
 
@@ -1143,6 +1531,33 @@ def leak_scan_clear() -> Callable[[Path, dict, dict], tuple[bool, str, str]]:
     return check
 
 
+def agent_audit_clear() -> Callable[[Path, dict, dict], tuple[bool, str, str]]:
+    def check(package: Path, _metrics: dict, _state: dict) -> tuple[bool, str, str]:
+        status_path = package / "ai_controls" / "agent_audit_status.json"
+        if not status_path.exists():
+            return False, "", "agent audit has not been run"
+        status_mtime = status_path.stat().st_mtime
+        watched = [
+            ("ai_controls/AGENT_DEPLOYMENT_HELPER.md", package / "ai_controls" / "AGENT_DEPLOYMENT_HELPER.md"),
+            ("ai_controls/agent_deployment_plan.csv", package / "ai_controls" / "agent_deployment_plan.csv"),
+            ("ai_controls/agent_handoff_checklist.csv", package / "ai_controls" / "agent_handoff_checklist.csv"),
+            ("ai_controls/agent_registry.csv", package / "ai_controls" / "agent_registry.csv"),
+        ]
+        newer = [rel for rel, path in watched if path.exists() and path.stat().st_mtime > status_mtime]
+        if newer:
+            return False, "", f"agent audit is stale relative to: {', '.join(newer)}"
+        status = json.loads(status_path.read_text(encoding="utf-8"))
+        blockers = int(status.get("blocker_count", 0))
+        ok = blockers == 0
+        return (
+            ok,
+            "ai_controls/agent_audit_status.json" if ok else "",
+            "" if ok else f"{blockers} open agent-audit blockers",
+        )
+
+    return check
+
+
 def boundary_ok() -> Callable[[Path, dict, dict], tuple[bool, str, str]]:
     def check(package: Path, _metrics: dict, _state: dict) -> tuple[bool, str, str]:
         resolved = package.resolve()
@@ -1167,6 +1582,7 @@ def gate_specs(level: str) -> list[GateSpec]:
             (
                 ("G0.T1", "package state exists and is active", package_state_active()),
                 ("G0.T2", "package is not inside controlled source material", boundary_ok()),
+                ("G0.T3", "agent audit has no blockers", agent_audit_clear()),
             ),
         ),
     ]
@@ -1592,6 +2008,41 @@ def command_leak_scan(args: argparse.Namespace) -> int:
     return 2 if status["quarantine_required"] and args.fail_on_quarantine else 0
 
 
+def command_agent_audit(args: argparse.Namespace) -> int:
+    package = args.package.resolve()
+    level = package_level(package, args.level)
+    status = audit_agent_controls(package, level)
+    append_history(
+        package,
+        "agent_audit",
+        {
+            "level": level,
+            "all_clear": status["all_clear"],
+            "blocker_count": status["blocker_count"],
+            "warning_count": status["warning_count"],
+        },
+    )
+    print(
+        json.dumps(
+            {
+                "level": status["level"],
+                "all_clear": status["all_clear"],
+                "blocker_count": status["blocker_count"],
+                "warning_count": status["warning_count"],
+                "plan_row_count": status["plan_row_count"],
+                "registry_row_count": status["registry_row_count"],
+                "handoff_row_count": status["handoff_row_count"],
+            },
+            indent=2,
+        )
+    )
+    if status["blocker_count"]:
+        return 1
+    if args.fail_on_warning and status["warning_count"]:
+        return 2
+    return 0
+
+
 def render_leak_report(status: dict) -> str:
     lines = [
         "# CRAMPS Leak Scan Report",
@@ -1700,6 +2151,7 @@ def command_status(args: argparse.Namespace) -> int:
     metrics_path = package / "cramps_sidecar_metrics.json"
     gate_path = package / "ai_controls" / "gate_status.json"
     leak_path = package / "ai_controls" / "leak_scan_status.json"
+    agent_audit_path = package / "ai_controls" / "agent_audit_status.json"
     result = {
         "package": str(package),
         "state": {
@@ -1711,6 +2163,7 @@ def command_status(args: argparse.Namespace) -> int:
         "sidecar": json.loads(metrics_path.read_text(encoding="utf-8")) if metrics_path.exists() else None,
         "gate": json.loads(gate_path.read_text(encoding="utf-8"))["summary"] if gate_path.exists() else None,
         "leak_scan": json.loads(leak_path.read_text(encoding="utf-8")) if leak_path.exists() else None,
+        "agent_audit": json.loads(agent_audit_path.read_text(encoding="utf-8")) if agent_audit_path.exists() else None,
     }
     print(json.dumps(result, indent=2, sort_keys=True))
     return 0
@@ -1758,7 +2211,7 @@ def command_doctor(_args: argparse.Namespace) -> int:
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="cramps",
-        description="Create, operate, check, gate, leak-scan, and quarantine CRAMPS packages.",
+        description="Create, operate, check, audit agents, gate, leak-scan, and quarantine CRAMPS packages.",
     )
     sub = parser.add_subparsers(dest="command", required=True)
 
@@ -1795,6 +2248,12 @@ def build_parser() -> argparse.ArgumentParser:
     leak_scan.add_argument("package", type=Path)
     leak_scan.add_argument("--fail-on-quarantine", action="store_true")
     leak_scan.set_defaults(func=command_leak_scan)
+
+    agent_audit = sub.add_parser("agent-audit", help="Audit agent deployment plan, registry, and handoffs.")
+    agent_audit.add_argument("package", type=Path)
+    agent_audit.add_argument("--level", choices=["preflight", "full", "auto"], default="auto")
+    agent_audit.add_argument("--fail-on-warning", action="store_true")
+    agent_audit.set_defaults(func=command_agent_audit)
 
     quarantine = sub.add_parser("quarantine", help="Place a package into no-release quarantine.")
     quarantine.add_argument("package", type=Path)

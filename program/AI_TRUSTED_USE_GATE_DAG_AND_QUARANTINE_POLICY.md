@@ -48,9 +48,10 @@ The AI operator must:
 4. Leave unknown values blank instead of inventing values.
 5. Record material actions in `logs/ai_activity_log.csv`.
 6. Run sidecar checks after material edits.
-7. Run leak scanning before gate accounting, export, escalation, release, or external sharing.
-8. Run gate accounting before phase progress.
-9. Quarantine the package if a critical leak, source-boundary breach, fabricated field, or overclaim appears.
+7. Run agent-control audit after deployment-plan, registry, or handoff changes.
+8. Run leak scanning before gate accounting, export, escalation, release, or external sharing.
+9. Run gate accounting before phase progress.
+10. Quarantine the package if a critical leak, source-boundary breach, fabricated field, or overclaim appears.
 
 The AI operator must not:
 
@@ -78,6 +79,16 @@ An uppercase `CRAMPS-*` package may use role-specific agents only inside their
 assigned gate spans. Material handoffs must be recorded in the handoff
 checklist. Agent identity, model or tool version, prompt or SOP version, review
 requirement, and audit-log path must be recorded in the agent registry.
+
+Run:
+
+```bash
+python tools/cramps_cli.py agent-audit <package_dir>
+```
+
+The command writes `ai_controls/agent_audit_status.json` and
+`ai_controls/agent_audit_report.md`. Blockers mean the agent deployment layer is
+not consistent enough to support phase progress.
 
 ## DAG Gate Accounting
 
@@ -114,7 +125,7 @@ phase is blocked even when its local terms appear complete.
 
 | gate | phase | progress condition |
 |---|---|---|
-| `G0` | package boundary | package state is active and outside controlled source material |
+| `G0` | package boundary | package state is active, outside controlled source material, and agent-audit has no blockers |
 | `P1` | preflight scope | required preflight artifacts exist |
 | `P2` | source accounting | sources exist and source-unit diversity is accounted for |
 | `P3` | row extraction | rows exist with coordinate values and units |
@@ -128,7 +139,7 @@ make an uppercase `CRAMPS-*` claim.
 
 | gate | phase | progress condition |
 |---|---|---|
-| `G0` | package boundary | package state is active and outside controlled source material |
+| `G0` | package boundary | package state is active, outside controlled source material, and agent-audit has no blockers |
 | `F1` | charter | charter, roles, and binders exist |
 | `F2` | protocol lock | protocol exists and candidate coordinates are locked |
 | `F3` | source and raw signal rows | source catalog, raw signal rows, and null/non-event evidence exist |

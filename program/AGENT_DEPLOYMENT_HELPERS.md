@@ -62,6 +62,7 @@ Before any agent beyond the default operator begins:
 
 ```bash
 python tools/cramps_cli.py check <package_dir>
+python tools/cramps_cli.py agent-audit <package_dir>
 python tools/cramps_cli.py leak-scan <package_dir>
 python tools/cramps_cli.py gate <package_dir>
 ```
@@ -130,3 +131,25 @@ Before accepting an agent-produced package, a supervisor should be able to find:
 
 If any item is missing, the package may still be useful as working material, but
 it is not yet defensible as a CRAMPS deliverable.
+
+## 9. Machine Audit
+
+Run `agent-audit` whenever the deployment plan, registry, or handoff checklist
+changes:
+
+```bash
+python tools/cramps_cli.py agent-audit <package_dir>
+```
+
+The command checks required files, CSV headers, required plan fields, duplicate
+agent IDs, lowercase preflight one-operator discipline, full-system role
+coverage, active-agent registry records, and handoff references. It writes:
+
+- `ai_controls/agent_audit_status.json`
+- `ai_controls/agent_audit_report.md`
+
+Warnings can be acceptable during setup. Blockers must be resolved, deferred
+with documented authority, or quarantined before a package relies on agent work.
+Gate evaluation treats a missing or stale agent audit as blocked. Re-run
+`agent-audit` after changing the helper, deployment plan, handoff checklist, or
+agent registry.

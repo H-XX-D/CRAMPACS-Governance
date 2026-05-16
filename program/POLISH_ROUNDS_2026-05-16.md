@@ -221,3 +221,22 @@ Artifacts:
 Outcome:
 
 - AI and human helpers can be pointed at a package with clear role spans, input limits, handoff accounting, and quarantine stop rules.
+
+## Post-Build Round 6: Agent audit enforcement
+
+Focus:
+
+- make agent deployment controls machine-checkable
+- detect missing deployment files, broken CSV headers, duplicate agent IDs, missing active-agent registry rows, preflight multi-agent drift, and broken handoffs
+- add agent-control status to the normal package operating loop
+
+Artifacts:
+
+- `tools/cramps_cli.py agent-audit`
+- package-local `ai_controls/agent_audit_status.json`
+- package-local `ai_controls/agent_audit_report.md`
+- updated operator guides, pilot runbook, and acceptance checks
+
+Outcome:
+
+- packages can now be inspected for agent deployment consistency before gates rely on agent-produced work.

@@ -21,6 +21,7 @@ Use before pushing a CRAMPS source-kit update.
 | Generated artifacts | domain packs, printouts, and workbooks regenerated when generators change | generator run log or commit diff |
 | Python tools | CLI and sidecar compile | `python -m py_compile ...` |
 | CLI health | source kit reports no doctor issues | `python tools/cramps_cli.py doctor` |
+| Agent audit | fresh package agent controls audit without blockers | `python tools/cramps_cli.py agent-audit <package>` |
 | Workbooks | master and domain workbooks import cleanly | `node tools/verify_workbooks.mjs` |
 | Whitespace | no trailing whitespace or patch errors | `git diff --check` |
 | Smoke path | preflight init/check/leak/gate and promote-to-full path behave as expected | smoke command output |
@@ -43,6 +44,7 @@ A `cramps-*` preflight may recommend escalation only when:
 | Leak scan | no open critical leak findings |
 | Claim boundary | no uppercase/full assurance claim appears |
 | Agent boundary | package uses the default `single_preflight_operator` or records a deviation |
+| Agent audit | `agent-audit` reports no blockers |
 
 Passing preflight acceptance means only:
 
@@ -68,6 +70,7 @@ A `CRAMPS-*` package may be release-reviewed only when:
 | Reproducibility | checksums, environment, run instructions, and clean-run record exist |
 | Trust | build ledger, checkpoint reviews, claim trace, trust debt, and trust status summary are complete |
 | Agent deployment | deployment plan, agent registry, and handoff checklist are complete for agents used |
+| Agent audit | `agent-audit` reports no blockers before release review |
 | Release | decision memo, claim-language approval, and signoff are complete |
 
 Passing full-system acceptance means only:
@@ -117,6 +120,7 @@ Worked example:
 
 ```bash
 python tools/cramps_cli.py check worked_examples/preflight/cramps-phy-synthetic-coordinate-recurrence --level preflight
+python tools/cramps_cli.py agent-audit worked_examples/preflight/cramps-phy-synthetic-coordinate-recurrence --level preflight
 python tools/cramps_cli.py leak-scan worked_examples/preflight/cramps-phy-synthetic-coordinate-recurrence
 python tools/cramps_cli.py gate worked_examples/preflight/cramps-phy-synthetic-coordinate-recurrence --level preflight
 ```

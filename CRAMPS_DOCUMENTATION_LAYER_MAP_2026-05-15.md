@@ -266,6 +266,8 @@ Output:
 - `ai_controls/agent_deployment_plan.csv`
 - `ai_controls/agent_handoff_checklist.csv`
 - `ai_controls/agent_registry.csv`
+- `ai_controls/agent_audit_status.json`
+- `ai_controls/agent_audit_report.md`
 - `ai_controls/gate_status.json`
 - `ai_controls/term_prereq_ledger.csv`
 - `ai_controls/leak_scan_status.json`

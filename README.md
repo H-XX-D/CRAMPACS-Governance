@@ -163,13 +163,14 @@ system without contaminating the sanitized source kit.
 ```bash
 python tools/cramps_cli.py init --level preflight --domain phy --study-id STUDY001
 python tools/cramps_cli.py check ./cramps_projects/<package>
+python tools/cramps_cli.py agent-audit ./cramps_projects/<package>
 python tools/cramps_cli.py leak-scan ./cramps_projects/<package>
 python tools/cramps_cli.py gate ./cramps_projects/<package>
 ```
 
 The CLI writes package-local AI instructions, agent deployment helpers, gate DAG
-status, prerequisite accounting, leak-watch reports, quarantine logs, sidecar
-metrics, and checksums.
+status, prerequisite accounting, agent-audit reports, leak-watch reports,
+quarantine logs, sidecar metrics, and checksums.
 
 To compose a lowercase preflight into an uppercase full package without changing
 the original preflight:

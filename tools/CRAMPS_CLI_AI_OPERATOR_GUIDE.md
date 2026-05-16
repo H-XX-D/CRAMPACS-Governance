@@ -60,6 +60,7 @@ After material edits, run these in order:
 
 ```bash
 python tools/cramps_cli.py check <package_dir>
+python tools/cramps_cli.py agent-audit <package_dir>
 python tools/cramps_cli.py leak-scan <package_dir>
 python tools/cramps_cli.py gate <package_dir>
 python tools/cramps_cli.py status <package_dir>
@@ -68,6 +69,7 @@ python tools/cramps_cli.py status <package_dir>
 Use the outputs to decide the next action:
 
 - `cramps_sidecar_metrics.json` gives completeness and checksum state.
+- `ai_controls/agent_audit_status.json` gives agent deployment, registry, and handoff consistency.
 - `ai_controls/leak_scan_status.json` gives leak and quarantine risk.
 - `ai_controls/gate_status.json` gives DAG gate status.
 - `ai_controls/term_prereq_ledger.csv` gives explicit prerequisite accounting.
@@ -85,6 +87,10 @@ For a lowercase preflight, keep the default `single_preflight_operator` unless a
 documented deviation approves help. For an uppercase full package, deploy only
 the role agents listed in `agent_deployment_plan.csv`, stay inside their gate
 spans, and record material handoffs in the handoff checklist.
+
+Run `agent-audit` after changing deployment plans, registries, or handoffs. The
+command writes `ai_controls/agent_audit_status.json` and
+`ai_controls/agent_audit_report.md`.
 
 ## When To Quarantine
 

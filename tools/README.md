@@ -5,8 +5,8 @@
 `cramps_cli.py` is the primary operating surface for AI-assisted package work.
 It creates isolated project packages, keeps the source kit sanitized, runs
 sidecar checks, evaluates DAG gates, writes term/prerequisite accounting,
-creates agent deployment helper files, scans leak surfaces, and records
-quarantine state.
+creates and audits agent deployment helper files, scans leak surfaces, and
+records quarantine state.
 
 Examples:
 
@@ -14,6 +14,7 @@ Examples:
 python3 tools/cramps_cli.py domains
 python3 tools/cramps_cli.py init --level preflight --domain phy --study-id STUDY001
 python3 tools/cramps_cli.py check ./cramps_projects/<package>
+python3 tools/cramps_cli.py agent-audit ./cramps_projects/<package>
 python3 tools/cramps_cli.py leak-scan ./cramps_projects/<package>
 python3 tools/cramps_cli.py gate ./cramps_projects/<package>
 python3 tools/cramps_cli.py promote ./cramps_projects/<preflight_package> --study-id STUDY001-FULL
