@@ -1,4 +1,4 @@
-# CRAMPACS-MED / crampacs-med Domain Governance Printable
+# crampacs-med / CRAMPACS-MED Domain Governance Printable
 
 **Domain:** Medicine and clinical evidence
 

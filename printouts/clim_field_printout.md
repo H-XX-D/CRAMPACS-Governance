@@ -1,4 +1,4 @@
-# CRAMPACS-CLIM / crampacs-clim Field Printout
+# crampacs-clim / CRAMPACS-CLIM Field Printout
 
 **Domain:** Climate and Earth systems
 

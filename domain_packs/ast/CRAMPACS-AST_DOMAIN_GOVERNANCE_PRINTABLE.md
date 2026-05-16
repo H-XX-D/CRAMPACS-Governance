@@ -1,4 +1,4 @@
-# CRAMPACS-AST / crampacs-ast Domain Governance Printable
+# crampacs-ast / CRAMPACS-AST Domain Governance Printable
 
 **Domain:** Astronomy and astrophysics
 

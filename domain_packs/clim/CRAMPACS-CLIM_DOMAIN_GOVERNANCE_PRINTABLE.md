@@ -1,4 +1,4 @@
-# CRAMPACS-CLIM / crampacs-clim Domain Governance Printable
+# crampacs-clim / CRAMPACS-CLIM Domain Governance Printable
 
 **Domain:** Climate and Earth systems
 

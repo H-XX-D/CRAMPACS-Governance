@@ -1,4 +1,4 @@
-# CRAMPACS-FIN / crampacs-fin Field Printout
+# crampacs-fin / CRAMPACS-FIN Field Printout
 
 **Domain:** Finance, fraud, and risk
 

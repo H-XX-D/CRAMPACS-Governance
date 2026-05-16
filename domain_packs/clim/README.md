@@ -1,4 +1,4 @@
-# CRAMPACS-CLIM / crampacs-clim Starter Pack
+# crampacs-clim / CRAMPACS-CLIM Starter Pack
 
 **Domain:** Climate and Earth systems
 

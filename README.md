@@ -25,19 +25,23 @@ CRAMPACS is not a discovery shortcut. It is a disciplined evidence-synthesis fra
 - `policies/crampacs_gotchas_and_sanity_checks_2026-05-15.md`  
   Failure-mode and sanity-check guide.
 
-## Domain Overlays
+## Domain Names
 
-The `domain_overlays/` directory adapts CRAMPACS to:
+Every domain has two names. Use lowercase for the lightweight preflight and uppercase for the full assurance system.
 
-- Medicine and clinical evidence, `CRAMPACS-MED`, alias `CRAMPACS-M`
-- Genomics and omics, `CRAMPACS-GEN`
-- Climate and Earth systems, `CRAMPACS-CLIM`
-- Materials science, `CRAMPACS-MAT`
-- Engineering reliability, `CRAMPACS-ENG`
-- Finance, fraud, and risk, `CRAMPACS-FIN`, alias `CRAMPACS-F`
-- Cybersecurity, `CRAMPACS-CYB`
-- Astronomy and astrophysics, `CRAMPACS-AST`
-- Physics and physical anomaly catalogs, `CRAMPACS-PHY`
+| Lightweight preflight | Full assurance | Domain |
+|---|---|---|
+| `crampacs-med` | `CRAMPACS-MED` | Medicine and clinical evidence |
+| `crampacs-gen` | `CRAMPACS-GEN` | Genomics and omics |
+| `crampacs-clim` | `CRAMPACS-CLIM` | Climate and Earth systems |
+| `crampacs-mat` | `CRAMPACS-MAT` | Materials science |
+| `crampacs-eng` | `CRAMPACS-ENG` | Engineering reliability |
+| `crampacs-fin` | `CRAMPACS-FIN` | Finance, fraud, and risk |
+| `crampacs-cyb` | `CRAMPACS-CYB` | Cybersecurity |
+| `crampacs-ast` | `CRAMPACS-AST` | Astronomy and astrophysics |
+| `crampacs-phy` | `CRAMPACS-PHY` | Physics and physical anomaly catalogs |
+
+The `domain_overlays/` directory adapts the full system to each domain. The `domain_packs/` directory gives each domain both lowercase preflight templates and uppercase full-system addenda.
 
 ## Templates
 

@@ -1,4 +1,4 @@
-# CRAMPACS-PHY / crampacs-phy Domain Governance Printable
+# crampacs-phy / CRAMPACS-PHY Domain Governance Printable
 
 **Domain:** Physics and physical anomaly catalogs
 

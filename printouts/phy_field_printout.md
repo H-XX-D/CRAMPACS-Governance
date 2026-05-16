@@ -1,4 +1,4 @@
-# CRAMPACS-PHY / crampacs-phy Field Printout
+# crampacs-phy / CRAMPACS-PHY Field Printout
 
 **Domain:** Physics and physical anomaly catalogs
 

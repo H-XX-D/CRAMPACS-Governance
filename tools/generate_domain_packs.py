@@ -100,7 +100,7 @@ def write(path: Path, text: str) -> None:
 
 def domain_readme(domain: dict[str, str]) -> str:
     return f"""
-# {domain["upper"]} / {domain["lower"]} Starter Pack
+# {domain["lower"]} / {domain["upper"]} Starter Pack
 
 **Domain:** {domain["label"]}
 
@@ -305,7 +305,7 @@ This `{domain["upper"]}` study can produce a full CRAMPACS evidence package only
 
 def domain_governance_printable(domain: dict[str, str]) -> str:
     return f"""
-# {domain["upper"]} / {domain["lower"]} Domain Governance Printable
+# {domain["lower"]} / {domain["upper"]} Domain Governance Printable
 
 **Domain:** {domain["label"]}
 
@@ -384,7 +384,7 @@ CRAMPACS does not replace domain-standard confirmation.
 
 def field_printout(domain: dict[str, str]) -> str:
     return f"""
-# {domain["upper"]} / {domain["lower"]} Field Printout
+# {domain["lower"]} / {domain["upper"]} Field Printout
 
 **Domain:** {domain["label"]}
 

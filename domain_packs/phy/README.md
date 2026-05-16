@@ -1,4 +1,4 @@
-# CRAMPACS-PHY / crampacs-phy Starter Pack
+# crampacs-phy / CRAMPACS-PHY Starter Pack
 
 **Domain:** Physics and physical anomaly catalogs
 

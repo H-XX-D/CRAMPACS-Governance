@@ -1,4 +1,4 @@
-# CRAMPACS-MED / crampacs-med Starter Pack
+# crampacs-med / CRAMPACS-MED Starter Pack
 
 **Domain:** Medicine and clinical evidence
 

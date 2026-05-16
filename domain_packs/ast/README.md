@@ -1,4 +1,4 @@
-# CRAMPACS-AST / crampacs-ast Starter Pack
+# crampacs-ast / CRAMPACS-AST Starter Pack
 
 **Domain:** Astronomy and astrophysics
 

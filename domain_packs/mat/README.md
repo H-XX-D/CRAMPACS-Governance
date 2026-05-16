@@ -1,4 +1,4 @@
-# CRAMPACS-MAT / crampacs-mat Starter Pack
+# crampacs-mat / CRAMPACS-MAT Starter Pack
 
 **Domain:** Materials science
 

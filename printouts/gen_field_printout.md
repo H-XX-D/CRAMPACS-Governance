@@ -1,4 +1,4 @@
-# CRAMPACS-GEN / crampacs-gen Field Printout
+# crampacs-gen / CRAMPACS-GEN Field Printout
 
 **Domain:** Genomics and omics
 

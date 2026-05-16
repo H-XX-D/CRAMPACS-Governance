@@ -199,8 +199,8 @@ function governanceWorkbook() {
     ["Core rule", "Lowercase can seed uppercase; only uppercase after full protocol lock carries assurance."],
   ]);
   addSheet(wb, "Domain Matrix", [
-    ["Full System", "Preflight", "Domain", "Coordinate Examples", "Null Examples", "Primary Gotchas", "Standards"],
-    ...domains.map((d) => [d.full, d.light, d.label, d.coordinates.join("; "), d.nulls.join("; "), d.gotchas.join("; "), d.standards.join("; ")]),
+    ["Preflight", "Full System", "Domain", "Coordinate Examples", "Null Examples", "Primary Gotchas", "Standards"],
+    ...domains.map((d) => [d.light, d.full, d.label, d.coordinates.join("; "), d.nulls.join("; "), d.gotchas.join("; "), d.standards.join("; ")]),
   ]);
   addSheet(wb, "Doc Layers", [
     ["Layer", "Name", "Purpose", "Documents"],
@@ -235,8 +235,9 @@ function governanceWorkbook() {
 function domainWorkbook(domain) {
   const wb = Workbook.create();
   addSheet(wb, "Domain Summary", [
-    [domain.full, domain.label],
-    ["Preflight", domain.light],
+    [`${domain.light} / ${domain.full}`, domain.label],
+    ["Lightweight preflight", domain.light],
+    ["Full assurance", domain.full],
     ["Rule", "Lowercase can seed uppercase. Full assurance starts after full protocol lock."],
     ["Main coordinates", domain.coordinates.join("; ")],
     ["Nulls to find", domain.nulls.join("; ")],
@@ -308,8 +309,8 @@ ${mdTable(["Gate", "Required evidence", "When checked"], gates)}
 # CRAMPACS Domain Matrix Printout
 
 ${mdTable(
-  ["Full System", "Preflight", "Domain", "Coordinates", "Nulls", "Primary Gotchas"],
-  domains.map((d) => [d.full, d.light, d.label, d.coordinates.join("; "), d.nulls.join("; "), d.gotchas.join("; ")])
+  ["Preflight", "Full System", "Domain", "Coordinates", "Nulls", "Primary Gotchas"],
+  domains.map((d) => [d.light, d.full, d.label, d.coordinates.join("; "), d.nulls.join("; "), d.gotchas.join("; ")])
 )}
 `
   );
@@ -334,7 +335,7 @@ ${mdTable(["Gotcha", "Symptom", "Fast sanity check"], gotchas)}
 
 ## Domain Workbooks
 
-${mdTable(["Domain", "Workbook"], domains.map((d) => [d.full, `spreadsheets/domains/${d.full}_Workbook.xlsx`]))}
+${mdTable(["Preflight", "Full System", "Workbook"], domains.map((d) => [d.light, d.full, `spreadsheets/domains/${d.light}_${d.full}_Workbook.xlsx`]))}
 `
   );
 
@@ -342,7 +343,7 @@ ${mdTable(["Domain", "Workbook"], domains.map((d) => [d.full, `spreadsheets/doma
     await writeText(
       path.join(root, "domain_packs", d.slug, `${d.full}_DOMAIN_GOVERNANCE_PRINTABLE.md`),
       `
-# ${d.full} / ${d.light} Domain Governance Printable
+# ${d.light} / ${d.full} Domain Governance Printable
 
 **Domain:** ${d.label}
 
@@ -387,9 +388,8 @@ async function main() {
   await buildPrintouts();
   await exportWorkbook(governanceWorkbook(), path.join(root, "spreadsheets", "CRAMPACS_Governance_Master.xlsx"));
   for (const domain of domains) {
-    await exportWorkbook(domainWorkbook(domain), path.join(root, "spreadsheets", "domains", `${domain.full}_Workbook.xlsx`));
+    await exportWorkbook(domainWorkbook(domain), path.join(root, "spreadsheets", "domains", `${domain.light}_${domain.full}_Workbook.xlsx`));
   }
 }
 
 await main();
-

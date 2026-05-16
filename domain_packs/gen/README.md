@@ -1,4 +1,4 @@
-# CRAMPACS-GEN / crampacs-gen Starter Pack
+# crampacs-gen / CRAMPACS-GEN Starter Pack
 
 **Domain:** Genomics and omics
 

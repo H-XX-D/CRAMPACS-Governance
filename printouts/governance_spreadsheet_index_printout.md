@@ -6,14 +6,14 @@
 
 ## Domain Workbooks
 
-| Domain | Workbook |
-| --- | --- |
-| CRAMPACS-MED | spreadsheets/domains/CRAMPACS-MED_Workbook.xlsx |
-| CRAMPACS-GEN | spreadsheets/domains/CRAMPACS-GEN_Workbook.xlsx |
-| CRAMPACS-CLIM | spreadsheets/domains/CRAMPACS-CLIM_Workbook.xlsx |
-| CRAMPACS-MAT | spreadsheets/domains/CRAMPACS-MAT_Workbook.xlsx |
-| CRAMPACS-ENG | spreadsheets/domains/CRAMPACS-ENG_Workbook.xlsx |
-| CRAMPACS-FIN | spreadsheets/domains/CRAMPACS-FIN_Workbook.xlsx |
-| CRAMPACS-CYB | spreadsheets/domains/CRAMPACS-CYB_Workbook.xlsx |
-| CRAMPACS-AST | spreadsheets/domains/CRAMPACS-AST_Workbook.xlsx |
-| CRAMPACS-PHY | spreadsheets/domains/CRAMPACS-PHY_Workbook.xlsx |
+| Preflight | Full System | Workbook |
+| --- | --- | --- |
+| crampacs-med | CRAMPACS-MED | spreadsheets/domains/crampacs-med_CRAMPACS-MED_Workbook.xlsx |
+| crampacs-gen | CRAMPACS-GEN | spreadsheets/domains/crampacs-gen_CRAMPACS-GEN_Workbook.xlsx |
+| crampacs-clim | CRAMPACS-CLIM | spreadsheets/domains/crampacs-clim_CRAMPACS-CLIM_Workbook.xlsx |
+| crampacs-mat | CRAMPACS-MAT | spreadsheets/domains/crampacs-mat_CRAMPACS-MAT_Workbook.xlsx |
+| crampacs-eng | CRAMPACS-ENG | spreadsheets/domains/crampacs-eng_CRAMPACS-ENG_Workbook.xlsx |
+| crampacs-fin | CRAMPACS-FIN | spreadsheets/domains/crampacs-fin_CRAMPACS-FIN_Workbook.xlsx |
+| crampacs-cyb | CRAMPACS-CYB | spreadsheets/domains/crampacs-cyb_CRAMPACS-CYB_Workbook.xlsx |
+| crampacs-ast | CRAMPACS-AST | spreadsheets/domains/crampacs-ast_CRAMPACS-AST_Workbook.xlsx |
+| crampacs-phy | CRAMPACS-PHY | spreadsheets/domains/crampacs-phy_CRAMPACS-PHY_Workbook.xlsx |

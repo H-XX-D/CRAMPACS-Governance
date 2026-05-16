@@ -1,4 +1,4 @@
-# CRAMPACS-CYB / crampacs-cyb Field Printout
+# crampacs-cyb / CRAMPACS-CYB Field Printout
 
 **Domain:** Cybersecurity
 

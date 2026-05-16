@@ -1,4 +1,4 @@
-# CRAMPACS-MED / crampacs-med Field Printout
+# crampacs-med / CRAMPACS-MED Field Printout
 
 **Domain:** Medicine and clinical evidence
 

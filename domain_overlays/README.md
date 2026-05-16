@@ -11,17 +11,17 @@ Core policies:
 
 Domain overlays:
 
-| Code | Alias | Domain | File |
+| Lightweight preflight | Full assurance overlay | Domain | File |
 |---|---|---|---|
-| CRAMPACS-MED | CRAMPACS-M | Medicine and clinical evidence | `CRAMPACS_MED_MEDICINE_OVERLAY.md` |
-| CRAMPACS-GEN |  | Genomics and omics | `CRAMPACS_GEN_GENOMICS_OVERLAY.md` |
-| CRAMPACS-CLIM |  | Climate and Earth systems | `CRAMPACS_CLIM_CLIMATE_OVERLAY.md` |
-| CRAMPACS-MAT |  | Materials science | `CRAMPACS_MAT_MATERIALS_OVERLAY.md` |
-| CRAMPACS-ENG |  | Engineering reliability | `CRAMPACS_ENG_ENGINEERING_OVERLAY.md` |
-| CRAMPACS-FIN | CRAMPACS-F | Finance, fraud, and risk | `CRAMPACS_FIN_FINANCE_OVERLAY.md` |
-| CRAMPACS-CYB |  | Cybersecurity | `CRAMPACS_CYB_CYBERSECURITY_OVERLAY.md` |
-| CRAMPACS-AST |  | Astronomy and astrophysics | `CRAMPACS_AST_ASTRONOMY_OVERLAY.md` |
-| CRAMPACS-PHY |  | Physics and physical anomaly catalogs | `CRAMPACS_PHY_PHYSICS_OVERLAY.md` |
+| `crampacs-med` | `CRAMPACS-MED` | Medicine and clinical evidence | `CRAMPACS_MED_MEDICINE_OVERLAY.md` |
+| `crampacs-gen` | `CRAMPACS-GEN` | Genomics and omics | `CRAMPACS_GEN_GENOMICS_OVERLAY.md` |
+| `crampacs-clim` | `CRAMPACS-CLIM` | Climate and Earth systems | `CRAMPACS_CLIM_CLIMATE_OVERLAY.md` |
+| `crampacs-mat` | `CRAMPACS-MAT` | Materials science | `CRAMPACS_MAT_MATERIALS_OVERLAY.md` |
+| `crampacs-eng` | `CRAMPACS-ENG` | Engineering reliability | `CRAMPACS_ENG_ENGINEERING_OVERLAY.md` |
+| `crampacs-fin` | `CRAMPACS-FIN` | Finance, fraud, and risk | `CRAMPACS_FIN_FINANCE_OVERLAY.md` |
+| `crampacs-cyb` | `CRAMPACS-CYB` | Cybersecurity | `CRAMPACS_CYB_CYBERSECURITY_OVERLAY.md` |
+| `crampacs-ast` | `CRAMPACS-AST` | Astronomy and astrophysics | `CRAMPACS_AST_ASTRONOMY_OVERLAY.md` |
+| `crampacs-phy` | `CRAMPACS-PHY` | Physics and physical anomaly catalogs | `CRAMPACS_PHY_PHYSICS_OVERLAY.md` |
 
 Each overlay defines:
 

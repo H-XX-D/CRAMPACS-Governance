@@ -1,4 +1,4 @@
-# CRAMPACS-FIN / crampacs-fin Starter Pack
+# crampacs-fin / CRAMPACS-FIN Starter Pack
 
 **Domain:** Finance, fraud, and risk
 

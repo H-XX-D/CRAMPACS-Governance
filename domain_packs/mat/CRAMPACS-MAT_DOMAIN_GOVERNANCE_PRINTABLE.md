@@ -1,4 +1,4 @@
-# CRAMPACS-MAT / crampacs-mat Domain Governance Printable
+# crampacs-mat / CRAMPACS-MAT Domain Governance Printable
 
 **Domain:** Materials science
 

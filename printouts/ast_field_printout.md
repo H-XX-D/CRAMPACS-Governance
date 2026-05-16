@@ -1,4 +1,4 @@
-# CRAMPACS-AST / crampacs-ast Field Printout
+# crampacs-ast / CRAMPACS-AST Field Printout
 
 **Domain:** Astronomy and astrophysics
 

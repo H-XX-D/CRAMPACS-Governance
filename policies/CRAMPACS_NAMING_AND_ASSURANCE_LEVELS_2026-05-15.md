@@ -19,18 +19,18 @@ Lowercase names refer to lightweight preflight systems.
 
 Examples:
 
-| Full assurance | Lightweight preflight | Domain |
+| Lightweight preflight | Full assurance | Domain |
 |---|---|---|
-| CRAMPACS-MED | crampacs-med | Medicine |
-| CRAMPACS-GEN | crampacs-gen | Genomics |
-| CRAMPACS-CLIM | crampacs-clim | Climate |
-| CRAMPACS-MAT | crampacs-mat | Materials |
-| CRAMPACS-ENG | crampacs-eng | Engineering |
-| CRAMPACS-FIN | crampacs-fin | Finance |
-| CRAMPACS-CYB | crampacs-cyb | Cybersecurity |
-| CRAMPACS-AST | crampacs-ast | Astronomy |
-| CRAMPACS-PHY | crampacs-phy | Physics |
-| CRAMPACS-GENR | crampacs-genr | Generic cross-domain use |
+| crampacs-med | CRAMPACS-MED | Medicine |
+| crampacs-gen | CRAMPACS-GEN | Genomics |
+| crampacs-clim | CRAMPACS-CLIM | Climate |
+| crampacs-mat | CRAMPACS-MAT | Materials |
+| crampacs-eng | CRAMPACS-ENG | Engineering |
+| crampacs-fin | CRAMPACS-FIN | Finance |
+| crampacs-cyb | CRAMPACS-CYB | Cybersecurity |
+| crampacs-ast | CRAMPACS-AST | Astronomy |
+| crampacs-phy | CRAMPACS-PHY | Physics |
+| crampacs-genr | CRAMPACS-GENR | Generic cross-domain use |
 
 The suffix can be extended to any field, but the uppercase/lowercase distinction must remain stable.
 

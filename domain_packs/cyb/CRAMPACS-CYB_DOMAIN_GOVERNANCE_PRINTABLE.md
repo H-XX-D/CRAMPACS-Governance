@@ -1,4 +1,4 @@
-# CRAMPACS-CYB / crampacs-cyb Domain Governance Printable
+# crampacs-cyb / CRAMPACS-CYB Domain Governance Printable
 
 **Domain:** Cybersecurity
 

@@ -2,9 +2,9 @@ import { FileBlob, SpreadsheetFile } from "@oai/artifact-tool";
 
 const files = [
   "spreadsheets/CRAMPACS_Governance_Master.xlsx",
-  "spreadsheets/domains/CRAMPACS-MED_Workbook.xlsx",
-  "spreadsheets/domains/CRAMPACS-FIN_Workbook.xlsx",
-  "spreadsheets/domains/CRAMPACS-PHY_Workbook.xlsx",
+  "spreadsheets/domains/crampacs-med_CRAMPACS-MED_Workbook.xlsx",
+  "spreadsheets/domains/crampacs-fin_CRAMPACS-FIN_Workbook.xlsx",
+  "spreadsheets/domains/crampacs-phy_CRAMPACS-PHY_Workbook.xlsx",
 ];
 
 for (const file of files) {
@@ -20,4 +20,3 @@ for (const file of files) {
   console.log(`VERIFIED ${file}`);
   console.log(inspect.ndjson.split("\n").slice(0, 3).join("\n"));
 }
-

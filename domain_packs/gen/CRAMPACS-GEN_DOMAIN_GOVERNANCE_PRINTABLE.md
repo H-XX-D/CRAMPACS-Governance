@@ -1,4 +1,4 @@
-# CRAMPACS-GEN / crampacs-gen Domain Governance Printable
+# crampacs-gen / CRAMPACS-GEN Domain Governance Printable
 
 **Domain:** Genomics and omics
 

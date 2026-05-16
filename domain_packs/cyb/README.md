@@ -1,4 +1,4 @@
-# CRAMPACS-CYB / crampacs-cyb Starter Pack
+# crampacs-cyb / CRAMPACS-CYB Starter Pack
 
 **Domain:** Cybersecurity
 

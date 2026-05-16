@@ -1,4 +1,4 @@
-# CRAMPACS-MAT / crampacs-mat Field Printout
+# crampacs-mat / CRAMPACS-MAT Field Printout
 
 **Domain:** Materials science
 

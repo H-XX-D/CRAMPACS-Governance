@@ -1,4 +1,4 @@
-# CRAMPACS-FIN / crampacs-fin Domain Governance Printable
+# crampacs-fin / CRAMPACS-FIN Domain Governance Printable
 
 **Domain:** Finance, fraud, and risk
 

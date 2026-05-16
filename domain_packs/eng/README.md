@@ -1,4 +1,4 @@
-# CRAMPACS-ENG / crampacs-eng Starter Pack
+# crampacs-eng / CRAMPACS-ENG Starter Pack
 
 **Domain:** Engineering reliability
 
