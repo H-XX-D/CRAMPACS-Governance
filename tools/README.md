@@ -35,7 +35,9 @@ See `CRAMPS_CLI_AI_OPERATOR_GUIDE.md` for the AI operator loop.
 happy path, verifies reviewer handoff, confirms stale post-acceptance edits are
 blocked, and tampers with a copied worked-example artifact to confirm manifest
 SHA-256 drift is detected. It also corrupts a copied row/source reference to
-confirm the contract audit fails closed on broken foreign keys.
+confirm the contract audit fails closed on broken foreign keys, and injects a
+second active preflight operator to confirm the agent audit enforces the
+lowercase one-operator boundary.
 
 ## Portable Tool
 

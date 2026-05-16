@@ -3270,6 +3270,71 @@ def run_self_test(strict_source: bool, keep_temp: bool) -> dict:
             "contract-audit package broken-contract-preflight",
         )
 
+        multi_agent = temp_path / "multi-agent-preflight"
+        shutil.copytree(ROOT / "worked_examples" / "preflight" / "cramps-phy-synthetic-coordinate-recurrence", multi_agent)
+        plan_path = multi_agent / "ai_controls" / "agent_deployment_plan.csv"
+        plan_rows = read_csv_rows(plan_path)
+        plan_rows.append(
+            {
+                "study_id": "EX-PHY-001",
+                "package_level": "preflight",
+                "deployment_mode": "extra_preflight_operator",
+                "agent_id": "second_preflight_operator",
+                "agent_role": "preflight_operator",
+                "assigned_scope": "Second active operator injected by self-test",
+                "allowed_inputs": "Package files; synthetic teaching sources",
+                "prohibited_inputs": "Source-kit edits; restricted data; uppercase assurance claims",
+                "required_outputs": "preflight review notes",
+                "reviewer_id": "",
+                "gate_start": "G0",
+                "gate_stop": "P5",
+                "can_write": "yes-package-only",
+                "can_export": "no-before-P5",
+                "human_review_required": "yes-before-promotion",
+                "status": "active",
+                "notes": "Self-test injected second active row.",
+            }
+        )
+        write_csv(plan_path, AGENT_DEPLOYMENT_PLAN_FIELDS, plan_rows)
+        registry_path = multi_agent / "ai_controls" / "agent_registry.csv"
+        registry_rows = read_csv_rows(registry_path)
+        registry_rows.append(
+            {
+                "agent_id": "second_preflight_operator",
+                "agent_name": "Second preflight operator",
+                "agent_type": "human_or_ai",
+                "purpose": "Injected self-test operator",
+                "allowed_inputs": "Package files; synthetic teaching sources",
+                "prohibited_inputs": "Source-kit edits; restricted data; uppercase assurance claims",
+                "output_schema": "preflight review notes",
+                "model_or_tool_version": "not_applicable",
+                "prompt_or_sop_version": "self-test",
+                "human_review_required": "yes-before-promotion",
+                "audit_log_path": "logs/ai_activity_log.csv",
+                "status": "active",
+            }
+        )
+        write_csv(registry_path, AGENT_REGISTRY_FIELDS, registry_rows)
+        multi_agent_result = run_cli_subprocess(["agent-audit", str(multi_agent), "--level", "preflight"])
+        multi_agent_status = load_json_artifact(multi_agent / "ai_controls" / "agent_audit_status.json") or {}
+        multi_agent_codes = {issue.get("code", "") for issue in multi_agent_status.get("issues", [])}
+        multi_agent_blocked = (
+            multi_agent_result.returncode == 1
+            and "preflight_multi_agent_without_deviation" in multi_agent_codes
+        )
+        add_self_test_check(
+            checks,
+            "preflight_multi_agent_tamper_trap",
+            "pass" if multi_agent_blocked else "fail",
+            "agent audit blocked an undeclared second preflight operator"
+            if multi_agent_blocked
+            else (
+                "expected preflight_multi_agent_without_deviation; "
+                f"got exit={multi_agent_result.returncode}, codes={', '.join(sorted(multi_agent_codes))}"
+            ),
+            "agent-audit package multi-agent-preflight",
+        )
+
         sequence = [
             ("check", ["check", str(package), "--level", "preflight"]),
             ("agent_audit", ["agent-audit", str(package), "--level", "preflight"]),

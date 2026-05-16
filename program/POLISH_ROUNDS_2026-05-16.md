@@ -453,3 +453,20 @@ Artifacts:
 Outcome:
 
 - maintainers now test that malformed preflight rows cannot pass release hygiene simply because the happy-path worked example is valid.
+
+## Post-Build Round 18: Preflight agent-boundary tamper trap
+
+Focus:
+
+- prove lowercase preflight packages remain one-operator by default
+- add a self-test negative control that injects a second active preflight operator
+- verify `agent-audit` raises `preflight_multi_agent_without_deviation`
+
+Artifacts:
+
+- `tools/cramps_cli.py` `preflight_multi_agent_tamper_trap` self-test check
+- updated release checklist and tools README
+
+Outcome:
+
+- maintainers now test that a lightweight preflight cannot quietly become an undeclared multi-agent workflow before review.

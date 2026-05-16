@@ -24,7 +24,7 @@ Use before pushing a CRAMPS source-kit update.
 | CLI health | source kit reports no doctor issues | `python tools/cramps_cli.py doctor` |
 | Source audit | source kit has no release blockers | `python tools/cramps_cli.py source-audit` |
 | Contract audit | source and package CSV data contracts are internally consistent | `python tools/cramps_cli.py contract-audit source` |
-| Self-test | temporary package path clears; stale-change, manifest, and contract-reference tamper traps block | `python tools/cramps_cli.py self-test` |
+| Self-test | temporary package path clears; stale-change, manifest, contract-reference, and preflight-agent tamper traps block | `python tools/cramps_cli.py self-test` |
 | Source snapshot | source kit handoff manifest and ZIP are created from a clean source | `python tools/cramps_cli.py source-snapshot` |
 | Agent audit | fresh package agent controls audit without blockers | `python tools/cramps_cli.py agent-audit <package>` |
 | Acceptance audit | package acceptance audit has no blockers and no wrong-level or stale-gate artifacts | `python tools/cramps_cli.py acceptance-audit <package>` |
