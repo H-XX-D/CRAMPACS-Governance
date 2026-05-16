@@ -1,0 +1,1 @@
+agent_id,agent_name,agent_type,purpose,allowed_inputs,prohibited_inputs,output_schema,model_or_tool_version,prompt_or_sop_version,human_review_required,audit_log_path,status

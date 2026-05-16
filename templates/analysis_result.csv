@@ -1,0 +1,1 @@
+result_id,candidate_id,statistic_id,observed_statistic,local_p_value,global_p_value,effect_estimate,effect_ci_low,effect_ci_high,evidence_tier,robustness_status,interpretation,approved_by_statistical_lead
