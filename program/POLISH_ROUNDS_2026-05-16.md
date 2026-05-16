@@ -184,3 +184,20 @@ Artifacts:
 Outcome:
 
 - a supervisor or AI operator can now inspect whether the source kit, worked example, or package is in a usable state without inferring acceptance rules from scattered documents.
+
+## Post-Build Round 4: First-pilot operationalization
+
+Focus:
+
+- turn the program from a governed package into a first-pilot operating path
+- make pilot selection explicit before teams spend time or budget
+- prevent teams from choosing a first pilot that is too broad, too sensitive, or too politically loaded
+
+Artifacts:
+
+- `program/FIRST_PILOT_RUNBOOK.md`
+- `program/PILOT_SELECTION_SCORECARD.md`
+
+Outcome:
+
+- a team can now choose a bounded first pilot, run a lowercase preflight, decide whether to open an uppercase package, and close the pilot without inventing the operating sequence.

@@ -47,6 +47,8 @@ Start here if you are deploying CRAMPS inside an organization.
   Exact scaffold structure and sidecar expectations for full evidence packages.
 - `program/DEPLOYMENT_PLAYBOOK.md`
   Practical rollout sequence for introducing CRAMPS inside an organization.
+- `program/FIRST_PILOT_RUNBOOK.md` and `program/PILOT_SELECTION_SCORECARD.md`
+  First-pilot operating sequence and scorecard for choosing a bounded, teachable pilot.
 - `program/SAFETY_SUPERVISOR_PACKET.md`
   Practical approval/hold/reject packet for safety supervisors, government program officers, and risk owners.
 - `program/AUDIT_AND_INSPECTION_PACKET.md`
