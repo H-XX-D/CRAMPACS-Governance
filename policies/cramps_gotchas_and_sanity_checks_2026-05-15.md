@@ -1,8 +1,8 @@
-# cramps Gotchas and Sanity Checks
+# cramps Failure Modes and Fast Checks
 
-**Guide ID:** cramps-GOTCHA-001  
-**Version:** 0.1  
-**Date:** 2026-05-15 PDT  
+**Guide ID:** cramps-FASTCHECK-001
+**Version:** 0.1
+**Date:** 2026-05-15 PDT
 **Status:** Draft practitioner guide
 
 ## 1. Purpose
@@ -28,7 +28,7 @@ Ask these before doing anything expensive:
 
 If three or more answers are weak, stay in lowercase preflight mode.
 
-## 3. Gotcha Catalog
+## 3. Failure-Mode Catalog
 
 ### 3.1 Coordinate Drift
 
@@ -224,4 +224,3 @@ Interpretation:
 ## 5. Practitioner Rule
 
 The fastest way to harden a cramps pass is not more statistics. It is finding the nulls, mapping dependence, locking the coordinate, and checking units.
-

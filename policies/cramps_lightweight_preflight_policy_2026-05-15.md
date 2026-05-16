@@ -9,7 +9,7 @@
 
 `cramps-*` is the lightweight one to two day version of CRAMPS.
 
-It helps teams decide whether a suspected weak-signal recurrence deserves full `CRAMPS-*` treatment.
+It helps teams decide whether a suspected weak-evidence recurrence deserves full `CRAMPS-*` treatment.
 
 It is designed for limited time and budget. It is not designed to produce confirmatory claims.
 
@@ -88,9 +88,9 @@ Output:
 
 - `preflight_rows.csv`
 
-### Hour 10-14: Gotcha Scan
+### Hour 10-14: Failure-Mode Scan
 
-Run the gotcha checklist:
+Run the failure-mode checklist:
 
 - coordinate drift
 - missing nulls
@@ -137,7 +137,7 @@ Output:
 - Rationale.
 - Strongest evidence.
 - Strongest null or non-event.
-- Biggest gotcha.
+- Biggest failure mode.
 - What would change the decision.
 - Recommended next step.
 - Explicit claim boundary.

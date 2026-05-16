@@ -80,7 +80,7 @@ Trust can be local.
 An artifact may be trustworthy for one purpose and not another:
 
 - a source catalog may be trustworthy for screening but not final inclusion
-- raw rows may be trustworthy for extraction review but not normalized analysis
+- raw signal rows may be trustworthy for extraction review but not normalized analysis
 - a null model may be trustworthy for sensitivity exploration but not release inference
 - a preflight may be trustworthy for budget scoping but not operational action
 

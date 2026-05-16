@@ -18,7 +18,7 @@ List the source families, instruments, vendors, sites, pipelines, datasets, or r
 
 ## Domain Bias Hazards
 
-Primary gotcha: fleet exposure imbalance, maintenance censoring, supplier-lot dependence, sensor drift
+Primary failure modes: fleet exposure imbalance, maintenance censoring, supplier-lot dependence, sensor drift
 
 Add domain-specific publication, reporting, measurement, selection, and survivorship biases.
 
@@ -36,4 +36,4 @@ NIST Engineering Statistics, ISO 9001, ISO 31000, ISO 17025, IEC 61508, ASME V&V
 
 ## Claim Limits
 
-This `CRAMPS-ENG` study can produce a full CRAMPS evidence package only after protocol lock, full source flow, null inclusion, independence review, bias review, null-model analysis, sensitivity tests, checksum reproduction, and signoff.
+Release condition: this `CRAMPS-ENG` study remains a working package until protocol lock, full source flow, null inclusion, independence review, bias review, null-model analysis, sensitivity tests, checksum reproduction, trust-state review, domain signoff, and claim-language approval are complete.

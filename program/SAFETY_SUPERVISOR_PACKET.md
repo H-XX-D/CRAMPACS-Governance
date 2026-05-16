@@ -5,7 +5,7 @@
 
 ## 1. What This Lets You Decide
 
-CRAMPS helps decide whether a weak-signal recurrence is worth escalation, validation, mitigation, or rejection.
+CRAMPS helps decide whether a weak-evidence recurrence is worth escalation, validation, mitigation, or rejection.
 
 It does not decide causality by itself.
 

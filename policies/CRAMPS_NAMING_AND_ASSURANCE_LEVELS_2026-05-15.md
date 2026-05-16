@@ -95,9 +95,9 @@ Minimum requirements:
 - Fast null and non-event check.
 - Fast dependence scan.
 - Fast bias and missing-evidence scan.
-- Unit and transform sanity check.
+- Unit and transform fast check.
 - Basic checksum manifest.
-- Gotcha checklist.
+- Failure-mode checklist.
 - Escalation recommendation.
 
 Allowed outputs:
@@ -138,7 +138,7 @@ The preflight creates seed artifacts:
 - candidate coordinate candidates
 - source shortlist
 - null and non-event leads
-- gotcha register
+- failure-mode register
 - dependence concerns
 - bias concerns
 - unit and transform concerns

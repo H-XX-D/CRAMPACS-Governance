@@ -6,7 +6,7 @@
 
 ## 1. Purpose
 
-CRAMPS is an assurance program for deciding whether weak signals recur at pre-specified coordinates across heterogeneous evidence sources more often than expected under a registered null model.
+CRAMPS is an assurance program for deciding whether weak observations recur at pre-specified coordinates across heterogeneous evidence sources more often than expected under a registered null model.
 
 The program is designed for teams that cannot afford informal pattern-finding:
 
@@ -120,7 +120,7 @@ Pass criteria:
 - Dependence grades assigned.
 - Bias assessment complete.
 - Missing-evidence risk stated.
-- Primary weights or clustering rules approved.
+- Primary weights or recurrence rules approved.
 
 Failure condition:
 
@@ -197,4 +197,4 @@ CRAMPS can support Tiers 0-3. Tier 4 requires domain-standard confirmation.
 
 Every released package must include:
 
-> CRAMPS is an evidence-control and anomaly-prioritization method. It does not establish clinical, legal, safety, financial, security, engineering, or scientific causality by itself. Domain-standard confirmation remains required.
+> CRAMPS is an evidence-control and recurrence-prioritization method. It does not establish clinical, legal, safety, financial, security, engineering, or scientific causality by itself. Domain-standard confirmation remains required.

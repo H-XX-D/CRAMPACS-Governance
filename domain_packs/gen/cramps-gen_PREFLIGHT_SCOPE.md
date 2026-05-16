@@ -7,7 +7,7 @@
 
 ## One-Sentence Question
 
-Does weak evidence recur at a pre-specified coordinate in Genomics and omics strongly enough to justify a full CRAMPS-GEN study?
+Does a bounded source set in the genomics and omics domain show enough coordinate-specific recurrence, including null and non-event checks, to justify opening a full CRAMPS-GEN package?
 
 ## Candidate Coordinate Sketch
 

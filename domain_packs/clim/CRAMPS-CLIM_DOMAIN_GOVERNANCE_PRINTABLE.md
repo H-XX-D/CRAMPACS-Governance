@@ -24,7 +24,7 @@
 - model runs without recurrence
 - negative attribution studies
 
-## Gotchas
+## Failure Modes
 
 - spatial autocorrelation
 - temporal autocorrelation

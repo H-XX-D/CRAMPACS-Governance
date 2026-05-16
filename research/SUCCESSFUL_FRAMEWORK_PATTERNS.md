@@ -51,7 +51,7 @@ CRAMPS adoption:
 
 ### Lesson 3: Missing evidence must be treated as a first-class risk
 
-Cochrane emphasizes that missing evidence can bias synthesis when result availability depends on direction, magnitude, or statistical significance. CRAMPS should never treat positive anomaly rows alone as a credible package.
+Cochrane emphasizes that missing evidence can bias synthesis when result availability depends on direction, magnitude, or statistical significance. CRAMPS should never treat positive or anomaly-like rows alone as a credible package.
 
 CRAMPS adoption:
 
@@ -135,4 +135,3 @@ CRAMPS adoption:
 | Training without assessment | People think attendance equals competence | competency rubric and practical exercise |
 | Pretty documents without evidence | Brand hides weak controls | control evidence register and audit procedure |
 | Domain-general language too abstract | Teams cannot apply it | domain packs and field examples |
-

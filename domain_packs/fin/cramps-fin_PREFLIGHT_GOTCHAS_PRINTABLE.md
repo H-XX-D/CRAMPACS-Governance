@@ -1,8 +1,8 @@
-# cramps-fin Gotchas Printable
+# cramps-fin Failure Modes and Fast Checks Printable
 
 **Domain:** Finance, fraud, and risk
 
-## Top Domain Gotcha
+## Primary Domain Failure Modes
 
 look-ahead bias, backtest overfitting, vendor revisions, feedback loops from prior controls
 

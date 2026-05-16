@@ -27,7 +27,7 @@
 - non-detections
 - failed replications
 
-## Gotchas
+## Failure Modes
 
 - look-elsewhere effect
 - theory-fashion clustering

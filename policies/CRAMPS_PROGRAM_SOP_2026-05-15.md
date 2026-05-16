@@ -7,22 +7,22 @@
 
 ## 1. Definition
 
-CRAMPS is a coordinate-resolved meta-analytic framework for testing whether weak anomalies from heterogeneous experimental catalogs cluster at pre-specified parameter values more often than expected under controlled null models.
+CRAMPS is a coordinate-resolved assurance framework for inspecting whether weak observations from heterogeneous evidence sources recur at pre-specified parameter values more often than expected under controlled null models.
 
-The method does not treat weak anomalies as discoveries. It treats cross-catalog recurrence at the same coordinate as a testable statistical object. The result of a CRAMPS study is an anomaly-prioritization and coherence assessment, not a physics claim by itself.
+The method does not treat weak observations as discoveries. It treats recurrence at the same coordinate as an inspectable statistical object with explicit source, null, dependence, bias, and claim controls. The result of a CRAMPS study is a bounded prioritization and escalation assessment, not a domain conclusion by itself.
 
 The core evidentiary question is:
 
-> Given a pre-specified coordinate atlas, inclusion contract, independence model, and null model, do reported anomalies, residuals, weak excesses, near-misses, and non-events cluster around candidate coordinates more often than expected?
+> Given a pre-specified coordinate atlas, inclusion contract, independence model, and null model, do reported anomalies, residuals, weak excesses, near-misses, and non-events recur around candidate coordinates more often than expected?
 
 ## 2. Scientific Position
 
-CRAMPS fills the evidentiary layer between isolated unresolved anomalies and confirmed discovery. It is designed to answer whether many weak or sub-threshold observations show structured recurrence across catalogs, while preserving the discovery standards of the underlying fields.
+CRAMPS fills the evidentiary layer between informal pattern suspicion and domain-standard confirmation. It is designed to answer whether weak or sub-threshold observations show structured recurrence across sources, while preserving the confirmation standards of the underlying fields.
 
 CRAMPS may support statements such as:
 
-- "A pre-specified candidate coordinate has unusual cross-catalog coherence under the registered null model."
-- "The cluster is robust to leave-family-out and leave-era-out sensitivity tests."
+- "A pre-specified candidate coordinate has unusual cross-source recurrence under the registered null model."
+- "The recurrence is robust to leave-family-out and leave-era-out sensitivity tests."
 - "The finding should be prioritized for targeted replication or prospective search."
 
 CRAMPS may not support statements such as:
@@ -33,7 +33,7 @@ CRAMPS may not support statements such as:
 
 ## 3. Standards Basis
 
-CRAMPS should be built as a physics-adapted evidence synthesis standard. It borrows discipline from systematic review, statistical reporting, metrology, repository governance, and AI risk management, but adapts each to anomaly catalogs.
+CRAMPS should be built as a domain-general weak-evidence inspection standard. It borrows discipline from systematic review, statistical reporting, metrology, repository governance, and AI risk management, but adapts each to coordinate-resolved recurrence packages.
 
 Primary standards and guidance anchors:
 
@@ -61,7 +61,7 @@ These are not copied wholesale. CRAMPS uses them as alignment targets.
 
 1. **Pre-specification is the center of the method.** Candidate coordinates, coordinate transforms, inclusion rules, tolerance windows, weighting rules, independence rules, null models, and primary statistics are fixed before scoring.
 
-2. **Exploration and confirmation are different products.** An exploratory anomaly atlas may generate candidate coordinates. A confirmatory CRAMPS run may only test coordinates locked before scoring.
+2. **Exploration and confirmation are different products.** An exploratory atlas may identify candidate coordinates. A confirmatory CRAMPS run may only test coordinates locked before scoring.
 
 3. **Nulls are data.** Non-events, exclusions, upper limits, searches with no excess, and negative control coordinates must be included when they satisfy the source contract.
 
@@ -101,7 +101,7 @@ A confirmatory CRAMPS result requires:
 - A locked protocol.
 - A frozen candidate coordinate registry.
 - A frozen source search strategy or documented source snapshot.
-- A locked primary cluster statistic.
+- A locked primary recurrence statistic.
 - A locked null-model generator.
 - A complete accounting of null and non-event evidence.
 - A reproducibility capsule that re-runs the analysis from raw extracted tables.
@@ -271,7 +271,7 @@ Gate 0 acceptance:
 
 Objective:
 
-Define the coordinate space before looking for clusters.
+Define the coordinate space before looking for recurrence.
 
 Procedure:
 
@@ -433,7 +433,7 @@ Required outputs:
 
 Gate 6 acceptance:
 
-- Normalized coordinates are reproducible from raw rows.
+- Normalized coordinates are reproducible from raw signal rows.
 - Transform uncertainty is propagated.
 - No post-hoc transform has been introduced.
 
@@ -455,7 +455,7 @@ Procedure:
    - E: duplicate or non-independent, not eligible as separate evidence.
 4. Assess source-level bias.
 5. Assess missing-evidence risk, including unpublished nulls, non-reporting bias, and selective threshold reporting.
-6. Define covariance or clustering weights used in analysis.
+6. Define covariance, collapse, or recurrence weights used in analysis.
 
 Required outputs:
 
@@ -474,7 +474,7 @@ Gate 7 acceptance:
 
 Objective:
 
-Compute the pre-specified anomaly-cluster statistic under calibrated null models.
+Compute the pre-specified recurrence statistic under calibrated null models.
 
 Procedure:
 
@@ -488,10 +488,10 @@ Procedure:
 
 Acceptable primary statistics include:
 
-- Weighted count of independent anomaly rows within a registered tolerance window.
+- Weighted count of independent signal, residual, anomaly-like, null, or near-miss rows within a registered tolerance window.
 - Signed or unsigned residual aggregation with dependence-adjusted covariance.
 - Coordinate density excess relative to domain-specific search support.
-- Hierarchical model estimating cluster intensity above background literature process.
+- Hierarchical model estimating recurrence intensity above the background literature or operational process.
 - Bayesian posterior predictive tail area or Bayes factor with registered priors.
 
 Null-model tiers:
@@ -519,7 +519,7 @@ Gate 8 acceptance:
 
 Objective:
 
-Test whether the cluster is robust or an artifact.
+Test whether the recurrence is robust or an artifact.
 
 Required sensitivity tests:
 
@@ -697,7 +697,7 @@ Rows are not independent merely because they appear in different papers. Depende
 - Same review article copied across sources.
 - Same plot digitized by multiple secondary authors.
 
-Primary analysis must either collapse dependent rows, model covariance, or use conservative cluster weights.
+Primary analysis must either collapse dependent rows, model covariance, or use conservative recurrence weights.
 
 ### 10.4 Missing-Evidence Rules
 
@@ -728,7 +728,7 @@ Unknown uncertainty is not zero. It requires conservative handling or exclusion 
 
 Use:
 
-- "cluster coherence"
+- "coordinate recurrence"
 - "cross-catalog recurrence"
 - "pre-specified coordinate test"
 - "global p-value under the registered null"
@@ -904,7 +904,7 @@ All data contracts are versioned. Field names use snake_case. Raw source fields 
 | observed_statistic | number | yes | Observed statistic |
 | local_p_value | number | no | Local p-value |
 | global_p_value | number | no | Global corrected p-value |
-| effect_estimate | number | no | Estimated cluster effect |
+| effect_estimate | number | no | Estimated recurrence effect |
 | effect_ci_low | number | no | Lower interval |
 | effect_ci_high | number | no | Upper interval |
 | evidence_tier | enum | yes | 0, 1, 2, 3, 4 |
@@ -1051,7 +1051,7 @@ Recommended pilot shape:
 - Source classes: direct detection, collider missing-energy or resonance searches, indirect astrophysical residuals, precision constraints, and null exclusions.
 - Candidate coordinates: no more than 3 to 5, locked before scoring.
 - Null model: start with Tier A and Tier B, then red-team whether Tier C is required.
-- Primary result: dependence-adjusted count or cluster intensity at each locked coordinate.
+- Primary result: dependence-adjusted count or recurrence intensity at each locked coordinate.
 - Required sensitivity: leave-modality-out, leave-era-out, nulls-only stress test, and negative control coordinates.
 - Public claim: "pilot method demonstration and prioritization result," not discovery.
 

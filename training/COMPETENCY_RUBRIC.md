@@ -45,7 +45,7 @@ Must score 2 or higher on:
 - preflight scope
 - preflight sources
 - preflight rows
-- gotcha checklist
+- failure-mode checklist
 - sidecar run
 
 ### Statistical lead
@@ -96,4 +96,3 @@ Recommended note format:
 ```text
 Completed CRAMPS practitioner practical. Average score: __. Required 3-level skills passed: yes/no. Reviewer: __.
 ```
-

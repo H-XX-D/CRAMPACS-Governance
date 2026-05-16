@@ -18,7 +18,7 @@ List the source families, instruments, vendors, sites, pipelines, datasets, or r
 
 ## Domain Bias Hazards
 
-Primary gotcha: sensor coverage gaps, duplicate intel feeds, alert suppression, honeypot selection bias
+Primary failure modes: sensor coverage gaps, duplicate intel feeds, alert suppression, honeypot selection bias
 
 Add domain-specific publication, reporting, measurement, selection, and survivorship biases.
 
@@ -36,4 +36,4 @@ NIST CSF 2.0, MITRE ATT&CK, CISA KEV, CVSS v4, ISO 27001, STIX/TAXII
 
 ## Claim Limits
 
-This `CRAMPS-CYB` study can produce a full CRAMPS evidence package only after protocol lock, full source flow, null inclusion, independence review, bias review, null-model analysis, sensitivity tests, checksum reproduction, and signoff.
+Release condition: this `CRAMPS-CYB` study remains a working package until protocol lock, full source flow, null inclusion, independence review, bias review, null-model analysis, sensitivity tests, checksum reproduction, trust-state review, domain signoff, and claim-language approval are complete.

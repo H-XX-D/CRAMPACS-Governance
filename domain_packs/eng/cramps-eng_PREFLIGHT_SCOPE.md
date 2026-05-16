@@ -7,7 +7,7 @@
 
 ## One-Sentence Question
 
-Does weak evidence recur at a pre-specified coordinate in Engineering reliability strongly enough to justify a full CRAMPS-ENG study?
+Does a bounded source set in the engineering reliability domain show enough coordinate-specific recurrence, including null and non-event checks, to justify opening a full CRAMPS-ENG package?
 
 ## Candidate Coordinate Sketch
 

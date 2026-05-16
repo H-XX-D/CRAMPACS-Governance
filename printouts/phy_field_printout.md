@@ -10,7 +10,7 @@ Output:
 
 - coordinate sketch
 - source shortlist
-- gotcha scan
+- failure-mode scan
 - sidecar metrics
 - escalation decision
 
@@ -35,7 +35,7 @@ mass, energy, frequency, redshift, coupling, cross section, decay channel, event
 
 null searches, exclusion contours, control regions, sidebands, non-detections, failed replications
 
-## Biggest Gotcha
+## Primary Failure Modes
 
 look-elsewhere effect, theory-fashion clustering, shared detector pipelines, plot digitization error
 

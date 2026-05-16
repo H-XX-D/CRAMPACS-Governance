@@ -19,7 +19,7 @@ Day 1:
 2. State the coordinate in one sentence.
 3. Collect a bounded source set, including nulls.
 4. Fill preflight rows.
-5. Run gotcha checklist.
+5. Run failure-mode checklist.
 
 Day 2:
 

@@ -10,13 +10,13 @@
 
 This policy defines the standards, practices, quality controls, reporting obligations, and governance requirements for CRAMPS studies.
 
-CRAMPS exists to test whether weak anomalies, residuals, nulls, exclusions, and near-misses show statistically unusual recurrence at pre-specified coordinates. Its credibility depends on stricter-than-normal discipline around pre-specification, source completeness, independence, null models, and conservative reporting.
+CRAMPS exists to inspect whether weak observations, residuals, nulls, exclusions, failures, and near-misses show statistically unusual recurrence at pre-specified coordinates. Its credibility depends on stricter-than-normal discipline around pre-specification, source completeness, independence, null models, and conservative reporting.
 
 ## 2. Authority
 
 This policy applies to all CRAMPS work products:
 
-- Exploratory anomaly atlases.
+- Exploratory coordinate atlases.
 - Locked retrospective studies.
 - Prospective holdout studies.
 - Pilot method demonstrations.
@@ -76,8 +76,8 @@ CRAMPS recognizes three work modes:
 
 | Mode | Purpose | Claim limit |
 |---|---|---|
-| Exploratory | Build atlas, discover possible coordinates | Hypothesis generation only |
-| Confirmatory | Test locked coordinates against existing data | Cross-catalog coherence under registered null |
+| Exploratory | Build atlas, identify possible coordinates | Hypothesis generation only |
+| Confirmatory | Test locked coordinates against existing data | Cross-source recurrence under registered null |
 | Prospective | Test locked coordinates against future or held-out data | Stronger prioritization signal, still not discovery |
 
 Exploratory findings cannot be re-labeled as confirmatory without a new blind-locked protocol.
@@ -296,7 +296,7 @@ Permitted language:
 
 - "pre-specified coordinate test"
 - "cross-catalog recurrence"
-- "cluster coherence"
+- "coordinate recurrence"
 - "under the registered null model"
 - "global result"
 - "priority for prospective testing"
@@ -312,7 +312,7 @@ Restricted language:
 
 Every public report must state:
 
-> CRAMPS is an anomaly synthesis and prioritization method. It does not replace direct experimental confirmation or field-specific discovery thresholds.
+> CRAMPS is a coordinate-resolved weak-evidence inspection and prioritization method. It does not replace direct domain confirmation or field-specific decision thresholds.
 
 ## 10. Ownership
 
@@ -337,4 +337,3 @@ This policy should be reviewed:
 - After failed reproduction.
 - After external review.
 - At least every six months while CRAMPS is active.
-

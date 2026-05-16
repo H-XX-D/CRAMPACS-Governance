@@ -55,7 +55,7 @@ By the end of baseline training, learners can:
 | 09:00 | Method overview | CRAMPS purpose, boundary, lowercase/uppercase split |
 | 10:00 | Coordinate lock | write candidate coordinate, units, tolerance, forbidden drift |
 | 11:00 | Evidence universe | source roles, nulls, non-events, exclusions |
-| 13:00 | Preflight exercise | fill scope, sources, rows, gotchas |
+| 13:00 | Preflight exercise | fill scope, sources, rows, failure-mode checks |
 | 15:00 | Sidecar exercise | run sidecar and interpret blockers |
 | 16:00 | Decision memo | advance, hold, stop, or re-scope |
 
@@ -149,4 +149,3 @@ Recommended renewal:
 | Bias or independence auditor | 12 months |
 | Safety supervisor | 12 months |
 | Instructor | 6 months |
-

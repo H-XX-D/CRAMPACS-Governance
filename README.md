@@ -2,9 +2,11 @@
 
 CRAMPS means **Coordinate-Resolved Anomaly Meta-analysis with Pre-specified Statistics**.
 
-This repository contains a domain-general governance, methodology, and data-contract package for testing whether weak signals, anomalies, residuals, nulls, exclusions, failures, or near-misses recur at pre-specified coordinates more often than expected under registered null models.
+This repository contains a domain-general governance, methodology, and data-contract package for inspecting whether weak observations, anomalies, residuals, nulls, exclusions, failures, or near-misses recur at pre-specified coordinates more often than expected under registered null models.
 
-CRAMPS is not a discovery shortcut. It is a disciplined evidence-synthesis framework for building defensible anomaly-prioritization results.
+CRAMPS is not a discovery shortcut and not a way to make weak evidence look strong. It is a disciplined inspection layer for turning signal-in-noise suspicion into a gated, reviewable evidence package.
+
+The method is useful when a team thinks something may be hiding in noisy records but cannot yet justify a full domain claim. CRAMPS preserves the tuning context: the coordinate, source path, null evidence, dependence, bias, uncertainty, and claim limits that usually get lost when weak findings are discussed informally.
 
 ## Start Here
 
@@ -50,7 +52,7 @@ Start here if you are deploying CRAMPS inside an organization.
 - `program/AUDIT_PROCEDURE.md` and `program/AUDIT_REPORT_TEMPLATE.md`
   Audit planning, evidence sampling, finding classification, reporting, and closure mechanics.
 - `program/VALIDATION_AND_BENCHMARKING_PLAN.md`
-  Validation batteries for known negatives, planted clusters, duplicate-evidence traps, missing-null traps, unit-conversion traps, and inter-rater reliability.
+  Validation batteries for known negatives, controlled recurrence injections, duplicate-evidence traps, missing-null traps, unit-conversion traps, and inter-rater reliability.
 - `program/VALIDATION_REPORT_TEMPLATE.md`
   Standard report format for documenting validation evidence and acceptance decisions.
 - `program/REGULATED_DEPLOYMENT_ADDENDUM.md`
@@ -94,7 +96,7 @@ The `research/` directory records source-backed design lessons from PRISMA, Coch
 - `policies/cramps_lightweight_preflight_policy_2026-05-15.md`
   One to two day lightweight preflight system.
 - `policies/cramps_gotchas_and_sanity_checks_2026-05-15.md`
-  Failure-mode and sanity-check guide.
+  Failure-mode and fast-check guide. The filename is retained for compatibility with preflight templates.
 
 ## Domain Names
 
@@ -116,7 +118,7 @@ The `domain_overlays/` directory adapts the full system to each domain. The `dom
 
 ## Templates
 
-The `templates/` directory contains the protocol template and CSV data-contract headers for source catalogs, raw anomaly rows, normalized rows, candidate coordinate registries, transforms, independence groups, bias assessment, null runs, results, amendments, agents, and roles.
+The `templates/` directory contains the protocol template and CSV data-contract headers for source catalogs, raw signal rows, normalized rows, candidate coordinate registries, transforms, independence groups, bias assessment, null runs, results, amendments, agents, and roles.
 
 It also contains preflight templates that compose into the full system:
 
@@ -200,13 +202,19 @@ CRAMPS cannot by itself support statements like:
 
 Domain-standard confirmation remains required.
 
+## Method Posture
+
+CRAMPS should be read as an inspection and assurance layer. It asks whether the same coordinate keeps attracting weak evidence after nulls, non-events, duplicate evidence, reporting bias, unit conversions, and look-elsewhere effects are made visible.
+
+It does not answer the final domain question. It answers whether a suspected recurrence has earned a better, more expensive test.
+
 ## Recommended First Use
 
 Start with a lowercase preflight:
 
 1. Pick a domain suffix, for example `cramps-fin`.
 2. Fill the preflight templates.
-3. Run the gotcha checklist.
+3. Run the failure-mode checklist.
 4. Run the sidecar metrics runner.
 5. Decide whether to compose into the uppercase full system.
 

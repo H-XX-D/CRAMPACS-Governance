@@ -7,7 +7,7 @@
 
 ## One-Sentence Question
 
-Does weak evidence recur at a pre-specified coordinate in Physics and physical anomaly catalogs strongly enough to justify a full CRAMPS-PHY study?
+Does a bounded source set in the physics and physical anomaly catalogs domain show enough coordinate-specific recurrence, including null and non-event checks, to justify opening a full CRAMPS-PHY package?
 
 ## Candidate Coordinate Sketch
 

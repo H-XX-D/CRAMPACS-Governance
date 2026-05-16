@@ -7,7 +7,7 @@
 
 ## One-Sentence Question
 
-Does weak evidence recur at a pre-specified coordinate in Cybersecurity strongly enough to justify a full CRAMPS-CYB study?
+Does a bounded source set in the cybersecurity domain show enough coordinate-specific recurrence, including null and non-event checks, to justify opening a full CRAMPS-CYB package?
 
 ## Candidate Coordinate Sketch
 

@@ -20,7 +20,7 @@ Choose one:
 
 ## Strongest Null or Non-Event
 
-## Biggest Gotcha
+## Biggest Failure Mode
 
 fleet exposure imbalance, maintenance censoring, supplier-lot dependence, sensor drift
 

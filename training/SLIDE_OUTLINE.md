@@ -7,7 +7,7 @@
 ## 1. Executive Briefing Deck
 
 1. CRAMPS in one sentence
-2. Why weak-signal recurrence needs controls
+2. Why weak-evidence recurrence needs controls
 3. The assurance boundary: `cramps-*` vs `CRAMPS-*`
 4. What the system produces
 5. What it does not prove
@@ -50,4 +50,3 @@
 8. Sidecar blocker interpretation
 9. Claim rewrite exercise
 10. Team presentation
-

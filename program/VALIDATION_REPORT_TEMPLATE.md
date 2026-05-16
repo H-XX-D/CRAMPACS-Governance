@@ -14,7 +14,7 @@ State which CRAMPS workflow, tool, template, or domain overlay is validated.
 | battery | dataset_or_fixture | seed | expected_result | observed_result | pass_fail | notes |
 |---|---|---|---|---|---|---|
 | A Known negative |  |  | no high-confidence recurrence |  |  |  |
-| B Planted cluster |  |  | planted cluster detected |  |  |  |
+| B Controlled recurrence injection |  |  | controlled recurrence recovered |  |  |  |
 | C Duplicate trap |  |  | dependence demotes/collapses |  |  |  |
 | D Missing-null trap |  |  | missing evidence flagged |  |  |  |
 | E Unit-conversion trap |  |  | conversion drift detected |  |  |  |
@@ -25,7 +25,7 @@ State which CRAMPS workflow, tool, template, or domain overlay is validated.
 Minimum:
 
 - no false release on known negative
-- planted cluster detected under registered statistic
+- controlled recurrence recovered under registered statistic
 - duplicate-evidence trap demoted or held
 - missing-null trap demoted or held
 - unit-conversion trap detected
@@ -43,4 +43,3 @@ Choose one:
 - validated_for_standard_use
 - validated_with_limitations
 - not_validated
-

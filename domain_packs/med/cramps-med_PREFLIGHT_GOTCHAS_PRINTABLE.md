@@ -1,8 +1,8 @@
-# cramps-med Gotchas Printable
+# cramps-med Failure Modes and Fast Checks Printable
 
 **Domain:** Medicine and clinical evidence
 
-## Top Domain Gotcha
+## Primary Domain Failure Modes
 
 confounding by indication, differential coding, missing nulls, surveillance bias
 

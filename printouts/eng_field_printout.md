@@ -10,7 +10,7 @@ Output:
 
 - coordinate sketch
 - source shortlist
-- gotcha scan
+- failure-mode scan
 - sidecar metrics
 - escalation decision
 
@@ -35,7 +35,7 @@ load, vibration frequency, temperature, firmware version, supplier lot, cycle co
 
 units exposed without failure, passed qualification tests, lots with no anomaly, sensor streams without recurrence
 
-## Biggest Gotcha
+## Primary Failure Modes
 
 fleet exposure imbalance, maintenance censoring, supplier-lot dependence, sensor drift
 

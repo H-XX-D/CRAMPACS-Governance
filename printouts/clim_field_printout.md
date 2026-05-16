@@ -10,7 +10,7 @@ Output:
 
 - coordinate sketch
 - source shortlist
-- gotcha scan
+- failure-mode scan
 - sidecar metrics
 - escalation decision
 
@@ -35,7 +35,7 @@ latitude, longitude, depth, pressure level, season, climate mode, threshold, bas
 
 comparable regions without anomaly, model runs without recurrence, negative attribution studies
 
-## Biggest Gotcha
+## Primary Failure Modes
 
 spatial autocorrelation, temporal autocorrelation, non-stationary baseline, model-family dependence
 

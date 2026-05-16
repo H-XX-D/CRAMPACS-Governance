@@ -28,7 +28,7 @@ mass, energy, frequency, redshift, coupling, cross section, decay channel, event
 
 null searches, exclusion contours, control regions, sidebands, non-detections, failed replications
 
-## Main Gotcha
+## Primary Failure Modes
 
 look-elsewhere effect, theory-fashion clustering, shared detector pipelines, plot digitization error
 

@@ -9,7 +9,7 @@ const domains = JSON.parse(await fs.readFile(path.join(root, "tools", "cramps_do
 const layers = [
   ["0", "Concept", "Vocabulary, claim boundary, uppercase/lowercase distinction", "README, naming policy"],
   ["1", "Lightweight preflight", "1-2 day triage and seed artifacts", "preflight policy, preflight templates, domain packs"],
-  ["2", "Gotchas", "Fast failure-mode checks and stop signs", "gotcha guide, field printouts"],
+  ["2", "Failure Modes", "Fast checks, stop signs, and quarantine triggers", "failure-mode guide, field printouts"],
   ["3", "Program standards", "Governance, quality gates, document control, release authority, CAPA", "program operating manual, control catalog, document control, release RACI, gate map, CAPA procedure"],
   ["4", "Methodology", "Coordinate ontology, nulls, dependence, bias, claim tiers", "methodology policy, protocol template"],
   ["5", "Domain overlay", "Field-specific adaptation", "domain overlays, domain packs, field printouts"],
@@ -26,7 +26,7 @@ const gates = [
   ["G0 Charter", "decision statement, assurance level, roles, intended use, prohibited use", "Before protocol lock"],
   ["G1 Coordinate Lock", "coordinate ontology, candidate registry, tolerance basis, transform rules, negative controls", "Before source scoring"],
   ["G2 Source Universe", "search strategy, source catalog, source flow, exclusions, null search", "Before extraction closeout"],
-  ["G3 Row Integrity", "raw rows, source trace, extraction confidence, review status, quarantine log", "Before normalization closeout"],
+  ["G3 Row Integrity", "raw signal rows, source trace, extraction confidence, review status, quarantine log", "Before normalization closeout"],
   ["G4 Dependence and Bias", "evidence-family map, independence grades, bias table, missing-evidence memo, weights", "Before analysis"],
   ["G5 Statistical Method", "primary statistic, null model, multiplicity correction, negative controls, sensitivity plan", "Before reporting"],
   ["G6 Reproducibility", "checksums, environment, run script, output hashes, clean-run report", "Before release review"],
@@ -65,9 +65,9 @@ const assuranceClaims = [
   ["AC-01", "Coordinate was pre-specified", "protocol hash, candidate registry", "coordinate moved after rows were known"],
   ["AC-02", "Source universe was not cherry-picked", "search log, source flow", "null sources omitted"],
   ["AC-03", "Rows are traceable and correctly extracted", "row table, source references", "AI or analyst inferred values incorrectly"],
-  ["AC-04", "Units and transforms are controlled", "raw/normalized split, transform registry", "hidden conversion created cluster"],
+  ["AC-04", "Units and transforms are controlled", "raw/normalized split, transform registry", "hidden conversion created apparent recurrence"],
   ["AC-05", "Dependence is modeled or controlled", "evidence-family map, weights", "duplicate evidence counted independently"],
-  ["AC-06", "Missing evidence and bias are assessed", "bias table, missing-evidence memo", "reporting bias explains cluster"],
+  ["AC-06", "Missing evidence and bias are assessed", "bias table, missing-evidence memo", "reporting bias explains recurrence"],
   ["AC-07", "Null model is fit for purpose", "null spec, negative controls", "null is too weak"],
   ["AC-08", "Multiple testing is addressed", "global correction", "local result is look-elsewhere artifact"],
   ["AC-09", "Result is robust enough for tier", "sensitivity tests", "one source drives result"],
@@ -77,7 +77,7 @@ const assuranceClaims = [
 
 const validationBatteries = [
   ["A", "Known negative", "Recurrence should not exist", "No false high-confidence recurrence"],
-  ["B", "Synthetic planted cluster", "Known recurrence is injected", "Detects planted recurrence under registered statistic"],
+  ["B", "Controlled recurrence injection", "Known recurrence is injected", "Recovers controlled recurrence under registered statistic"],
   ["C", "Duplicate-evidence trap", "Many rows derive from one source family", "Down-weights or collapses duplicates"],
   ["D", "Missing-null trap", "Nulls are hidden until audit", "Flags missing evidence and demotes/holds"],
   ["E", "Unit-conversion trap", "Mixed units/reference systems", "Raw/normalized audit catches drift"],
@@ -88,7 +88,7 @@ const packageScaffold = [
   ["00_charter", "decision, roles, intended use, prohibited use, constraints", "study_charter.md; role_assignment.csv"],
   ["01_protocol_lock", "protocol, candidate registry, amendment control", "protocol.md; candidate_coordinate_registry.csv; amendment_log.csv"],
   ["02_sources", "search strategy, source catalog, source flow", "search_strategy.md; source_catalog.csv; source_flow.md"],
-  ["03_extraction", "raw rows and extraction review", "anomaly_rows_raw.csv; extraction_notes.md"],
+  ["03_extraction", "raw signal rows and extraction review", "anomaly_rows_raw.csv; extraction_notes.md"],
   ["04_coordinate_normalization", "transforms, normalized rows, unit audit", "coordinate_transform_registry.csv; normalized_rows.csv; unit_conversion_audit.md"],
   ["05_dependence_bias", "independence, bias, missing evidence", "independence_groups.csv; bias_assessment.csv; missing_evidence_assessment.md"],
   ["06_statistics", "analysis plan, null model, result, controls, sensitivities", "statistical_analysis_plan.md; null_model_runs.csv; analysis_result.csv; negative_controls.md; sensitivity_results.md"],
@@ -255,7 +255,7 @@ function governanceWorkbook() {
   const wb = Workbook.create();
   addSheet(wb, "Dashboard", [
     ["CRAMPS Governance Master", ""],
-    ["Purpose", "Coordinate-resolved weak-signal recurrence governance"],
+    ["Purpose", "Coordinate-resolved weak-evidence inspection and recurrence governance"],
     ["Uppercase", "CRAMPS-* = full assurance system"],
     ["Lowercase", "cramps-* = 1-2 day preflight"],
     ["Domain count", domains.length],
@@ -263,7 +263,7 @@ function governanceWorkbook() {
     ["Core rule", "Lowercase can seed uppercase; only uppercase after full protocol lock carries assurance."],
   ]);
   addSheet(wb, "Domain Matrix", [
-    ["Preflight", "Full System", "Domain", "Coordinate Examples", "Null Examples", "Primary Gotchas", "Standards"],
+    ["Preflight", "Full System", "Domain", "Coordinate Examples", "Null Examples", "Primary Failure Modes", "Standards"],
     ...domains.map((d) => [d.light, d.full, d.label, d.coordinates.join("; "), d.nulls.join("; "), d.gotchas.join("; "), d.standards.join("; ")]),
   ]);
   addSheet(wb, "Doc Layers", [
@@ -326,8 +326,8 @@ function governanceWorkbook() {
     ["Deviation ID", "Study ID", "Severity", "Affected controls", "Description", "Containment", "Root cause", "Corrective action", "Preventive action", "Owner", "Due date", "Verification", "Effectiveness check date", "Effectiveness result", "Approver", "Status"],
     ["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
   ]);
-  addSheet(wb, "Gotchas", [
-    ["Gotcha", "Symptom", "Fast sanity check"],
+  addSheet(wb, "Failure Modes", [
+    ["Failure mode", "Symptom", "Fast check"],
     ...gotchas,
   ]);
   addSheet(wb, "Preflight Checklist", [
@@ -357,7 +357,7 @@ function domainWorkbook(domain) {
     ["Rule", "Lowercase can seed uppercase. Full assurance starts after full protocol lock."],
     ["Main coordinates", domain.coordinates.join("; ")],
     ["Nulls to find", domain.nulls.join("; ")],
-    ["Gotchas", domain.gotchas.join("; ")],
+    ["Primary failure modes", domain.gotchas.join("; ")],
     ["Standards", domain.standards.join("; ")],
   ]);
   addSheet(wb, "Preflight Scope", [
@@ -381,8 +381,8 @@ function domainWorkbook(domain) {
     ["", "", "", "", "", "", "", "", "", "", "", "", ""],
     ...Array.from({ length: 19 }, () => ["", "", "", "", "", "", "", "", "", "", "", "", ""]),
   ]);
-  addSheet(wb, "Gotchas", [
-    ["Gotcha", "Status", "Notes"],
+  addSheet(wb, "Failure Modes", [
+    ["Failure mode", "Status", "Notes"],
     ...domain.gotchas.map((g) => [g, "", ""]),
     ...gotchas.slice(0, 6).map((g) => [g[0], "", g[2]]),
   ]);
@@ -484,7 +484,7 @@ ${mdTable(["Checkpoint", "Package point", "Main honesty risk", "Minimum review"]
 # CRAMPS Domain Matrix Printout
 
 ${mdTable(
-  ["Preflight", "Full System", "Domain", "Coordinates", "Nulls", "Primary Gotchas"],
+  ["Preflight", "Full System", "Domain", "Coordinates", "Nulls", "Primary Failure Modes"],
   domains.map((d) => [d.light, d.full, d.label, d.coordinates.join("; "), d.nulls.join("; "), d.gotchas.join("; ")])
 )}
 `
@@ -493,9 +493,9 @@ ${mdTable(
   await writeText(
     path.join(printoutDir, "governance_gotchas_printout.md"),
     `
-# CRAMPS Governance Gotchas Printout
+# CRAMPS Governance Failure Modes and Fast Checks Printout
 
-${mdTable(["Gotcha", "Symptom", "Fast sanity check"], gotchas)}
+${mdTable(["Failure mode", "Symptom", "Fast check"], gotchas)}
 `
   );
 
@@ -603,7 +603,7 @@ ${d.coordinates.map((x) => `- ${x}`).join("\n")}
 
 ${d.nulls.map((x) => `- ${x}`).join("\n")}
 
-## Gotchas
+## Failure Modes
 
 ${d.gotchas.map((x) => `- ${x}`).join("\n")}
 

@@ -12,7 +12,7 @@ Rules:
 
 - Do not remove columns during a study.
 - Add new columns only through `amendment_log.csv`.
-- Preserve raw source values in `anomaly_rows_raw.csv`.
+- Preserve raw source values in `anomaly_rows_raw.csv`. The filename is a stable data-contract name; the table may contain anomaly-like rows, residuals, failures, nulls, non-events, exclusions, or near-misses.
 - Write normalized values only in `normalized_rows.csv`.
 - Leave unknown values blank rather than inventing placeholders.
 - Keep all IDs stable after the protocol lock.

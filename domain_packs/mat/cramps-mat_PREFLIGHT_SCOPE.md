@@ -7,7 +7,7 @@
 
 ## One-Sentence Question
 
-Does weak evidence recur at a pre-specified coordinate in Materials science strongly enough to justify a full CRAMPS-MAT study?
+Does a bounded source set in the materials science domain show enough coordinate-specific recurrence, including null and non-event checks, to justify opening a full CRAMPS-MAT package?
 
 ## Candidate Coordinate Sketch
 

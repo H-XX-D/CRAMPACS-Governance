@@ -23,7 +23,7 @@
 - failed replications
 - cohorts with exposure but no event
 
-## Gotchas
+## Failure Modes
 
 - confounding by indication
 - differential coding

@@ -24,7 +24,7 @@
 - lots with no anomaly
 - sensor streams without recurrence
 
-## Gotchas
+## Failure Modes
 
 - fleet exposure imbalance
 - maintenance censoring

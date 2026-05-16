@@ -18,7 +18,7 @@ List the source families, instruments, vendors, sites, pipelines, datasets, or r
 
 ## Domain Bias Hazards
 
-Primary gotcha: look-ahead bias, backtest overfitting, vendor revisions, feedback loops from prior controls
+Primary failure modes: look-ahead bias, backtest overfitting, vendor revisions, feedback loops from prior controls
 
 Add domain-specific publication, reporting, measurement, selection, and survivorship biases.
 
@@ -36,4 +36,4 @@ SR 11-7/OCC 2011-12, BCBS 239, FFIEC, SEC Regulation SCI, GLBA/FCRA/ECOA/BSA
 
 ## Claim Limits
 
-This `CRAMPS-FIN` study can produce a full CRAMPS evidence package only after protocol lock, full source flow, null inclusion, independence review, bias review, null-model analysis, sensitivity tests, checksum reproduction, and signoff.
+Release condition: this `CRAMPS-FIN` study remains a working package until protocol lock, full source flow, null inclusion, independence review, bias review, null-model analysis, sensitivity tests, checksum reproduction, trust-state review, domain signoff, and claim-language approval are complete.

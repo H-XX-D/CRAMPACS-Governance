@@ -1,8 +1,8 @@
-# cramps-eng Gotchas Printable
+# cramps-eng Failure Modes and Fast Checks Printable
 
 **Domain:** Engineering reliability
 
-## Top Domain Gotcha
+## Primary Domain Failure Modes
 
 fleet exposure imbalance, maintenance censoring, supplier-lot dependence, sensor drift
 

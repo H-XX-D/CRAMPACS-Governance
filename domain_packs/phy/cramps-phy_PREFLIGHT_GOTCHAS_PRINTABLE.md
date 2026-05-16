@@ -1,8 +1,8 @@
-# cramps-phy Gotchas Printable
+# cramps-phy Failure Modes and Fast Checks Printable
 
 **Domain:** Physics and physical anomaly catalogs
 
-## Top Domain Gotcha
+## Primary Domain Failure Modes
 
 look-elsewhere effect, theory-fashion clustering, shared detector pipelines, plot digitization error
 

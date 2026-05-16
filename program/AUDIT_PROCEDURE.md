@@ -42,7 +42,7 @@ Minimum:
 - candidate registry
 - source catalog
 - exclusion log
-- raw rows
+- raw signal rows
 - normalized rows
 - independence groups
 - bias assessment
@@ -76,4 +76,3 @@ Auditors must record:
 ## 7. Audit Report
 
 Use `AUDIT_REPORT_TEMPLATE.md`.
-

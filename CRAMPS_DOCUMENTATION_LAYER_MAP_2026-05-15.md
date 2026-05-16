@@ -78,7 +78,7 @@ Documents:
 - `templates/preflight_scope.md`
 - `templates/preflight_sources.csv`
 - `templates/preflight_rows.csv`
-- `templates/preflight_gotchas.md`
+- `templates/preflight_gotchas.md` (failure-mode worksheet; filename retained for compatibility)
 - `templates/preflight_decision.md`
 - `templates/preflight_manifest.csv`
 - Conversion artifact: `templates/preflight_import_log.csv`
@@ -88,14 +88,14 @@ Output:
 - Coordinate sketch.
 - Source shortlist.
 - Row sketch.
-- Gotcha register.
+- Failure-mode register.
 - Sidecar metrics.
 - Preflight manifest.
 - Escalation decision.
 
 `preflight_import_log.csv` is created during conversion into the full system.
 
-### Layer 2: Gotcha and Sanity Layer
+### Layer 2: Failure Modes and Fast Checks Layer
 
 Purpose:
 
@@ -105,14 +105,14 @@ Purpose:
 
 Documents:
 
-- `policies/cramps_gotchas_and_sanity_checks_2026-05-15.md`
+- `policies/cramps_gotchas_and_sanity_checks_2026-05-15.md` (failure-mode and fast-check guide; filename retained for compatibility)
 - `printouts/cramps_preflight_1_to_2_day_printout.md`
 - `printouts/preflight_to_full_composition_printout.md`
 
 Output:
 
 - Stop signs.
-- Five-minute sanity score.
+- Five-minute fast-check score.
 - Known failure-mode register.
 - Printable field checklists.
 
@@ -182,7 +182,7 @@ Documents:
 Output:
 
 - Domain adapter.
-- Domain-specific gotchas.
+- Domain-specific failure modes.
 - Standards anchors.
 - Domain claim limits.
 - Domain-specific preflight templates.
@@ -389,7 +389,7 @@ Platform modules:
 
 Output:
 
-- Repeatable organizational operating system for weak-signal recurrence.
+- Repeatable organizational operating system for weak-evidence recurrence inspection.
 
 ## 4. Composition Path
 
@@ -397,7 +397,7 @@ The intended path is:
 
 ```text
 cramps-* preflight
-  -> gotcha scan
+  -> failure-mode scan
   -> sidecar metrics
   -> leak scan and gate accounting
   -> escalation decision

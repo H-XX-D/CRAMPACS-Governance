@@ -28,7 +28,7 @@ locus, variant, gene, pathway, cell type, tissue, expression threshold, perturba
 
 failed replications, non-significant loci, negative functional assays, tested pathways not enriched
 
-## Main Gotcha
+## Primary Failure Modes
 
 population stratification, batch effects, genome-build drift, winner's curse
 

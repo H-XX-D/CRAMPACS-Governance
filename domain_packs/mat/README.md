@@ -28,7 +28,7 @@ composition ratio, dopant level, phase, lattice parameter, processing temperatur
 
 failed syntheses, tested materials without property jump, simulations with no predicted anomaly
 
-## Main Gotcha
+## Primary Failure Modes
 
 unreported failed syntheses, hidden processing parameters, batch variation, simulation convergence artifacts
 

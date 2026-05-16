@@ -7,7 +7,7 @@
 
 ## One-Sentence Question
 
-Does weak evidence recur at a pre-specified coordinate in Astronomy and astrophysics strongly enough to justify a full CRAMPS-AST study?
+Does a bounded source set in the astronomy and astrophysics domain show enough coordinate-specific recurrence, including null and non-event checks, to justify opening a full CRAMPS-AST package?
 
 ## Candidate Coordinate Sketch
 

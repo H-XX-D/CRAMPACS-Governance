@@ -1,8 +1,8 @@
-# cramps-mat Gotchas Printable
+# cramps-mat Failure Modes and Fast Checks Printable
 
 **Domain:** Materials science
 
-## Top Domain Gotcha
+## Primary Domain Failure Modes
 
 unreported failed syntheses, hidden processing parameters, batch variation, simulation convergence artifacts
 

@@ -35,9 +35,9 @@ It is not:
 | AC-01 | The coordinate was pre-specified | protocol hash, candidate registry, lock timestamp | coordinate moved after rows were known |
 | AC-02 | The source universe was not cherry-picked | search log, source flow, exclusion reasons | negative/null sources omitted |
 | AC-03 | Rows are traceable and correctly extracted | row table, source references, review status | AI or analyst inferred values incorrectly |
-| AC-04 | Units and transforms are controlled | raw/normalized split, transform registry | hidden conversion created the cluster |
+| AC-04 | Units and transforms are controlled | raw/normalized split, transform registry | hidden conversion created apparent recurrence |
 | AC-05 | Dependence is modeled or controlled | evidence-family map, independence grades, weights | duplicate evidence counted as independent |
-| AC-06 | Missing evidence and bias are assessed | bias assessment, missing-evidence memo | publication/reporting bias explains cluster |
+| AC-06 | Missing evidence and bias are assessed | bias assessment, missing-evidence memo | publication/reporting bias explains recurrence |
 | AC-07 | Null model is fit for purpose | null model spec, validation checks, negative controls | null is too weak or unrealistic |
 | AC-08 | Multiple testing is addressed | global correction, multiplicity groups | local result is a look-elsewhere artifact |
 | AC-09 | Result is robust enough for assigned tier | sensitivity tests, leave-family-out checks | one source or era drives result |
@@ -69,4 +69,3 @@ Major unresolved claims require either:
 - remediation, or
 - demotion of the evidence tier, or
 - explicit signed acceptance by the authorized domain supervisor.
-

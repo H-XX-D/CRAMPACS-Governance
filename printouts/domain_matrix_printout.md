@@ -1,6 +1,6 @@
 # CRAMPS Domain Matrix Printout
 
-| Preflight | Full System | Domain | Coordinates | Nulls | Primary Gotchas |
+| Preflight | Full System | Domain | Coordinates | Nulls | Primary Failure Modes |
 | --- | --- | --- | --- | --- | --- |
 | cramps-med | CRAMPS-MED | Medicine and clinical evidence | dose; exposure window; biomarker threshold; adverse-event onset; phenotype; care setting | negative safety analyses; monitored adverse events not elevated; failed replications; cohorts with exposure but no event | confounding by indication; differential coding; missing nulls; surveillance bias |
 | cramps-gen | CRAMPS-GEN | Genomics and omics | locus; variant; gene; pathway; cell type; tissue; expression threshold; perturbation | failed replications; non-significant loci; negative functional assays; tested pathways not enriched | population stratification; batch effects; genome-build drift; winner's curse |

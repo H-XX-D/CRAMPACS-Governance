@@ -18,7 +18,7 @@ List the source families, instruments, vendors, sites, pipelines, datasets, or r
 
 ## Domain Bias Hazards
 
-Primary gotcha: spatial autocorrelation, temporal autocorrelation, non-stationary baseline, model-family dependence
+Primary failure modes: spatial autocorrelation, temporal autocorrelation, non-stationary baseline, model-family dependence
 
 Add domain-specific publication, reporting, measurement, selection, and survivorship biases.
 
@@ -36,4 +36,4 @@ WMO, CF Conventions, CMIP/ESGF, IPCC uncertainty, FAIR
 
 ## Claim Limits
 
-This `CRAMPS-CLIM` study can produce a full CRAMPS evidence package only after protocol lock, full source flow, null inclusion, independence review, bias review, null-model analysis, sensitivity tests, checksum reproduction, and signoff.
+Release condition: this `CRAMPS-CLIM` study remains a working package until protocol lock, full source flow, null inclusion, independence review, bias review, null-model analysis, sensitivity tests, checksum reproduction, trust-state review, domain signoff, and claim-language approval are complete.

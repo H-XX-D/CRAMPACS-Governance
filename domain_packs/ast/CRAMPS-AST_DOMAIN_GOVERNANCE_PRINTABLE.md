@@ -23,7 +23,7 @@
 - survey fields with no event
 - searched spectral windows with no feature
 
-## Gotchas
+## Failure Modes
 
 - sky coverage bias
 - cadence bias

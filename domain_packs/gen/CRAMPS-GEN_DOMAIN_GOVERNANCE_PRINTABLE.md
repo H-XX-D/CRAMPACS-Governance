@@ -25,7 +25,7 @@
 - negative functional assays
 - tested pathways not enriched
 
-## Gotchas
+## Failure Modes
 
 - population stratification
 - batch effects

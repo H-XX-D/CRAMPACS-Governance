@@ -8,7 +8,7 @@
 
 ## Question
 
-State the suspected weak-signal recurrence in one sentence.
+State the suspected weak-evidence recurrence in one sentence.
 
 ## Coordinate Sketch
 

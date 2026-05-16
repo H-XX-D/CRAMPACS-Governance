@@ -350,7 +350,7 @@ def render_domain_reference(domain: dict) -> str:
 
 {chr(10).join(f"- {item}" for item in domain["nulls"])}
 
-## Domain Gotchas
+## Domain Failure Modes
 
 {chr(10).join(f"- {item}" for item in domain["gotchas"])}
 
@@ -498,8 +498,8 @@ def render_next_actions(level: str) -> str:
         actions = [
             "Complete `preflight_scope.md` with the question, coordinate sketch, inclusion boundary, exclusion boundary, and intended decision.",
             "Add searched and included sources to `preflight_sources.csv`.",
-            "Extract weak-signal, anomaly-like, null, non-event, and exclusion rows into `preflight_rows.csv`.",
-            "Complete `preflight_gotchas.md` before making an escalation decision.",
+            "Extract weak observation, residual, null, non-event, exclusion, and near-miss rows into `preflight_rows.csv`.",
+            "Complete `preflight_gotchas.md` as the failure-mode worksheet before making an escalation decision.",
             "Run `check`, `gate`, and `leak-scan` before deciding whether to promote.",
         ]
     else:
@@ -853,14 +853,14 @@ def gate_specs(level: str) -> list[GateSpec]:
             ),
             GateSpec(
                 "P4",
-                "null_and_gotcha_check",
-                "Nulls, non-events, and gotchas",
+                "null_and_failure_mode_check",
+                "Nulls, non-events, and failure modes",
                 40,
                 "preflight",
                 ("P3",),
                 (
                     ("P4.T1", "at least one null or non-event row exists", metric_at_least("null_or_non_event_rows", 1)),
-                    ("P4.T2", "gotcha worksheet exists", file_exists("preflight_gotchas.md")),
+                    ("P4.T2", "failure-mode worksheet exists", file_exists("preflight_gotchas.md")),
                 ),
             ),
             GateSpec(
@@ -913,7 +913,7 @@ def gate_specs(level: str) -> list[GateSpec]:
             ("F2",),
             (
                 ("F3.T1", "source catalog has at least one row", csv_min_rows("02_sources/source_catalog.csv", 1)),
-                ("F3.T2", "raw anomaly rows entered", metric_at_least("raw_row_count", 1)),
+                ("F3.T2", "raw signal rows entered", metric_at_least("raw_row_count", 1)),
                 ("F3.T3", "nulls or non-events included", metric_at_least("null_or_non_event_rows", 1)),
             ),
         ),

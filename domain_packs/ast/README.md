@@ -28,7 +28,7 @@ sky coordinate, redshift, wavelength, period, phase, cadence, source class
 
 follow-up non-detections, survey fields with no event, searched spectral windows with no feature
 
-## Main Gotcha
+## Primary Failure Modes
 
 sky coverage bias, cadence bias, follow-up selection bias, calibration drift
 

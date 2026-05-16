@@ -20,7 +20,7 @@ Choose one:
 
 ## Strongest Null or Non-Event
 
-## Biggest Gotcha
+## Biggest Failure Mode
 
 look-ahead bias, backtest overfitting, vendor revisions, feedback loops from prior controls
 

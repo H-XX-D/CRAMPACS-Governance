@@ -1,6 +1,6 @@
-# CRAMPS Governance Gotchas Printout
+# CRAMPS Governance Failure Modes and Fast Checks Printout
 
-| Gotcha | Symptom | Fast sanity check |
+| Failure mode | Symptom | Fast check |
 | --- | --- | --- |
 | Coordinate drift | Coordinate changes names, units, or definitions across sources | Write the coordinate formula and units on one line |
 | Tolerance creep | Window widens after rows are seen | State tolerance source before scoring |

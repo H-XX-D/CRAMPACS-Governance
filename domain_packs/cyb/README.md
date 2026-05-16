@@ -28,7 +28,7 @@ CVE, ATT&CK technique, port, protocol, endpoint class, time-to-exploit, detectio
 
 exposed assets not exploited, rules with no hits, scanned vulnerabilities not exploited, false positives
 
-## Main Gotcha
+## Primary Failure Modes
 
 sensor coverage gaps, duplicate intel feeds, alert suppression, honeypot selection bias
 

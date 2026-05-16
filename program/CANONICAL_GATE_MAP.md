@@ -16,7 +16,7 @@ This is the canonical gate taxonomy for CRAMPS. Older SOP stage names and printo
 | G0 | Charter | decision statement, assurance level, roles, intended use, prohibited use | program owner and domain/safety supervisor | no decision owner or unclear intended use | gate_review_record.csv |
 | G1 | Coordinate Lock | coordinate ontology, candidate registry, tolerance basis, transform rules, negative controls | statistical lead and domain lead | mobile/post-hoc coordinate | candidate registry and gate record |
 | G2 | Source Universe | search strategy, source catalog, source flow, exclusions, null search | domain lead and bias auditor | positive-only evidence | source flow and gate record |
-| G3 | Row Integrity | raw rows, source trace, extraction confidence, review status, quarantine log | data steward | untraceable rows or raw overwrite | row review record |
+| G3 | Row Integrity | raw signal rows, source trace, extraction confidence, review status, quarantine log | data steward | untraceable rows or raw overwrite | row review record |
 | G4 | Dependence and Bias | evidence-family map, grades A-E, bias table, missing-evidence memo, weights | independence auditor and bias auditor | unresolved material dependence or missing-evidence risk | dependence/bias gate record |
 | G5 | Statistical Method | primary statistic, null model, multiplicity correction, negative controls, sensitivity plan | statistical lead | statistic shopping or weak null model | statistical gate record |
 | G6 | Reproducibility | checksums, environment, run script, output hashes, clean-run report | reproducibility lead and data steward | unreproducible primary output | reproduction report |
@@ -51,4 +51,3 @@ Each gate must have:
 - conditions
 - evidence file references
 - signature or approval record
-

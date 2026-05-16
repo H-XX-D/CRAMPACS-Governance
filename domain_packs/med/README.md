@@ -28,7 +28,7 @@ dose, exposure window, biomarker threshold, adverse-event onset, phenotype, care
 
 negative safety analyses, monitored adverse events not elevated, failed replications, cohorts with exposure but no event
 
-## Main Gotcha
+## Primary Failure Modes
 
 confounding by indication, differential coding, missing nulls, surveillance bias
 

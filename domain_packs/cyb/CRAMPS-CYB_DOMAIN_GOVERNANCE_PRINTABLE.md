@@ -24,7 +24,7 @@
 - scanned vulnerabilities not exploited
 - false positives
 
-## Gotchas
+## Failure Modes
 
 - sensor coverage gaps
 - duplicate intel feeds

@@ -4,7 +4,7 @@
 
 This policy governs AI-assisted operation of CRAMPS packages. It exists to
 keep the reusable source kit sanitized, make package progress inspectable, and
-prevent weak-signal synthesis from turning into uncontrolled pattern claims.
+prevent weak-evidence inspection from turning into uncontrolled pattern claims.
 
 The policy applies to both:
 
@@ -99,7 +99,7 @@ phase is blocked even when its local terms appear complete.
 | `P1` | preflight scope | required preflight artifacts exist |
 | `P2` | source accounting | sources exist and source-unit diversity is accounted for |
 | `P3` | row extraction | rows exist with coordinate values and units |
-| `P4` | null and gotcha check | null/non-event evidence and gotcha worksheet exist |
+| `P4` | null and failure-mode check | null/non-event evidence and failure-mode worksheet exist |
 | `P5` | decision and leak clearance | decision record exists, sidecar required-artifact blockers are clear, and leak scan has no open critical finding |
 
 A lowercase preflight can recommend escalation only after `P5` clears. It cannot
@@ -112,7 +112,7 @@ make an uppercase `CRAMPS-*` claim.
 | `G0` | package boundary | package state is active and outside controlled source material |
 | `F1` | charter | charter, roles, and binders exist |
 | `F2` | protocol lock | protocol exists and candidate coordinates are locked |
-| `F3` | source and raw rows | source catalog, raw rows, and null/non-event evidence exist |
+| `F3` | source and raw signal rows | source catalog, raw signal rows, and null/non-event evidence exist |
 | `F4` | coordinate normalization | normalized rows, transform registry, and unit audit exist |
 | `F5` | dependence and bias | independence and bias coverage are complete |
 | `F6` | statistics | statistical plan, null runs, global result fields, and negative controls exist |

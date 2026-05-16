@@ -20,7 +20,7 @@ Choose one:
 
 ## Strongest Null or Non-Event
 
-## Biggest Gotcha
+## Biggest Failure Mode
 
 spatial autocorrelation, temporal autocorrelation, non-stationary baseline, model-family dependence
 

@@ -7,7 +7,7 @@
 
 ## One-Sentence Question
 
-Does weak evidence recur at a pre-specified coordinate in Medicine and clinical evidence strongly enough to justify a full CRAMPS-MED study?
+Does a bounded source set in the medicine and clinical evidence domain show enough coordinate-specific recurrence, including null and non-event checks, to justify opening a full CRAMPS-MED package?
 
 ## Candidate Coordinate Sketch
 

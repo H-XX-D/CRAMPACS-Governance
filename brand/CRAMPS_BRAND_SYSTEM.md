@@ -7,7 +7,9 @@
 
 ## 1. Brand Position
 
-CRAMPS is a disciplined assurance method for testing whether weak, heterogeneous signals recur at pre-specified coordinates more often than expected under controlled null models.
+CRAMPS is a disciplined assurance method for inspecting whether weak, heterogeneous observations recur at pre-specified coordinates more often than expected under controlled null models.
+
+The name should carry the feel of the work: exacting and valuable because it forces hidden assumptions into view before a team escalates a weak signal.
 
 It should feel:
 
@@ -29,11 +31,11 @@ It should not feel:
 
 ## 2. Brand Promise
 
-CRAMPS turns weak-signal pattern suspicion into a controlled evidence package.
+CRAMPS turns signal-in-noise suspicion into a controlled evidence package.
 
 ## 3. Brand Boundary
 
-CRAMPS is not a proof engine. It is an evidence-control and anomaly-prioritization system.
+CRAMPS is not a truth machine. It is an evidence-control, recurrence-inspection, and escalation-governance system.
 
 Permitted claim:
 
@@ -64,6 +66,8 @@ Never use uppercase for the lightweight route.
 Preferred language:
 
 - coordinate recurrence
+- tuning context
+- recurrence inspection
 - evidence package
 - protocol lock
 - null and non-event evidence
@@ -170,9 +174,9 @@ A CRAMPS artifact is brand-complete only if:
 
 - the assurance level is explicit
 - the claim boundary is visible
+- the coordinate and tuning context are visible
 - inputs and outputs are clear
 - stop rules are easy to find
 - evidence requirements are concrete
 - the reader knows what to do next
 - the document avoids unsupported domain claims
-

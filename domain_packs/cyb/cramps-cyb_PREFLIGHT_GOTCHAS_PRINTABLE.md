@@ -1,8 +1,8 @@
-# cramps-cyb Gotchas Printable
+# cramps-cyb Failure Modes and Fast Checks Printable
 
 **Domain:** Cybersecurity
 
-## Top Domain Gotcha
+## Primary Domain Failure Modes
 
 sensor coverage gaps, duplicate intel feeds, alert suppression, honeypot selection bias
 

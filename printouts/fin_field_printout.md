@@ -10,7 +10,7 @@ Output:
 
 - coordinate sketch
 - source shortlist
-- gotcha scan
+- failure-mode scan
 - sidecar metrics
 - escalation decision
 
@@ -35,7 +35,7 @@ asset, tenor, counterparty, time window, transaction velocity, network position,
 
 cleared alerts, comparable accounts without event, backtests with no breach, control portfolios
 
-## Biggest Gotcha
+## Primary Failure Modes
 
 look-ahead bias, backtest overfitting, vendor revisions, feedback loops from prior controls
 

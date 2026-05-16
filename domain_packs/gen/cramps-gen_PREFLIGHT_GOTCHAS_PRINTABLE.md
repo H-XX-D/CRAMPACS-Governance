@@ -1,8 +1,8 @@
-# cramps-gen Gotchas Printable
+# cramps-gen Failure Modes and Fast Checks Printable
 
 **Domain:** Genomics and omics
 
-## Top Domain Gotcha
+## Primary Domain Failure Modes
 
 population stratification, batch effects, genome-build drift, winner's curse
 

@@ -18,7 +18,7 @@ List the source families, instruments, vendors, sites, pipelines, datasets, or r
 
 ## Domain Bias Hazards
 
-Primary gotcha: population stratification, batch effects, genome-build drift, winner's curse
+Primary failure modes: population stratification, batch effects, genome-build drift, winner's curse
 
 Add domain-specific publication, reporting, measurement, selection, and survivorship biases.
 
@@ -36,4 +36,4 @@ GA4GH, ClinGen, MIAME/MINSEQE, STREGA, FAIR
 
 ## Claim Limits
 
-This `CRAMPS-GEN` study can produce a full CRAMPS evidence package only after protocol lock, full source flow, null inclusion, independence review, bias review, null-model analysis, sensitivity tests, checksum reproduction, and signoff.
+Release condition: this `CRAMPS-GEN` study remains a working package until protocol lock, full source flow, null inclusion, independence review, bias review, null-model analysis, sensitivity tests, checksum reproduction, trust-state review, domain signoff, and claim-language approval are complete.

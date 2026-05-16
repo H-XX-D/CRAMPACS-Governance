@@ -18,7 +18,7 @@ List the source families, instruments, vendors, sites, pipelines, datasets, or r
 
 ## Domain Bias Hazards
 
-Primary gotcha: sky coverage bias, cadence bias, follow-up selection bias, calibration drift
+Primary failure modes: sky coverage bias, cadence bias, follow-up selection bias, calibration drift
 
 Add domain-specific publication, reporting, measurement, selection, and survivorship biases.
 
@@ -36,4 +36,4 @@ FITS, IVOA, VOEvent, NASA ADS, FAIR/DataCite
 
 ## Claim Limits
 
-This `CRAMPS-AST` study can produce a full CRAMPS evidence package only after protocol lock, full source flow, null inclusion, independence review, bias review, null-model analysis, sensitivity tests, checksum reproduction, and signoff.
+Release condition: this `CRAMPS-AST` study remains a working package until protocol lock, full source flow, null inclusion, independence review, bias review, null-model analysis, sensitivity tests, checksum reproduction, trust-state review, domain signoff, and claim-language approval are complete.

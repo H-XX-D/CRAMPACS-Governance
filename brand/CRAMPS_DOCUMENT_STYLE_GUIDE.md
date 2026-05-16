@@ -106,7 +106,7 @@ Use this box in reports, training material, and supervisor packets:
 ```text
 Claim Boundary
 
-CRAMPS supports controlled anomaly-prioritization and evidence-tier decisions.
+CRAMPS supports controlled recurrence prioritization and evidence-tier decisions.
 It does not establish domain causality or regulatory compliance by itself.
 ```
 
@@ -146,4 +146,3 @@ Before release, confirm:
 | Domain claims restrained |  |
 | Links and paths work |  |
 | Document appears in register if controlled |  |
-

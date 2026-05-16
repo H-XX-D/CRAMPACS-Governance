@@ -7,7 +7,7 @@
 
 ## One-Sentence Question
 
-Does weak evidence recur at a pre-specified coordinate in Finance, fraud, and risk strongly enough to justify a full CRAMPS-FIN study?
+Does a bounded source set in the finance, fraud, and risk domain show enough coordinate-specific recurrence, including null and non-event checks, to justify opening a full CRAMPS-FIN package?
 
 ## Candidate Coordinate Sketch
 

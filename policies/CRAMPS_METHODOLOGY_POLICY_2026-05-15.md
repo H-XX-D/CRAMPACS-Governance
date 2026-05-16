@@ -10,7 +10,9 @@
 
 This policy defines the methodological rules for any CRAMPS study, regardless of domain.
 
-CRAMPS tests whether weak signals, anomalies, non-events, exclusions, residuals, failures, or near-misses recur at pre-specified coordinates more often than expected under a registered null model.
+CRAMPS inspects whether weak observations, anomalies, non-events, exclusions, residuals, failures, or near-misses recur at pre-specified coordinates more often than expected under a registered null model.
+
+The method preserves the tuning context around a suspected signal: the coordinate, units, tolerance, source path, null evidence, dependence, bias, uncertainty, and prohibited claims.
 
 The method is domain-general. Physics is one use case. The same structure can apply to medicine, genomics, climate, materials science, engineering reliability, finance, cybersecurity, and astronomy when the evidence can be mapped into a coordinate system.
 
@@ -25,12 +27,14 @@ A CRAMPS study must define:
 5. A null and non-event inclusion rule.
 6. A dependence model.
 7. A bias and missing-evidence model.
-8. A primary cluster statistic.
+8. A primary recurrence statistic.
 9. A realistic null generator.
 10. A sensitivity and negative-control plan.
 11. A conservative reporting tier.
 
 If any of these are missing, the study is exploratory only.
+
+The method is not complete until the package states both what it is trustworthy for and what it is not trustworthy for.
 
 ## 3. Coordinate Ontology
 
@@ -149,7 +153,7 @@ Permitted primary statistics include:
 - Dependence-adjusted count within a locked tolerance window.
 - Weighted recurrence score.
 - Coordinate density excess.
-- Hierarchical cluster-intensity model.
+- Hierarchical recurrence-intensity model.
 - Signed residual aggregation with covariance.
 - Posterior predictive tail probability under a registered Bayesian model.
 - Registered risk-lift statistic for operational domains.
@@ -240,4 +244,3 @@ This policy must be reviewed:
 - After external statistical review.
 - After a new domain overlay is added.
 - Before any Tier 2 or higher claim.
-

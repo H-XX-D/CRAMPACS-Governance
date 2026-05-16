@@ -18,7 +18,7 @@ List the source families, instruments, vendors, sites, pipelines, datasets, or r
 
 ## Domain Bias Hazards
 
-Primary gotcha: look-elsewhere effect, theory-fashion clustering, shared detector pipelines, plot digitization error
+Primary failure modes: look-elsewhere effect, theory-fashion clustering, shared detector pipelines, plot digitization error
 
 Add domain-specific publication, reporting, measurement, selection, and survivorship biases.
 
@@ -36,4 +36,4 @@ PRISMA, PDG statistics, HEP look-elsewhere practice, JCGM GUM, FAIR/DataCite/PRO
 
 ## Claim Limits
 
-This `CRAMPS-PHY` study can produce a full CRAMPS evidence package only after protocol lock, full source flow, null inclusion, independence review, bias review, null-model analysis, sensitivity tests, checksum reproduction, and signoff.
+Release condition: this `CRAMPS-PHY` study remains a working package until protocol lock, full source flow, null inclusion, independence review, bias review, null-model analysis, sensitivity tests, checksum reproduction, trust-state review, domain signoff, and claim-language approval are complete.

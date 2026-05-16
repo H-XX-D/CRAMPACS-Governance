@@ -20,7 +20,7 @@ Choose one:
 
 ## Strongest Null or Non-Event
 
-## Biggest Gotcha
+## Biggest Failure Mode
 
 confounding by indication, differential coding, missing nulls, surveillance bias
 

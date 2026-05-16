@@ -6,7 +6,7 @@
 | Candidate registry locked |  |  |
 | Source flow complete |  |  |
 | Nulls and non-events included |  |  |
-| Raw rows reviewed |  |  |
+| Raw signal rows reviewed |  |  |
 | Normalized rows reproducible |  |  |
 | Independence grades complete |  |  |
 | Bias assessment complete |  |  |

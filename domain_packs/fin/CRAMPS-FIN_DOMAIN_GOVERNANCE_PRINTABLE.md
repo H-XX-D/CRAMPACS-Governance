@@ -24,7 +24,7 @@
 - backtests with no breach
 - control portfolios
 
-## Gotchas
+## Failure Modes
 
 - look-ahead bias
 - backtest overfitting

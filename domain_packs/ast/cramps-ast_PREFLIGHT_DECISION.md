@@ -20,7 +20,7 @@ Choose one:
 
 ## Strongest Null or Non-Event
 
-## Biggest Gotcha
+## Biggest Failure Mode
 
 sky coverage bias, cadence bias, follow-up selection bias, calibration drift
 

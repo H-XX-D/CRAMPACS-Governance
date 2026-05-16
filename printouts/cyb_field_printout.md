@@ -10,7 +10,7 @@ Output:
 
 - coordinate sketch
 - source shortlist
-- gotcha scan
+- failure-mode scan
 - sidecar metrics
 - escalation decision
 
@@ -35,7 +35,7 @@ CVE, ATT&CK technique, port, protocol, endpoint class, time-to-exploit, detectio
 
 exposed assets not exploited, rules with no hits, scanned vulnerabilities not exploited, false positives
 
-## Biggest Gotcha
+## Primary Failure Modes
 
 sensor coverage gaps, duplicate intel feeds, alert suppression, honeypot selection bias
 

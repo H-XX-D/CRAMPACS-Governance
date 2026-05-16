@@ -20,7 +20,7 @@ Choose one:
 
 ## Strongest Null or Non-Event
 
-## Biggest Gotcha
+## Biggest Failure Mode
 
 unreported failed syntheses, hidden processing parameters, batch variation, simulation convergence artifacts
 

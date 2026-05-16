@@ -7,7 +7,7 @@
 
 ## One-Sentence Question
 
-Does weak evidence recur at a pre-specified coordinate in Climate and Earth systems strongly enough to justify a full CRAMPS-CLIM study?
+Does a bounded source set in the climate and earth systems domain show enough coordinate-specific recurrence, including null and non-event checks, to justify opening a full CRAMPS-CLIM package?
 
 ## Candidate Coordinate Sketch
 

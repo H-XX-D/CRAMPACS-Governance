@@ -28,7 +28,7 @@ load, vibration frequency, temperature, firmware version, supplier lot, cycle co
 
 units exposed without failure, passed qualification tests, lots with no anomaly, sensor streams without recurrence
 
-## Main Gotcha
+## Primary Failure Modes
 
 fleet exposure imbalance, maintenance censoring, supplier-lot dependence, sensor drift
 

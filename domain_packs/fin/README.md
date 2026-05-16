@@ -28,7 +28,7 @@ asset, tenor, counterparty, time window, transaction velocity, network position,
 
 cleared alerts, comparable accounts without event, backtests with no breach, control portfolios
 
-## Main Gotcha
+## Primary Failure Modes
 
 look-ahead bias, backtest overfitting, vendor revisions, feedback loops from prior controls
 

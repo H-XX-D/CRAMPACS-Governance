@@ -12,7 +12,7 @@
 | --- | --- | --- | --- |
 | 0 | Concept | Vocabulary, claim boundary, uppercase/lowercase distinction | README, naming policy |
 | 1 | Lightweight preflight | 1-2 day triage and seed artifacts | preflight policy, preflight templates, domain packs |
-| 2 | Gotchas | Fast failure-mode checks and stop signs | gotcha guide, field printouts |
+| 2 | Failure Modes | Fast checks, stop signs, and quarantine triggers | failure-mode guide, field printouts |
 | 3 | Program standards | Governance, quality gates, document control, release authority, CAPA | program operating manual, control catalog, document control, release RACI, gate map, CAPA procedure |
 | 4 | Methodology | Coordinate ontology, nulls, dependence, bias, claim tiers | methodology policy, protocol template |
 | 5 | Domain overlay | Field-specific adaptation | domain overlays, domain packs, field printouts |
@@ -31,7 +31,7 @@
 | G0 Charter | decision statement, assurance level, roles, intended use, prohibited use | Before protocol lock |
 | G1 Coordinate Lock | coordinate ontology, candidate registry, tolerance basis, transform rules, negative controls | Before source scoring |
 | G2 Source Universe | search strategy, source catalog, source flow, exclusions, null search | Before extraction closeout |
-| G3 Row Integrity | raw rows, source trace, extraction confidence, review status, quarantine log | Before normalization closeout |
+| G3 Row Integrity | raw signal rows, source trace, extraction confidence, review status, quarantine log | Before normalization closeout |
 | G4 Dependence and Bias | evidence-family map, independence grades, bias table, missing-evidence memo, weights | Before analysis |
 | G5 Statistical Method | primary statistic, null model, multiplicity correction, negative controls, sensitivity plan | Before reporting |
 | G6 Reproducibility | checksums, environment, run script, output hashes, clean-run report | Before release review |
@@ -89,7 +89,7 @@
 | 00_charter | decision, roles, intended use, prohibited use, constraints | study_charter.md; role_assignment.csv |
 | 01_protocol_lock | protocol, candidate registry, amendment control | protocol.md; candidate_coordinate_registry.csv; amendment_log.csv |
 | 02_sources | search strategy, source catalog, source flow | search_strategy.md; source_catalog.csv; source_flow.md |
-| 03_extraction | raw rows and extraction review | anomaly_rows_raw.csv; extraction_notes.md |
+| 03_extraction | raw signal rows and extraction review | anomaly_rows_raw.csv; extraction_notes.md |
 | 04_coordinate_normalization | transforms, normalized rows, unit audit | coordinate_transform_registry.csv; normalized_rows.csv; unit_conversion_audit.md |
 | 05_dependence_bias | independence, bias, missing evidence | independence_groups.csv; bias_assessment.csv; missing_evidence_assessment.md |
 | 06_statistics | analysis plan, null model, result, controls, sensitivities | statistical_analysis_plan.md; null_model_runs.csv; analysis_result.csv; negative_controls.md; sensitivity_results.md |

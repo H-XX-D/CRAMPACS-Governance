@@ -13,7 +13,7 @@ Identify the study as a CRAMPS protocol and state the coordinate family and doma
 
 ## 2. Rationale
 
-State why this coordinate-resolved anomaly synthesis is being performed. Include what is known, what is uncertain, and why isolated anomaly review is insufficient.
+State why this coordinate-resolved recurrence inspection is being performed. Include what is known, what is uncertain, and why isolated review of single findings is insufficient.
 
 ## 3. Objectives
 
@@ -41,7 +41,7 @@ Define reviewer count, disagreement resolution, and exclusion reason taxonomy.
 
 ## 9. Extraction Procedure
 
-Reference `anomaly_rows_raw.csv`. Define extraction fields, plot digitization policy, and confidence scoring.
+Reference `anomaly_rows_raw.csv` as the stable raw-signal table name. Define extraction fields, plot digitization policy, and confidence scoring.
 
 ## 10. Coordinate Normalization
 
@@ -82,4 +82,3 @@ Define what counts as administrative, minor, or major amendment. State how resul
 ## 19. Conflicts, Funding, and Contributions
 
 Record conflicts of interest, funding source, sponsor role, and CRediT-style contributions.
-

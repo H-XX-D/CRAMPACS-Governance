@@ -22,7 +22,7 @@
 - tested materials without property jump
 - simulations with no predicted anomaly
 
-## Gotchas
+## Failure Modes
 
 - unreported failed syntheses
 - hidden processing parameters

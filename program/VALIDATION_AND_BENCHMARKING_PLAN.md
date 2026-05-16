@@ -6,7 +6,7 @@
 
 The CRAMPS program must be validated before strong institutional claims are made about its effectiveness.
 
-Validation asks whether the method detects real planted recurrence, rejects false recurrence, and remains stable under reviewer and source variation.
+Validation asks whether the method recovers controlled recurrence injections, rejects false recurrence, and remains stable under reviewer and source variation.
 
 ## 2. Validation Batteries
 
@@ -20,13 +20,13 @@ Pass:
 - sidecar blocks incomplete packages
 - reports remain Tier 0 or stop
 
-### Battery B: Synthetic Planted Cluster
+### Battery B: Controlled Recurrence Injection
 
 Inject known coordinate recurrence into a controlled evidence set.
 
 Pass:
 
-- method detects planted cluster under registered statistic
+- method recovers controlled recurrence under registered statistic
 - global correction behaves as expected
 - sensitivity tests do not erase true signal unless designed to
 
@@ -72,7 +72,7 @@ Pass:
 Track:
 
 - false escalation rate
-- missed planted cluster rate
+- missed controlled recurrence rate
 - extraction disagreement rate
 - dependence-grade disagreement rate
 - bias-grade disagreement rate
@@ -102,7 +102,7 @@ Before an organization uses CRAMPS for safety, regulated, public, financial, cli
 | Battery | Minimum cases | Minimum seeds or reviewers | Acceptance threshold |
 |---|---:|---:|---|
 | Known negative | 3 packages | 10 null-model seeds each | 0 false Tier 2 or higher escalations |
-| Synthetic planted cluster | 3 packages | 10 null-model seeds each | detects planted recurrence in at least 2 of 3 packages without prohibited overclaiming |
+| Controlled recurrence injection | 3 packages | 10 null-model seeds each | recovers controlled recurrence in at least 2 of 3 packages without prohibited overclaiming |
 | Duplicate-evidence trap | 2 packages | 5 source-family configurations each | duplicate family does not drive a release-ready result |
 | Missing-null trap | 2 packages | 1 hidden-null reveal each | package is held or demoted after null reveal when effect changes materially |
 | Unit-conversion trap | 2 packages | 5 mixed-unit cases each | all material unit/reference mismatches caught before release |

@@ -59,7 +59,7 @@ Run a trust checkpoint at:
 | Start | package created or preflight started | build ledger entry |
 | Before coordinate lock | candidate coordinate proposed | checkpoint review |
 | After source search | source universe drafted | checkpoint review |
-| After extraction | raw rows created | checkpoint review |
+| After extraction | raw signal rows created | checkpoint review |
 | After normalization | canonical rows created | checkpoint review |
 | After dependence and bias review | evidence-family and bias tables drafted | checkpoint review |
 | Before statistics | statistic and null model selected | checkpoint review |
@@ -83,7 +83,7 @@ For `cramps-*` preflights, use lightweight versions:
 
 - preflight decision notes
 - sidecar output
-- gotcha checklist
+- failure-mode checklist
 - explicit hold/stop/escalate rationale
 
 ## 6. Build Ledger Rule

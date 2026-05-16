@@ -63,7 +63,7 @@ Required:
 
 Required:
 
-- raw anomaly rows
+- raw signal rows
 - extraction notes
 - extraction reviewer status
 - plot digitization logs if applicable

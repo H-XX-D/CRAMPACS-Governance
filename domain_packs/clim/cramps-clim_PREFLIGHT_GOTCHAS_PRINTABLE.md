@@ -1,8 +1,8 @@
-# cramps-clim Gotchas Printable
+# cramps-clim Failure Modes and Fast Checks Printable
 
 **Domain:** Climate and Earth systems
 
-## Top Domain Gotcha
+## Primary Domain Failure Modes
 
 spatial autocorrelation, temporal autocorrelation, non-stationary baseline, model-family dependence
 

@@ -17,7 +17,7 @@ The scaffold is the starting structure for an uppercase `CRAMPS-*` full assuranc
 | `00_charter` | decision, roles, intended use, prohibited use, constraints |
 | `01_protocol_lock` | protocol, candidate registry, amendment log |
 | `02_sources` | search strategy, source catalog, source flow, exclusions |
-| `03_extraction` | raw rows, extraction notes, reviewer status |
+| `03_extraction` | raw signal rows, extraction notes, reviewer status |
 | `04_coordinate_normalization` | transform registry, normalized rows, unit audit |
 | `05_dependence_bias` | independence groups, bias assessment, missing evidence |
 | `06_statistics` | analysis plan, null runs, results, controls, sensitivities |

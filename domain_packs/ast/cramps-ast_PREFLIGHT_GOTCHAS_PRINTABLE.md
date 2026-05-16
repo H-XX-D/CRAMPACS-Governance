@@ -1,8 +1,8 @@
-# cramps-ast Gotchas Printable
+# cramps-ast Failure Modes and Fast Checks Printable
 
 **Domain:** Astronomy and astrophysics
 
-## Top Domain Gotcha
+## Primary Domain Failure Modes
 
 sky coverage bias, cadence bias, follow-up selection bias, calibration drift
 

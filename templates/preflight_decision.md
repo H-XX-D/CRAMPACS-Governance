@@ -26,7 +26,7 @@ Summarize the strongest positive or anomaly-like evidence.
 
 Summarize the strongest null, exclusion, failed replication, or non-event.
 
-## Biggest Gotcha
+## Biggest Failure Mode
 
 Name the main failure risk.
 

@@ -1,4 +1,4 @@
-# cramps Preflight Gotchas
+# cramps Preflight Failure Modes and Fast Checks
 
 **Preflight ID:**  
 **Date:**  
@@ -18,11 +18,10 @@
 | Negative control identified or run |  |  |
 | Package can be reproduced from hashes |  |  |
 
-## Biggest Gotcha
+## Biggest Failure Mode
 
 State the failure mode most likely to invalidate escalation.
 
 ## What Would Change the Assessment
 
 State the easiest evidence that would improve or weaken the case.
-

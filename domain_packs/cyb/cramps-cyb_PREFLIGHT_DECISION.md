@@ -20,7 +20,7 @@ Choose one:
 
 ## Strongest Null or Non-Event
 
-## Biggest Gotcha
+## Biggest Failure Mode
 
 sensor coverage gaps, duplicate intel feeds, alert suppression, honeypot selection bias
 

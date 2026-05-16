@@ -10,7 +10,7 @@ Output:
 
 - coordinate sketch
 - source shortlist
-- gotcha scan
+- failure-mode scan
 - sidecar metrics
 - escalation decision
 
@@ -35,7 +35,7 @@ dose, exposure window, biomarker threshold, adverse-event onset, phenotype, care
 
 negative safety analyses, monitored adverse events not elevated, failed replications, cohorts with exposure but no event
 
-## Biggest Gotcha
+## Primary Failure Modes
 
 confounding by indication, differential coding, missing nulls, surveillance bias
 

@@ -20,7 +20,7 @@ Choose one:
 
 ## Strongest Null or Non-Event
 
-## Biggest Gotcha
+## Biggest Failure Mode
 
 look-elsewhere effect, theory-fashion clustering, shared detector pipelines, plot digitization error
 

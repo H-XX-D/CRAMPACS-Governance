@@ -69,7 +69,7 @@ Use the lowercase documents for a one to two day triage pass. Use the uppercase 
 
 {domain["nulls"]}
 
-## Main Gotcha
+## Primary Failure Modes
 
 {domain["gotcha"]}
 
@@ -90,7 +90,7 @@ def preflight_scope(domain: dict[str, str]) -> str:
 
 ## One-Sentence Question
 
-Does weak evidence recur at a pre-specified coordinate in {domain["label"]} strongly enough to justify a full {domain["upper"]} study?
+Does a bounded source set in the {domain["label"].lower()} domain show enough coordinate-specific recurrence, including null and non-event checks, to justify opening a full {domain["upper"]} package?
 
 ## Candidate Coordinate Sketch
 
@@ -129,11 +129,11 @@ def preflight_rows(domain: dict[str, str]) -> str:
 
 def gotchas(domain: dict[str, str]) -> str:
     return f"""
-# {domain["lower"]} Gotchas Printable
+# {domain["lower"]} Failure Modes and Fast Checks Printable
 
 **Domain:** {domain["label"]}
 
-## Top Domain Gotcha
+## Primary Domain Failure Modes
 
 {domain["gotcha"]}
 
@@ -190,7 +190,7 @@ Choose one:
 
 ## Strongest Null or Non-Event
 
-## Biggest Gotcha
+## Biggest Failure Mode
 
 {domain["gotcha"]}
 
@@ -228,7 +228,7 @@ List the source families, instruments, vendors, sites, pipelines, datasets, or r
 
 ## Domain Bias Hazards
 
-Primary gotcha: {domain["gotcha"]}
+Primary failure modes: {domain["gotcha"]}
 
 Add domain-specific publication, reporting, measurement, selection, and survivorship biases.
 
@@ -246,7 +246,7 @@ List required hashes for domain-specific source systems, units, transforms, voca
 
 ## Claim Limits
 
-This `{domain["upper"]}` study can produce a full CRAMPS evidence package only after protocol lock, full source flow, null inclusion, independence review, bias review, null-model analysis, sensitivity tests, checksum reproduction, and signoff.
+Release condition: this `{domain["upper"]}` study remains a working package until protocol lock, full source flow, null inclusion, independence review, bias review, null-model analysis, sensitivity tests, checksum reproduction, trust-state review, domain signoff, and claim-language approval are complete.
 """
 
 
@@ -269,7 +269,7 @@ def domain_governance_printable(domain: dict[str, str]) -> str:
 
 {chr(10).join(f"- {x.strip()}" for x in domain["nulls"].split(","))}
 
-## Gotchas
+## Failure Modes
 
 {chr(10).join(f"- {x.strip()}" for x in domain["gotcha"].split(","))}
 
@@ -304,7 +304,7 @@ def release_gate(domain: dict[str, str]) -> str:
 | Candidate registry locked |  |  |
 | Source flow complete |  |  |
 | Nulls and non-events included |  |  |
-| Raw rows reviewed |  |  |
+| Raw signal rows reviewed |  |  |
 | Normalized rows reproducible |  |  |
 | Independence grades complete |  |  |
 | Bias assessment complete |  |  |
@@ -347,7 +347,7 @@ Output:
 
 - coordinate sketch
 - source shortlist
-- gotcha scan
+- failure-mode scan
 - sidecar metrics
 - escalation decision
 
@@ -372,7 +372,7 @@ Output:
 
 {domain["nulls"]}
 
-## Biggest Gotcha
+## Primary Failure Modes
 
 {domain["gotcha"]}
 
@@ -460,7 +460,7 @@ If escalated, the decision must name the matching uppercase full system, for exa
 | Candidate registry locked |  |  |
 | Source flow complete |  |  |
 | Nulls and non-events included |  |  |
-| Raw rows reviewed |  |  |
+| Raw signal rows reviewed |  |  |
 | Normalized rows reproducible |  |  |
 | Independence grades complete |  |  |
 | Bias assessment complete |  |  |
