@@ -14,7 +14,7 @@ This worked example follows the lowercase preflight gate path.
 Run gate accounting only after check and leak scan:
 
 ```bash
-python tools/cramps_cli.py check worked_examples/preflight/cramps-phy-synthetic-coordinate-recurrence --level preflight
-python tools/cramps_cli.py leak-scan worked_examples/preflight/cramps-phy-synthetic-coordinate-recurrence
-python tools/cramps_cli.py gate worked_examples/preflight/cramps-phy-synthetic-coordinate-recurrence --level preflight
+rm -rf /tmp/cramps-phy-worked-example
+cp -R worked_examples/preflight/cramps-phy-synthetic-coordinate-recurrence /tmp/cramps-phy-worked-example
+python tools/cramps_cli.py release-check package /tmp/cramps-phy-worked-example --level preflight --force
 ```

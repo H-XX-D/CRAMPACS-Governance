@@ -22,6 +22,12 @@ from pathlib import Path
 from typing import Iterable
 
 
+ROOT = Path(__file__).resolve().parents[1]
+SOURCE_TREE_PACKAGE_ROOTS = {
+    "cramps_projects",
+}
+
+
 NULL_TYPES = {
     "null",
     "non_event",
@@ -34,6 +40,36 @@ NULL_TYPES = {
     "cleared",
     "passed",
 }
+
+
+def is_relative_to(path: Path, base: Path) -> bool:
+    try:
+        path.resolve().relative_to(base.resolve())
+        return True
+    except ValueError:
+        return False
+
+
+def package_path_inside_sanitized_source(package: Path) -> bool:
+    resolved = package.resolve()
+    if not is_relative_to(resolved, ROOT):
+        return False
+    for dirname in SOURCE_TREE_PACKAGE_ROOTS:
+        allowed_root = (ROOT / dirname).resolve()
+        if resolved != allowed_root and is_relative_to(resolved, allowed_root):
+            return False
+    return True
+
+
+def output_path_inside_sanitized_source(path: Path) -> bool:
+    resolved = path.resolve()
+    if not is_relative_to(resolved, ROOT):
+        return False
+    for dirname in SOURCE_TREE_PACKAGE_ROOTS:
+        allowed_root = (ROOT / dirname).resolve()
+        if resolved != allowed_root and is_relative_to(resolved, allowed_root):
+            return False
+    return True
 
 POSITIVE_TYPES = {
     "excess",
@@ -530,6 +566,14 @@ def main() -> int:
 
     out_json = args.out_json or (root / "cramps_sidecar_metrics.json")
     out_md = args.out_md or (root / "cramps_sidecar_metrics.md")
+
+    if package_path_inside_sanitized_source(root) and (args.out_json is None or args.out_md is None):
+        raise SystemExit(
+            "Refusing to write sidecar outputs into sanitized source material. "
+            "Use --out-json and --out-md outside the repository, or copy the package under cramps_projects/ first."
+        )
+    if output_path_inside_sanitized_source(out_json) or output_path_inside_sanitized_source(out_md):
+        raise SystemExit("Refusing to write sidecar output files inside sanitized source material.")
 
     out_json.write_text(json.dumps(metrics, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     out_md.write_text(render_markdown(metrics, manifest), encoding="utf-8")

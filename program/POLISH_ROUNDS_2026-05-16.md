@@ -335,3 +335,27 @@ Artifacts:
 Outcome:
 
 - source-kit releases can now be handed off with a manifest and archive instead of relying only on the git commit pointer.
+
+## Post-Build Round 12: Executable release acceptance
+
+Focus:
+
+- convert the release acceptance checklist from a document-only control into an executable gate
+- collect command logs, CSV results, status JSON, and a Markdown release-check report in one output directory
+- support both source-kit release checks and package-level release checks
+- keep source-kit release outputs under ignored `dist/` by default and keep package checks package-local
+- refuse mutating package checks against source-tree worked examples unless the example is copied to an isolated package path first
+
+Artifacts:
+
+- `tools/cramps_cli.py release-check source`
+- `tools/cramps_cli.py release-check package <package>`
+- source-tree package-output refusal guards in `tools/cramps_cli.py` and `tools/cramps_sidecar.py`
+- `RELEASE_CHECK_RESULTS.csv`
+- `release_check_status.json`
+- `RELEASE_CHECK_REPORT.md`
+- updated README, program README, tools README, and release acceptance checklist
+
+Outcome:
+
+- maintainers and AI operators can now run one acceptance command before handoff instead of manually reconstructing the release sequence from the checklist.

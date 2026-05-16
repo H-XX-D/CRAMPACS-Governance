@@ -16,6 +16,7 @@ The method is useful when a team thinks something may be hiding in noisy records
 | Teach the method to a team | `training/CRAMPS_TRAINING_GUIDE.md` |
 | Run the assurance program | `program/README.md` |
 | Check release readiness | `program/RELEASE_ACCEPTANCE_CHECKLIST.md` |
+| Run executable release gates | `python tools/cramps_cli.py release-check source` |
 | Create isolated AI-operable packages | `tools/cramps_cli.py` |
 | Start a full evidence package | `tools/scaffold_cramps_package.py` |
 | Run package readiness checks | `tools/cramps_sidecar.py` |
@@ -178,10 +179,15 @@ and checksums.
 Before publishing or handing off the reusable source kit itself, run:
 
 ```bash
+python tools/cramps_cli.py release-check source
 python tools/cramps_cli.py source-audit
 python tools/cramps_cli.py self-test
 python tools/cramps_cli.py source-snapshot
 ```
+
+`release-check source` writes a release-check report, command logs, CSV results,
+and a source snapshot under ignored `dist/` output. Use the lower-level commands
+when you need to inspect one control in isolation.
 
 To compose a lowercase preflight into an uppercase full package without changing
 the original preflight:

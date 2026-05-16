@@ -65,6 +65,7 @@ python tools/cramps_cli.py leak-scan <package_dir>
 python tools/cramps_cli.py gate <package_dir>
 python tools/cramps_cli.py acceptance-audit <package_dir>
 python tools/cramps_cli.py review-packet <package_dir>
+python tools/cramps_cli.py release-check package <package_dir>
 python tools/cramps_cli.py status <package_dir>
 ```
 
@@ -77,6 +78,17 @@ Use the outputs to decide the next action:
 - `ai_controls/term_prereq_ledger.csv` gives explicit prerequisite accounting.
 - `ai_controls/acceptance_audit_status.json` gives the package acceptance decision, including level and freshness checks.
 - `exports/review_packet/` gives the reviewer handoff summary, manifest, and bounded ZIP.
+- `exports/release_check/` gives the executable release-check report, command logs, and CSV results.
+
+Before pushing or handing off the reusable source kit itself, run:
+
+```bash
+python tools/cramps_cli.py release-check source
+```
+
+Do not use `--allow-dirty`, `--allow-warning`, `--skip-workbooks`, or
+`--no-snapshot` for a real source-kit release unless the deviation is explicitly
+approved and recorded.
 
 ## Agent Deployment Helpers
 

@@ -16,6 +16,7 @@ Use before pushing a CRAMPS source-kit update.
 
 | Check | Pass condition | Evidence |
 |---|---|---|
+| Executable release check | source-kit release sequence completes and writes release evidence | `python tools/cramps_cli.py release-check source` |
 | Worktree state | no unintended modified or untracked files | `git status --short` |
 | Naming boundary | no stale legacy project-name or old expansion strings | repository text scan |
 | Generated artifacts | domain packs, printouts, and workbooks regenerated when generators change | generator run log or commit diff |
@@ -119,6 +120,7 @@ Stop release or escalation if:
 Source kit:
 
 ```bash
+python tools/cramps_cli.py release-check source
 python -m py_compile tools/cramps_cli.py tools/cramps_sidecar.py tools/scaffold_cramps_package.py tools/generate_domain_packs.py
 python tools/cramps_cli.py doctor
 python tools/cramps_cli.py source-audit
@@ -131,10 +133,7 @@ git diff --check
 Worked example:
 
 ```bash
-python tools/cramps_cli.py check worked_examples/preflight/cramps-phy-synthetic-coordinate-recurrence --level preflight
-python tools/cramps_cli.py agent-audit worked_examples/preflight/cramps-phy-synthetic-coordinate-recurrence --level preflight
-python tools/cramps_cli.py leak-scan worked_examples/preflight/cramps-phy-synthetic-coordinate-recurrence
-python tools/cramps_cli.py gate worked_examples/preflight/cramps-phy-synthetic-coordinate-recurrence --level preflight
-python tools/cramps_cli.py acceptance-audit worked_examples/preflight/cramps-phy-synthetic-coordinate-recurrence --level preflight
-python tools/cramps_cli.py review-packet worked_examples/preflight/cramps-phy-synthetic-coordinate-recurrence --level preflight
+rm -rf /tmp/cramps-phy-worked-example
+cp -R worked_examples/preflight/cramps-phy-synthetic-coordinate-recurrence /tmp/cramps-phy-worked-example
+python tools/cramps_cli.py release-check package /tmp/cramps-phy-worked-example --level preflight --force
 ```

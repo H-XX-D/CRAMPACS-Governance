@@ -14,6 +14,7 @@ import csv
 import hashlib
 import json
 import re
+import shlex
 import shutil
 import subprocess
 import sys
@@ -50,6 +51,10 @@ CONTROLLED_SOURCE_DIRS = {
     "templates",
     "tools",
     "training",
+}
+
+SOURCE_TREE_PACKAGE_ROOTS = {
+    "cramps_projects",
 }
 
 PACKAGE_RUNTIME_DIRS = [
@@ -172,6 +177,16 @@ SOURCE_SNAPSHOT_MANIFEST_FIELDS = [
     "sha256",
     "modified_utc",
     "included_in_zip",
+]
+
+RELEASE_CHECK_FIELDS = [
+    "check_id",
+    "scope",
+    "status",
+    "severity",
+    "evidence",
+    "exit_code",
+    "message",
 ]
 
 SOURCE_AUDIT_SKIP_DIRS = {
@@ -529,7 +544,8 @@ outside the package and must not be edited during package operation.
 6. Run `python {ROOT / "tools" / "cramps_cli.py"} gate . --level {check_level}` before phase progress.
 7. Run `python {ROOT / "tools" / "cramps_cli.py"} acceptance-audit . --level {check_level}` before reliance changes.
 8. Run `python {ROOT / "tools" / "cramps_cli.py"} review-packet . --level {check_level}` before reviewer handoff.
-9. If a critical leak, source-boundary breach, fabricated field, or prohibited claim is found, run quarantine.
+9. Run `python {ROOT / "tools" / "cramps_cli.py"} release-check package . --level {check_level}` before promotion, closeout, or release review.
+10. If a critical leak, source-boundary breach, fabricated field, or prohibited claim is found, run quarantine.
 
 ## Claim Boundary
 
@@ -592,7 +608,8 @@ while performing package work.
 8. Run DAG accounting with `cramps_cli.py gate`.
 9. Run acceptance synthesis with `cramps_cli.py acceptance-audit`.
 10. Run reviewer packet synthesis with `cramps_cli.py review-packet` before handoff.
-11. Stop and quarantine if a critical leak, contamination event, fabricated field, or prohibited claim appears.
+11. Run executable package acceptance with `cramps_cli.py release-check package` before promotion, closeout, or release review.
+12. Stop and quarantine if a critical leak, contamination event, fabricated field, or prohibited claim appears.
 
 ## Non-Negotiables
 
@@ -917,6 +934,7 @@ python {ROOT / "tools" / "cramps_cli.py"} leak-scan .
 python {ROOT / "tools" / "cramps_cli.py"} gate . --level {level}
 python {ROOT / "tools" / "cramps_cli.py"} acceptance-audit . --level {level}
 python {ROOT / "tools" / "cramps_cli.py"} review-packet . --level {level}
+python {ROOT / "tools" / "cramps_cli.py"} release-check package . --level {level}
 python {ROOT / "tools" / "cramps_cli.py"} status .
 ```
 """
@@ -994,6 +1012,7 @@ def agent_row_in_scope(row: dict[str, str]) -> bool:
 
 
 def audit_agent_controls(package: Path, level: str) -> dict:
+    assert_package_output_allowed(package, "agent-audit")
     issues: list[dict[str, str]] = []
     now = utc_now()
     controls_dir = package / "ai_controls"
@@ -1245,10 +1264,7 @@ def add_acceptance_check(
 
 
 def acceptance_audit(package: Path, level: str) -> dict:
-    if not package.exists():
-        raise SystemExit(f"Package not found: {package}")
-    if package == ROOT or any(is_relative_to(package, ROOT / dirname) for dirname in CONTROLLED_SOURCE_DIRS):
-        raise SystemExit("Refusing to write acceptance-audit outputs inside controlled source material.")
+    assert_package_output_allowed(package, "acceptance-audit")
 
     checks: list[dict[str, str]] = []
     now = utc_now()
@@ -1467,16 +1483,30 @@ def render_acceptance_audit_report(status: dict) -> str:
     return "\n".join(lines)
 
 
+def package_path_inside_sanitized_source(package: Path) -> bool:
+    resolved = package.resolve()
+    if not is_relative_to(resolved, ROOT):
+        return False
+    for dirname in SOURCE_TREE_PACKAGE_ROOTS:
+        allowed_root = (ROOT / dirname).resolve()
+        if resolved != allowed_root and is_relative_to(resolved, allowed_root):
+            return False
+    return True
+
+
 def assert_package_output_allowed(package: Path, action: str) -> None:
     if not package.exists():
         raise SystemExit(f"Package not found: {package}")
-    if package == ROOT or any(is_relative_to(package, ROOT / dirname) for dirname in CONTROLLED_SOURCE_DIRS):
-        raise SystemExit(f"Refusing to write {action} outputs inside controlled source material.")
+    if package_path_inside_sanitized_source(package):
+        raise SystemExit(
+            f"Refusing to write {action} outputs inside sanitized source material. "
+            "Create or copy the package under cramps_projects/ or outside this repository."
+        )
 
 
 def packet_output_dir(package: Path, out: Path | None) -> Path:
     output = out.resolve() if out else package / "exports" / "review_packet"
-    if output == ROOT or any(is_relative_to(output, ROOT / dirname) for dirname in CONTROLLED_SOURCE_DIRS):
+    if output == ROOT or (is_relative_to(output, ROOT) and not is_relative_to(output, package.resolve())):
         raise SystemExit(f"Refusing to write review-packet outputs inside controlled source material: {output}")
     return output
 
@@ -1832,6 +1862,31 @@ def find_stale_source_names() -> list[str]:
     return hits
 
 
+def worked_example_mutation_guidance_hits() -> list[str]:
+    hits = []
+    commands = [
+        "check",
+        "agent-audit",
+        "leak-scan",
+        "gate",
+        "acceptance-audit",
+        "review-packet",
+        "quarantine",
+        "release-check package",
+    ]
+    needles = ["cramps_cli.py " + command + " worked_examples/" for command in commands]
+    for path in iter_source_text_files():
+        try:
+            text = path.read_text(encoding="utf-8", errors="ignore")
+        except Exception:
+            continue
+        for line_number, line in enumerate(text.splitlines(), start=1):
+            if any(needle in line for needle in needles):
+                hits.append(f"{relative_artifact(ROOT, path)}:{line_number}")
+                break
+    return hits
+
+
 def source_junk_files() -> list[str]:
     return [
         relative_artifact(ROOT, path)
@@ -1953,6 +2008,18 @@ def source_audit_status() -> dict:
         "no stale legacy project names found"
         if not stale_hits
         else f"stale names found at: {', '.join(stale_hits[:10])}",
+    )
+
+    worked_example_guidance_hits = worked_example_mutation_guidance_hits()
+    add_source_audit_check(
+        checks,
+        "worked_example_mutation_guidance",
+        "pass" if not worked_example_guidance_hits else "fail",
+        "blocker",
+        "source text scan",
+        "worked-example docs route mutating CLI checks through isolated copies"
+        if not worked_example_guidance_hits
+        else f"direct worked-example mutation commands found at: {', '.join(worked_example_guidance_hits[:10])}",
     )
 
     contamination = controlled_source_contamination()
@@ -2256,6 +2323,279 @@ def build_source_snapshot(
     return status
 
 
+def default_release_check_dir(scope: str) -> Path:
+    stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+    commit = git_value("rev-parse", "--short", "HEAD") or "unknown"
+    return ROOT / "dist" / "release_checks" / f"{stamp}_{commit}_{scope}"
+
+
+def release_check_output_dir(scope: str, out: Path | None, force: bool, package: Path | None = None) -> Path:
+    if out:
+        output = out.expanduser().resolve()
+    elif scope == "package" and package is not None:
+        output = package / "exports" / "release_check"
+    else:
+        output = default_release_check_dir(scope)
+
+    if output == ROOT:
+        raise SystemExit("Refusing to write release-check outputs into the source repository root.")
+    dist_root = (ROOT / "dist").resolve()
+    if scope == "source" and is_relative_to(output, ROOT) and not is_relative_to(output, dist_root):
+        raise SystemExit(f"Refusing to write source release-check outputs inside the source repository outside dist/: {output}")
+    if scope == "package" and is_relative_to(output, ROOT):
+        if package is None or not is_relative_to(output, package.resolve()):
+            raise SystemExit(f"Refusing to write package release-check outputs inside sanitized source material: {output}")
+    if any(output == (ROOT / dirname).resolve() or is_relative_to(output, (ROOT / dirname).resolve()) for dirname in CONTROLLED_SOURCE_DIRS):
+        raise SystemExit(f"Refusing to write release-check outputs inside controlled source material: {output}")
+    if output.exists() and any(output.iterdir()) and not force:
+        raise SystemExit(f"Release-check output directory is not empty. Re-run with --force if intentional: {output}")
+    return output
+
+
+def compact_command_message(result: subprocess.CompletedProcess[str]) -> str:
+    text = (result.stdout or result.stderr or "").strip()
+    if not text:
+        return "command completed" if result.returncode == 0 else "command failed without output"
+    text = " ".join(text.split())
+    if len(text) > 240:
+        return text[:237] + "..."
+    return text
+
+
+def run_release_command(
+    check_id: str,
+    scope: str,
+    command: list[str],
+    output_dir: Path,
+    severity: str = "blocker",
+    pass_codes: tuple[int, ...] = (0,),
+) -> dict[str, str]:
+    result = subprocess.run(command, cwd=ROOT, capture_output=True, text=True)
+    output_dir.mkdir(parents=True, exist_ok=True)
+    log_path = output_dir / f"{check_id}.log"
+    log_path.write_text(
+        "\n".join(
+            [
+                f"$ {shlex.join(command)}",
+                f"exit_code={result.returncode}",
+                "",
+                "## stdout",
+                result.stdout.rstrip(),
+                "",
+                "## stderr",
+                result.stderr.rstrip(),
+                "",
+            ]
+        ),
+        encoding="utf-8",
+    )
+    return {
+        "check_id": check_id,
+        "scope": scope,
+        "status": "pass" if result.returncode in pass_codes else "fail",
+        "severity": severity,
+        "evidence": relative_artifact(output_dir, log_path),
+        "exit_code": str(result.returncode),
+        "message": compact_command_message(result),
+    }
+
+
+def render_release_check_report(status: dict) -> str:
+    lines = [
+        "# CRAMPS Release Check Report",
+        "",
+        f"Generated: {status['generated_at']}",
+        f"Scope: `{status['scope']}`",
+        f"Decision: `{status['decision']}`",
+        f"All clear: `{status['all_clear']}`",
+        f"Blockers: `{status['blocker_count']}`",
+        f"Warnings: `{status['warning_count']}`",
+        f"Output directory: `{status['output_dir']}`",
+        "",
+    ]
+    if status["scope"] == "source":
+        lines.extend(
+            [
+                f"Source commit: `{status['source_commit']}`",
+                f"Source dirty: `{status['source_dirty']}`",
+                "",
+            ]
+        )
+    else:
+        lines.extend(
+            [
+                f"Package: `{status['package']}`",
+                f"Level: `{status['level']}`",
+                "",
+            ]
+        )
+    lines.extend(
+        [
+            "| check | status | severity | exit | evidence | message |",
+            "|---|---|---|---:|---|---|",
+        ]
+    )
+    for check in status["checks"]:
+        lines.append(
+            f"| `{check['check_id']}` | `{check['status']}` | `{check['severity']}` | {check['exit_code']} | `{check['evidence']}` | {check['message']} |"
+        )
+    lines.append("")
+    if status["blocker_count"]:
+        lines.extend(
+            [
+                "## Release Hold",
+                "",
+                "Do not push, hand off, publish, or rely on this artifact until the failed blocker checks are corrected or formally documented as an approved deviation.",
+                "",
+            ]
+        )
+    return "\n".join(lines)
+
+
+def write_release_check_outputs(output_dir: Path, status: dict) -> None:
+    output_dir.mkdir(parents=True, exist_ok=True)
+    write_csv(output_dir / "RELEASE_CHECK_RESULTS.csv", RELEASE_CHECK_FIELDS, status["checks"])
+    (output_dir / "release_check_status.json").write_text(
+        json.dumps(status, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
+    write_text(output_dir / "RELEASE_CHECK_REPORT.md", render_release_check_report(status))
+
+
+def build_source_release_check(
+    out: Path | None,
+    force: bool,
+    allow_dirty: bool,
+    allow_warning: bool,
+    skip_workbooks: bool,
+    no_snapshot: bool,
+) -> dict:
+    output_dir = release_check_output_dir("source", out, force)
+    script = str(Path(__file__).resolve())
+    checks: list[dict[str, str]] = []
+    checks.append(
+        run_release_command(
+            "python_compile",
+            "source",
+            [
+                sys.executable,
+                "-m",
+                "py_compile",
+                "tools/cramps_cli.py",
+                "tools/cramps_sidecar.py",
+                "tools/scaffold_cramps_package.py",
+                "tools/generate_domain_packs.py",
+            ],
+            output_dir,
+        )
+    )
+    checks.append(run_release_command("doctor", "source", [sys.executable, script, "doctor"], output_dir))
+    source_audit_cmd = [sys.executable, script, "source-audit"]
+    if not allow_warning:
+        source_audit_cmd.append("--fail-on-warning")
+    checks.append(run_release_command("source_audit", "source", source_audit_cmd, output_dir))
+
+    self_test_cmd = [sys.executable, script, "self-test"]
+    if not allow_dirty and not allow_warning:
+        self_test_cmd.append("--strict-source")
+    checks.append(run_release_command("self_test", "source", self_test_cmd, output_dir))
+
+    if not skip_workbooks:
+        checks.append(run_release_command("workbook_verify", "source", ["node", "tools/verify_workbooks.mjs"], output_dir))
+
+    checks.append(run_release_command("whitespace_diff_check", "source", ["git", "diff", "--check"], output_dir))
+
+    if not no_snapshot:
+        snapshot_cmd = [
+            sys.executable,
+            script,
+            "source-snapshot",
+            "--out",
+            str(output_dir / "source_snapshot"),
+            "--force",
+        ]
+        if allow_dirty:
+            snapshot_cmd.append("--allow-dirty")
+        if allow_warning:
+            snapshot_cmd.append("--allow-warning")
+        checks.append(run_release_command("source_snapshot", "source", snapshot_cmd, output_dir))
+
+    blockers = [check for check in checks if check["severity"] == "blocker" and check["status"] != "pass"]
+    warnings = [check for check in checks if check["severity"] == "warning" and check["status"] != "pass"]
+    status = {
+        "generated_at": utc_now(),
+        "scope": "source",
+        "decision": "source_release_ready" if not blockers else "hold_source_release",
+        "all_clear": not blockers and not warnings,
+        "blocker_count": len(blockers),
+        "warning_count": len(warnings),
+        "source_repo": str(ROOT),
+        "source_commit": git_value("rev-parse", "HEAD"),
+        "source_dirty": source_dirty(),
+        "output_dir": str(output_dir),
+        "checks": checks,
+    }
+    write_release_check_outputs(output_dir, status)
+    return status
+
+
+def build_package_release_check(
+    package: Path,
+    level: str,
+    out: Path | None,
+    force: bool,
+    include_package_files: bool,
+    fail_on_warning: bool,
+) -> dict:
+    package = package.resolve()
+    assert_package_output_allowed(package, "release-check")
+    level = package_level(package, level)
+    output_dir = release_check_output_dir("package", out, force, package)
+    script = str(Path(__file__).resolve())
+    checks: list[dict[str, str]] = []
+    checks.append(run_release_command("check", "package", [sys.executable, script, "check", str(package), "--level", level], output_dir))
+    agent_cmd = [sys.executable, script, "agent-audit", str(package), "--level", level]
+    if fail_on_warning:
+        agent_cmd.append("--fail-on-warning")
+    checks.append(run_release_command("agent_audit", "package", agent_cmd, output_dir))
+    checks.append(run_release_command("leak_scan", "package", [sys.executable, script, "leak-scan", str(package), "--fail-on-quarantine"], output_dir))
+    checks.append(run_release_command("gate", "package", [sys.executable, script, "gate", str(package), "--level", level], output_dir))
+    acceptance_cmd = [sys.executable, script, "acceptance-audit", str(package), "--level", level]
+    if fail_on_warning:
+        acceptance_cmd.append("--fail-on-warning")
+    checks.append(run_release_command("acceptance_audit", "package", acceptance_cmd, output_dir))
+    review_cmd = [
+        sys.executable,
+        script,
+        "review-packet",
+        str(package),
+        "--level",
+        level,
+        "--out",
+        str(output_dir / "review_packet"),
+    ]
+    if include_package_files:
+        review_cmd.append("--include-package-files")
+    checks.append(run_release_command("review_packet", "package", review_cmd, output_dir))
+
+    blockers = [check for check in checks if check["severity"] == "blocker" and check["status"] != "pass"]
+    warnings = [check for check in checks if check["severity"] == "warning" and check["status"] != "pass"]
+    status = {
+        "generated_at": utc_now(),
+        "scope": "package",
+        "decision": "package_release_ready" if not blockers else "hold_package_release",
+        "all_clear": not blockers and not warnings,
+        "blocker_count": len(blockers),
+        "warning_count": len(warnings),
+        "package": str(package),
+        "level": level,
+        "output_dir": str(output_dir),
+        "checks": checks,
+    }
+    write_release_check_outputs(output_dir, status)
+    return status
+
+
 def add_self_test_check(
     checks: list[dict[str, str]],
     check_id: str,
@@ -2425,6 +2765,18 @@ def run_self_test(strict_source: bool, keep_temp: bool) -> dict:
             if source_root_result.returncode != 0
             else "review-packet unexpectedly allowed source root",
             "review-packet source-root",
+        )
+
+        source_example = ROOT / "worked_examples" / "preflight" / "cramps-phy-synthetic-coordinate-recurrence"
+        source_example_result = run_cli_subprocess(["release-check", "package", str(source_example), "--level", "preflight"])
+        add_self_test_check(
+            checks,
+            "source_example_package_refusal",
+            "pass" if source_example_result.returncode != 0 else "fail",
+            "release-check package refused to write into source worked example"
+            if source_example_result.returncode != 0
+            else "release-check package unexpectedly wrote into source worked example",
+            "release-check package worked-example source",
         )
     finally:
         if not keep_temp:
@@ -2736,6 +3088,7 @@ they can support any uppercase `{domain["full"]}` claim.
 
 
 def run_sidecar(package: Path, level: str) -> dict:
+    assert_package_output_allowed(package, "check")
     metrics = sidecar.score_preflight(package) if level == "preflight" else sidecar.score_full(package)
     metrics["generated_at"] = utc_now()
     metrics["package_path"] = str(package)
@@ -3260,21 +3613,9 @@ def command_leak_scan(args: argparse.Namespace) -> int:
     package = args.package.resolve()
     if not package.exists():
         raise SystemExit(f"Package not found: {package}")
+    assert_package_output_allowed(package, "leak-scan")
 
     findings = []
-    if package == ROOT or any(is_relative_to(package, ROOT / dirname) for dirname in CONTROLLED_SOURCE_DIRS):
-        findings.append(
-            {
-                "severity": "critical",
-                "surface": "source-kit_boundary",
-                "artifact_path": ".",
-                "line": "",
-                "pattern_id": "package_inside_controlled_source",
-                "status": "open",
-                "quarantine_required": "yes",
-                "notes": "package path is inside sanitized source material",
-            }
-        )
 
     for path in iter_scannable_files(package):
         findings.extend(scan_text_file(package, path))
@@ -3461,6 +3802,43 @@ def command_source_snapshot(args: argparse.Namespace) -> int:
     return int(status["exit_code"])
 
 
+def command_release_check(args: argparse.Namespace) -> int:
+    if args.release_scope == "source":
+        status = build_source_release_check(
+            args.out,
+            args.force,
+            args.allow_dirty,
+            args.allow_warning,
+            args.skip_workbooks,
+            args.no_snapshot,
+        )
+    else:
+        status = build_package_release_check(
+            args.package,
+            args.level,
+            args.out,
+            args.force,
+            args.include_package_files,
+            args.fail_on_warning,
+        )
+    print(
+        json.dumps(
+            {
+                "scope": status["scope"],
+                "decision": status["decision"],
+                "all_clear": status["all_clear"],
+                "blocker_count": status["blocker_count"],
+                "warning_count": status["warning_count"],
+                "output_dir": status["output_dir"],
+            },
+            indent=2,
+        )
+    )
+    if args.verbose:
+        print(json.dumps(status, indent=2, sort_keys=True))
+    return 0 if status["blocker_count"] == 0 and status["warning_count"] == 0 else 1
+
+
 def command_self_test(args: argparse.Namespace) -> int:
     status = run_self_test(args.strict_source, args.keep_temp)
     if args.report:
@@ -3508,6 +3886,7 @@ def command_quarantine(args: argparse.Namespace) -> int:
     package = args.package.resolve()
     if not package.exists():
         raise SystemExit(f"Package not found: {package}")
+    assert_package_output_allowed(package, "quarantine")
     state = load_state(package, required=False)
     previous = state.get("status", "unknown")
     state["status"] = "quarantined"
@@ -3555,6 +3934,7 @@ evaluation.
 
 def command_clear_quarantine(args: argparse.Namespace) -> int:
     package = args.package.resolve()
+    assert_package_output_allowed(package, "clear-quarantine")
     state = load_state(package, required=True)
     state["status"] = "active"
     state.setdefault("history", []).append(
@@ -3653,7 +4033,7 @@ def command_doctor(_args: argparse.Namespace) -> int:
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="cramps",
-        description="Create, operate, check, audit, gate, leak-scan, accept, packet, quarantine, source-audit, source-snapshot, and self-test CRAMPS packages.",
+        description="Create, operate, check, audit, gate, leak-scan, accept, packet, quarantine, source-audit, source-snapshot, release-check, and self-test CRAMPS packages.",
     )
     sub = parser.add_subparsers(dest="command", required=True)
 
@@ -3737,6 +4117,28 @@ def build_parser() -> argparse.ArgumentParser:
 
     domains = sub.add_parser("domains", help="List configured CRAMPS domains.")
     domains.set_defaults(func=command_domains)
+
+    release_check = sub.add_parser("release-check", help="Run executable source-kit or package release acceptance checks.")
+    release_scopes = release_check.add_subparsers(dest="release_scope", required=True)
+    release_source = release_scopes.add_parser("source", help="Run source-kit release checks and write a release-check report.")
+    release_source.add_argument("--out", type=Path, default=None)
+    release_source.add_argument("--force", action="store_true")
+    release_source.add_argument("--allow-dirty", action="store_true", help="Allow source release check to run non-strict self-test and snapshot dirty source.")
+    release_source.add_argument("--allow-warning", action="store_true", help="Allow source-audit warnings during source release check.")
+    release_source.add_argument("--skip-workbooks", action="store_true", help="Skip XLSX workbook import verification.")
+    release_source.add_argument("--no-snapshot", action="store_true", help="Skip source snapshot creation.")
+    release_source.add_argument("--verbose", action="store_true")
+    release_source.set_defaults(func=command_release_check)
+
+    release_package = release_scopes.add_parser("package", help="Run package acceptance sequence and write a release-check report.")
+    release_package.add_argument("package", type=Path)
+    release_package.add_argument("--level", choices=["auto", "preflight", "full"], default="auto")
+    release_package.add_argument("--out", type=Path, default=None)
+    release_package.add_argument("--force", action="store_true")
+    release_package.add_argument("--include-package-files", action="store_true")
+    release_package.add_argument("--fail-on-warning", action="store_true")
+    release_package.add_argument("--verbose", action="store_true")
+    release_package.set_defaults(func=command_release_check)
 
     source_audit = sub.add_parser("source-audit", help="Audit the reusable CRAMPS source kit before handoff or push.")
     source_audit.add_argument("--fail-on-warning", action="store_true")

@@ -67,6 +67,7 @@ python tools/cramps_cli.py leak-scan <package_dir>
 python tools/cramps_cli.py gate <package_dir>
 python tools/cramps_cli.py acceptance-audit <package_dir>
 python tools/cramps_cli.py review-packet <package_dir>
+python tools/cramps_cli.py release-check package <package_dir>
 ```
 
 If the next blocked gate is outside the agent's assigned gate span, do not use

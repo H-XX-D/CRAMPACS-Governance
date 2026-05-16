@@ -11,7 +11,9 @@ Quarantine this worked example if:
 Run:
 
 ```bash
-python tools/cramps_cli.py quarantine worked_examples/preflight/cramps-phy-synthetic-coordinate-recurrence --reason "<reason>"
+rm -rf /tmp/cramps-phy-worked-example
+cp -R worked_examples/preflight/cramps-phy-synthetic-coordinate-recurrence /tmp/cramps-phy-worked-example
+python tools/cramps_cli.py quarantine /tmp/cramps-phy-worked-example --reason "<reason>"
 ```
 
 Quarantine does not delete artifacts. It marks the package as no-release and no-escalation until a reviewer clears the issue.

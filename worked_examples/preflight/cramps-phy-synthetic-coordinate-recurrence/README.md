@@ -21,10 +21,21 @@ The example asks whether a synthetic set of physics-style records shows enough c
 
 ## Expected Sidecar Result
 
-Run from the repository root:
+Run from the repository root without writing back into the source example:
 
 ```bash
-python tools/cramps_sidecar.py worked_examples/preflight/cramps-phy-synthetic-coordinate-recurrence --level preflight
+python tools/cramps_sidecar.py worked_examples/preflight/cramps-phy-synthetic-coordinate-recurrence \
+  --level preflight \
+  --out-json /tmp/cramps-phy-worked-sidecar.json \
+  --out-md /tmp/cramps-phy-worked-sidecar.md
+```
+
+For mutating CLI checks, copy the example first:
+
+```bash
+rm -rf /tmp/cramps-phy-worked-example
+cp -R worked_examples/preflight/cramps-phy-synthetic-coordinate-recurrence /tmp/cramps-phy-worked-example
+python tools/cramps_cli.py release-check package /tmp/cramps-phy-worked-example --level preflight --force
 ```
 
 Expected posture:

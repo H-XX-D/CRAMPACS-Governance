@@ -12,6 +12,7 @@ Examples:
 
 ```bash
 python3 tools/cramps_cli.py domains
+python3 tools/cramps_cli.py release-check source
 python3 tools/cramps_cli.py source-audit
 python3 tools/cramps_cli.py self-test
 python3 tools/cramps_cli.py source-snapshot
@@ -22,6 +23,7 @@ python3 tools/cramps_cli.py leak-scan ./cramps_projects/<package>
 python3 tools/cramps_cli.py gate ./cramps_projects/<package>
 python3 tools/cramps_cli.py acceptance-audit ./cramps_projects/<package>
 python3 tools/cramps_cli.py review-packet ./cramps_projects/<package>
+python3 tools/cramps_cli.py release-check package ./cramps_projects/<package>
 python3 tools/cramps_cli.py promote ./cramps_projects/<preflight_package> --study-id STUDY001-FULL
 ```
 
@@ -34,11 +36,12 @@ See `CRAMPS_CLI_AI_OPERATOR_GUIDE.md` for the AI operator loop.
 Examples:
 
 ```bash
-python3 tools/cramps_sidecar.py domain_packs/med --level preflight
-python3 tools/cramps_sidecar.py templates --level full
+python3 tools/cramps_sidecar.py domain_packs/med --level preflight --out-json /tmp/cramps-med-sidecar.json --out-md /tmp/cramps-med-sidecar.md
+python3 tools/cramps_sidecar.py templates --level full --out-json /tmp/cramps-templates-sidecar.json --out-md /tmp/cramps-templates-sidecar.md
 ```
 
 Use explicit `--level preflight` or `--level full` for governance audits. Auto-detection is intended for completed study package directories, not the repository root.
+When reading source-kit examples or templates, write sidecar outputs to `/tmp` or another external path. Copy real packages under `cramps_projects/` before using the default package-local outputs.
 
 ## Generation Tools
 

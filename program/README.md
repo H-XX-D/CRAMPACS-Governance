@@ -86,17 +86,22 @@ sanitized for reuse.
 For source-kit handoff, run:
 
 ```bash
+python tools/cramps_cli.py release-check source
 python tools/cramps_cli.py source-audit
 python tools/cramps_cli.py self-test
 python tools/cramps_cli.py source-snapshot
 ```
 
+Use `release-check source` as the normal pre-push and handoff gate. The
+individual commands remain available when a reviewer wants to inspect one layer
+without running the full source-kit acceptance sequence.
+
 Use the lower-level scaffold tool only when you need the full evidence-binder
 structure without the CLI operating controls:
 
 ```bash
-python tools/scaffold_cramps_package.py ./packages/CRAMPS_MED_STUDY001 --domain med --study-id STUDY001
-python tools/cramps_sidecar.py ./packages/CRAMPS_MED_STUDY001 --level full
+python tools/scaffold_cramps_package.py ./cramps_projects/CRAMPS_MED_STUDY001 --domain med --study-id STUDY001
+python tools/cramps_sidecar.py ./cramps_projects/CRAMPS_MED_STUDY001 --level full
 ```
 
 The first command creates the binder. The second command shows what is still missing before the package can be treated as release-ready.

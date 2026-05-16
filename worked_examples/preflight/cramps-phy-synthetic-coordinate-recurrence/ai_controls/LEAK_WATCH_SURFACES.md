@@ -14,5 +14,7 @@ Watch these surfaces:
 Run:
 
 ```bash
-python tools/cramps_cli.py leak-scan worked_examples/preflight/cramps-phy-synthetic-coordinate-recurrence
+rm -rf /tmp/cramps-phy-worked-example
+cp -R worked_examples/preflight/cramps-phy-synthetic-coordinate-recurrence /tmp/cramps-phy-worked-example
+python tools/cramps_cli.py leak-scan /tmp/cramps-phy-worked-example
 ```
