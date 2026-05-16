@@ -6,7 +6,7 @@
 It creates isolated project packages, keeps the source kit sanitized, runs
 sidecar checks, evaluates DAG gates, writes term/prerequisite accounting,
 creates and audits agent deployment helper files, scans leak surfaces, and
-records acceptance and quarantine state.
+records acceptance, reviewer packet, and quarantine state.
 
 Examples:
 
@@ -18,6 +18,7 @@ python3 tools/cramps_cli.py agent-audit ./cramps_projects/<package>
 python3 tools/cramps_cli.py leak-scan ./cramps_projects/<package>
 python3 tools/cramps_cli.py gate ./cramps_projects/<package>
 python3 tools/cramps_cli.py acceptance-audit ./cramps_projects/<package>
+python3 tools/cramps_cli.py review-packet ./cramps_projects/<package>
 python3 tools/cramps_cli.py promote ./cramps_projects/<preflight_package> --study-id STUDY001-FULL
 ```
 

@@ -259,3 +259,24 @@ Artifacts:
 Outcome:
 
 - operators can ask one final package-level question before promotion or release review: is this package control-complete enough for the reliance being requested?
+
+## Post-Build Round 8: Reviewer packet hardening
+
+Focus:
+
+- convert accepted package state into an inspectable reviewer handoff
+- prevent silent handoff after material package changes made after acceptance
+- keep packet ZIPs bounded by default so raw evidence is not bundled unless explicitly requested
+
+Artifacts:
+
+- `tools/cramps_cli.py review-packet`
+- package-local `exports/review_packet/review_packet_status.json`
+- package-local `exports/review_packet/REVIEW_PACKET_MANIFEST.csv`
+- package-local `exports/review_packet/REVIEW_PACKET_SUMMARY.md`
+- package-local `exports/review_packet/REVIEWER_HANDOFF.md`
+- updated audit packet, runbook, release checklist, operator guides, and worked example commands
+
+Outcome:
+
+- reviewers receive a package index with hashes, control status, reliance limits, and blocker checks instead of a loose folder handoff.

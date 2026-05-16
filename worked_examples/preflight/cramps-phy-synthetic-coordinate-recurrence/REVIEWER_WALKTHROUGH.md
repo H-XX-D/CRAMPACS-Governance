@@ -112,6 +112,7 @@ python tools/cramps_cli.py agent-audit worked_examples/preflight/cramps-phy-synt
 python tools/cramps_cli.py leak-scan worked_examples/preflight/cramps-phy-synthetic-coordinate-recurrence
 python tools/cramps_cli.py gate worked_examples/preflight/cramps-phy-synthetic-coordinate-recurrence --level preflight
 python tools/cramps_cli.py acceptance-audit worked_examples/preflight/cramps-phy-synthetic-coordinate-recurrence --level preflight
+python tools/cramps_cli.py review-packet worked_examples/preflight/cramps-phy-synthetic-coordinate-recurrence --level preflight
 ```
 
 Expected:
@@ -120,6 +121,7 @@ Expected:
 - recommendation: `candidate_for_CRAMPS_upgrade`
 - leak findings: `0`
 - highest cleared gate priority: `50`
+- review-packet decision: `ready_for_review_handoff`
 - all clear: `true`
 
 ## 9. Reviewer Decision

@@ -273,6 +273,8 @@ Output:
 - `ai_controls/leak_scan_status.json`
 - `ai_controls/acceptance_audit_status.json`
 - `ai_controls/acceptance_audit_report.md`
+- `exports/review_packet/review_packet_status.json`
+- `exports/review_packet/REVIEW_PACKET_MANIFEST.csv`
 - Package manifest with hashes.
 - Readiness score.
 - Blocker list.

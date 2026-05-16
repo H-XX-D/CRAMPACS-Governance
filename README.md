@@ -167,11 +167,13 @@ python tools/cramps_cli.py agent-audit ./cramps_projects/<package>
 python tools/cramps_cli.py leak-scan ./cramps_projects/<package>
 python tools/cramps_cli.py gate ./cramps_projects/<package>
 python tools/cramps_cli.py acceptance-audit ./cramps_projects/<package>
+python tools/cramps_cli.py review-packet ./cramps_projects/<package>
 ```
 
 The CLI writes package-local AI instructions, agent deployment helpers, gate DAG
 status, prerequisite accounting, agent-audit reports, leak-watch reports,
-acceptance-audit reports, quarantine logs, sidecar metrics, and checksums.
+acceptance-audit reports, reviewer packets, quarantine logs, sidecar metrics,
+and checksums.
 
 To compose a lowercase preflight into an uppercase full package without changing
 the original preflight:

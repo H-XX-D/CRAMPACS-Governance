@@ -17,6 +17,7 @@ import re
 import shutil
 import subprocess
 import sys
+import zipfile
 from dataclasses import dataclass
 from datetime import datetime, timezone
 from pathlib import Path
@@ -152,6 +153,15 @@ AGENT_REGISTRY_FIELDS = [
     "human_review_required",
     "audit_log_path",
     "status",
+]
+
+REVIEW_PACKET_MANIFEST_FIELDS = [
+    "artifact_path",
+    "bytes",
+    "sha256",
+    "modified_utc",
+    "included_in_zip",
+    "notes",
 ]
 
 AGENT_PLAN_REQUIRED_FIELDS = [
@@ -450,7 +460,9 @@ outside the package and must not be edited during package operation.
 4. Run `python {ROOT / "tools" / "cramps_cli.py"} agent-audit . --level {check_level}` after agent-plan, registry, or handoff changes.
 5. Run `python {ROOT / "tools" / "cramps_cli.py"} leak-scan .` before sharing, exporting, escalation, release, or gate evaluation.
 6. Run `python {ROOT / "tools" / "cramps_cli.py"} gate . --level {check_level}` before phase progress.
-7. If a critical leak, source-boundary breach, fabricated field, or prohibited claim is found, run quarantine.
+7. Run `python {ROOT / "tools" / "cramps_cli.py"} acceptance-audit . --level {check_level}` before reliance changes.
+8. Run `python {ROOT / "tools" / "cramps_cli.py"} review-packet . --level {check_level}` before reviewer handoff.
+9. If a critical leak, source-boundary breach, fabricated field, or prohibited claim is found, run quarantine.
 
 ## Claim Boundary
 
@@ -511,7 +523,9 @@ while performing package work.
 6. Run agent-control checks with `cramps_cli.py agent-audit`.
 7. Run leak scanning with `cramps_cli.py leak-scan`.
 8. Run DAG accounting with `cramps_cli.py gate`.
-9. Stop and quarantine if a critical leak, contamination event, fabricated field, or prohibited claim appears.
+9. Run acceptance synthesis with `cramps_cli.py acceptance-audit`.
+10. Run reviewer packet synthesis with `cramps_cli.py review-packet` before handoff.
+11. Stop and quarantine if a critical leak, contamination event, fabricated field, or prohibited claim appears.
 
 ## Non-Negotiables
 
@@ -835,6 +849,7 @@ python {ROOT / "tools" / "cramps_cli.py"} agent-audit .
 python {ROOT / "tools" / "cramps_cli.py"} leak-scan .
 python {ROOT / "tools" / "cramps_cli.py"} gate . --level {level}
 python {ROOT / "tools" / "cramps_cli.py"} acceptance-audit . --level {level}
+python {ROOT / "tools" / "cramps_cli.py"} review-packet . --level {level}
 python {ROOT / "tools" / "cramps_cli.py"} status .
 ```
 """
@@ -1385,6 +1400,323 @@ def render_acceptance_audit_report(status: dict) -> str:
     return "\n".join(lines)
 
 
+def assert_package_output_allowed(package: Path, action: str) -> None:
+    if not package.exists():
+        raise SystemExit(f"Package not found: {package}")
+    if package == ROOT or any(is_relative_to(package, ROOT / dirname) for dirname in CONTROLLED_SOURCE_DIRS):
+        raise SystemExit(f"Refusing to write {action} outputs inside controlled source material.")
+
+
+def packet_output_dir(package: Path, out: Path | None) -> Path:
+    output = out.resolve() if out else package / "exports" / "review_packet"
+    if output == ROOT or any(is_relative_to(output, ROOT / dirname) for dirname in CONTROLLED_SOURCE_DIRS):
+        raise SystemExit(f"Refusing to write review-packet outputs inside controlled source material: {output}")
+    return output
+
+
+def path_modified_utc(path: Path) -> str:
+    return datetime.fromtimestamp(path.stat().st_mtime, timezone.utc).isoformat()
+
+
+def iter_package_manifest_files(package: Path, output_dir: Path | None = None) -> list[Path]:
+    files: list[Path] = []
+    output_resolved = output_dir.resolve() if output_dir and output_dir.exists() else None
+    for path in sorted(package.rglob("*")):
+        if not path.is_file():
+            continue
+        if ".git" in path.parts:
+            continue
+        if output_resolved and (path.resolve() == output_resolved or is_relative_to(path.resolve(), output_resolved)):
+            continue
+        files.append(path)
+    return files
+
+
+def material_changes_after_acceptance(package: Path, acceptance_path: Path, output_dir: Path) -> list[str]:
+    if not acceptance_path.exists():
+        return []
+    acceptance_mtime = acceptance_path.stat().st_mtime
+    allowed_exact = {
+        STATE_FILE,
+        "ai_controls/acceptance_audit_status.json",
+        "ai_controls/acceptance_audit_report.md",
+    }
+    allowed_prefixes = ("exports/",)
+    changed = []
+    for path in iter_package_manifest_files(package, output_dir):
+        rel = relative_artifact(package, path)
+        if rel in allowed_exact or rel.startswith(allowed_prefixes):
+            continue
+        if path.stat().st_mtime > acceptance_mtime + 0.001:
+            changed.append(rel)
+    return changed
+
+
+def build_review_manifest(package: Path, output_dir: Path, include_package_files: bool) -> list[dict[str, str]]:
+    rows = []
+    for path in iter_package_manifest_files(package, output_dir):
+        rel = relative_artifact(package, path)
+        rows.append(
+            {
+                "artifact_path": rel,
+                "bytes": str(path.stat().st_size),
+                "sha256": sha256_file(path),
+                "modified_utc": path_modified_utc(path),
+                "included_in_zip": "yes" if include_package_files else "no",
+                "notes": "source package artifact",
+            }
+        )
+    return rows
+
+
+def add_review_packet_check(
+    checks: list[dict[str, str]],
+    check_id: str,
+    status: str,
+    severity: str,
+    evidence: str,
+    message: str,
+) -> None:
+    checks.append(
+        {
+            "check_id": check_id,
+            "status": status,
+            "severity": severity,
+            "evidence": evidence,
+            "message": message,
+        }
+    )
+
+
+def review_packet_status(package: Path, level: str, output_dir: Path, include_package_files: bool) -> dict:
+    state = load_state(package, required=False)
+    metrics = load_json_artifact(package / "cramps_sidecar_metrics.json")
+    agent = load_json_artifact(package / "ai_controls" / "agent_audit_status.json")
+    leak = load_json_artifact(package / "ai_controls" / "leak_scan_status.json")
+    gate = load_json_artifact(package / "ai_controls" / "gate_status.json")
+    acceptance = load_json_artifact(package / "ai_controls" / "acceptance_audit_status.json")
+
+    checks: list[dict[str, str]] = []
+    add_review_packet_check(
+        checks,
+        "state_active",
+        "pass" if state.get("status") == "active" else "fail",
+        "blocker",
+        STATE_FILE if state else "",
+        "package state is active" if state.get("status") == "active" else f"package state is {state.get('status', 'missing')}",
+    )
+
+    acceptance_path = package / "ai_controls" / "acceptance_audit_status.json"
+    if not acceptance:
+        add_review_packet_check(checks, "acceptance_present", "fail", "blocker", "", "acceptance audit has not been run")
+    else:
+        add_review_packet_check(
+            checks,
+            "acceptance_level_matches",
+            "pass" if acceptance.get("level") == level else "fail",
+            "blocker",
+            "ai_controls/acceptance_audit_status.json",
+            "acceptance level matches review packet level"
+            if acceptance.get("level") == level
+            else f"acceptance level is {acceptance.get('level')}; expected {level}",
+        )
+        add_review_packet_check(
+            checks,
+            "acceptance_all_clear",
+            "pass" if acceptance.get("all_clear") else "fail",
+            "blocker",
+            "ai_controls/acceptance_audit_status.json",
+            "acceptance audit is clear"
+            if acceptance.get("all_clear")
+            else f"acceptance decision is {acceptance.get('decision', 'missing')}",
+        )
+        changed = material_changes_after_acceptance(package, acceptance_path, output_dir)
+        add_review_packet_check(
+            checks,
+            "no_material_changes_after_acceptance",
+            "pass" if not changed else "fail",
+            "blocker",
+            "ai_controls/acceptance_audit_status.json",
+            "no material package artifacts changed after acceptance"
+            if not changed
+            else f"material artifacts changed after acceptance: {', '.join(changed[:10])}",
+        )
+
+    if leak:
+        quarantine_required = bool(leak.get("quarantine_required"))
+        add_review_packet_check(
+            checks,
+            "leak_scan_clear",
+            "pass" if not quarantine_required else "fail",
+            "blocker",
+            "ai_controls/leak_scan_status.json",
+            "leak scan has no quarantine-triggering findings"
+            if not quarantine_required
+            else "leak scan requires quarantine",
+        )
+    else:
+        add_review_packet_check(checks, "leak_scan_present", "fail", "blocker", "", "leak scan has not been run")
+
+    if gate:
+        all_clear = bool(gate.get("summary", {}).get("all_clear"))
+        add_review_packet_check(
+            checks,
+            "gate_all_clear",
+            "pass" if all_clear else "fail",
+            "blocker",
+            "ai_controls/gate_status.json",
+            "gate status is all clear"
+            if all_clear
+            else f"next blocked gate is {gate.get('summary', {}).get('next_blocked_gate', 'unknown')}",
+        )
+    else:
+        add_review_packet_check(checks, "gate_present", "fail", "blocker", "", "gate status has not been run")
+
+    blockers = [check for check in checks if check["severity"] == "blocker" and check["status"] != "pass"]
+    decision = "ready_for_review_handoff" if not blockers else "hold_review_packet"
+    return {
+        "generated_at": utc_now(),
+        "package": str(package),
+        "level": level,
+        "output_dir": str(output_dir),
+        "decision": decision,
+        "all_clear": not blockers,
+        "blocker_count": len(blockers),
+        "checks": checks,
+        "include_package_files": include_package_files,
+        "source": {
+            "source_repo": state.get("source_repo", ""),
+            "source_commit_at_package_creation": state.get("source_commit", ""),
+            "source_dirty_at_creation": state.get("source_dirty_at_creation", ""),
+            "current_source_commit": git_value("rev-parse", "HEAD"),
+            "current_source_dirty": source_dirty(),
+        },
+        "controls": {
+            "sidecar_recommendation": (metrics or {}).get("recommendation", ""),
+            "sidecar_readiness_score": (metrics or {}).get("readiness_score", ""),
+            "agent_audit_all_clear": (agent or {}).get("all_clear", ""),
+            "leak_quarantine_required": (leak or {}).get("quarantine_required", ""),
+            "gate_all_clear": ((gate or {}).get("summary") or {}).get("all_clear", ""),
+            "acceptance_decision": (acceptance or {}).get("decision", ""),
+            "acceptance_reliance": (acceptance or {}).get("reliance", ""),
+        },
+    }
+
+
+def render_review_packet_summary(status: dict, manifest_rows: list[dict[str, str]]) -> str:
+    lines = [
+        "# CRAMPS Review Packet Summary",
+        "",
+        f"Generated: {status['generated_at']}",
+        f"Level: `{status['level']}`",
+        f"Decision: `{status['decision']}`",
+        f"All clear: `{status['all_clear']}`",
+        f"Blockers: `{status['blocker_count']}`",
+        f"Package: `{status['package']}`",
+        "",
+        "## Reliance Boundary",
+        "",
+        "This packet is a reviewer handoff. It does not prove the domain claim, replace release authority, or override CRAMPS gate decisions.",
+        "",
+        "## Control Snapshot",
+        "",
+        "| control | value |",
+        "|---|---|",
+    ]
+    for key, value in status["controls"].items():
+        lines.append(f"| `{key}` | `{value}` |")
+    lines.extend(
+        [
+            "",
+            "## Packet Checks",
+            "",
+            "| check | status | severity | evidence | message |",
+            "|---|---|---|---|---|",
+        ]
+    )
+    for check in status["checks"]:
+        lines.append(
+            f"| `{check['check_id']}` | `{check['status']}` | `{check['severity']}` | `{check['evidence']}` | {check['message']} |"
+        )
+    lines.extend(
+        [
+            "",
+            "## Manifest",
+            "",
+            f"Package artifact count: `{len(manifest_rows)}`",
+            "",
+            "Use `REVIEW_PACKET_MANIFEST.csv` for file-level hashes. By default, the ZIP contains only the packet index, not the package evidence files.",
+        ]
+    )
+    return "\n".join(lines)
+
+
+def render_reviewer_handoff(status: dict) -> str:
+    return f"""
+# Reviewer Handoff
+
+## First Checks
+
+1. Confirm `review_packet_status.json` has `decision` = `{status['decision']}`.
+2. Confirm `REVIEW_PACKET_MANIFEST.csv` matches the package files being reviewed.
+3. Read `ai_controls/acceptance_audit_report.md`, `ai_controls/gate_status.md`, `cramps_sidecar_metrics.md`, and `ai_controls/leak_scan_report.md` in the source package.
+4. Do not treat this packet as release approval. It is a handoff index for review.
+
+## If Blocked
+
+If `decision` is `hold_review_packet`, resolve or formally accept the listed blockers, then rerun `check`, `agent-audit`, `leak-scan`, `gate`, `acceptance-audit`, and `review-packet` in that order.
+"""
+
+
+def write_review_packet_zip(output_dir: Path, manifest_rows: list[dict[str, str]], package: Path, include_package_files: bool) -> Path:
+    zip_path = output_dir / "review_packet.zip"
+    packet_files = [
+        output_dir / "review_packet_status.json",
+        output_dir / "REVIEW_PACKET_SUMMARY.md",
+        output_dir / "REVIEWER_HANDOFF.md",
+        output_dir / "REVIEW_PACKET_MANIFEST.csv",
+    ]
+    with zipfile.ZipFile(zip_path, "w", compression=zipfile.ZIP_DEFLATED) as archive:
+        for path in packet_files:
+            archive.write(path, path.name)
+        if include_package_files:
+            for row in manifest_rows:
+                artifact = package / row["artifact_path"]
+                if artifact.exists() and artifact.is_file():
+                    archive.write(artifact, f"package/{row['artifact_path']}")
+    return zip_path
+
+
+def build_review_packet(package: Path, level: str, out: Path | None, allow_hold: bool, include_package_files: bool, create_zip: bool) -> dict:
+    assert_package_output_allowed(package, "review-packet")
+    output_dir = packet_output_dir(package, out)
+    output_dir.mkdir(parents=True, exist_ok=True)
+    status = review_packet_status(package, level, output_dir, include_package_files)
+    manifest_rows = build_review_manifest(package, output_dir, include_package_files)
+    write_csv(output_dir / "REVIEW_PACKET_MANIFEST.csv", REVIEW_PACKET_MANIFEST_FIELDS, manifest_rows)
+    (output_dir / "review_packet_status.json").write_text(
+        json.dumps(status, indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
+    write_text(output_dir / "REVIEW_PACKET_SUMMARY.md", render_review_packet_summary(status, manifest_rows))
+    write_text(output_dir / "REVIEWER_HANDOFF.md", render_reviewer_handoff(status))
+
+    if create_zip:
+        zip_path = write_review_packet_zip(output_dir, manifest_rows, package, include_package_files)
+        status["zip_path"] = str(zip_path)
+        status["zip_sha256"] = sha256_file(zip_path)
+        (output_dir / "review_packet_status.json").write_text(
+            json.dumps(status, indent=2, sort_keys=True) + "\n",
+            encoding="utf-8",
+        )
+
+    if status["blocker_count"] and not allow_hold:
+        status["exit_code"] = 1
+    else:
+        status["exit_code"] = 0
+    return status
+
+
 def render_gate_dag_doc(level: str) -> str:
     specs = gate_specs(level)
     lines = [
@@ -1482,7 +1814,7 @@ def render_next_actions(level: str) -> str:
             "Add searched and included sources to `preflight_sources.csv`.",
             "Extract weak observation, residual, null, non-event, exclusion, and near-miss rows into `preflight_rows.csv`.",
             "Complete `preflight_gotchas.md` as the failure-mode worksheet before making an escalation decision.",
-            "Run `check`, `agent-audit`, `leak-scan`, `gate`, and `acceptance-audit` before deciding whether to promote.",
+            "Run `check`, `agent-audit`, `leak-scan`, `gate`, `acceptance-audit`, and `review-packet` before deciding whether to promote.",
         ]
     else:
         actions = [
@@ -1490,7 +1822,7 @@ def render_next_actions(level: str) -> str:
             "Lock candidate coordinates before scoring.",
             "Populate source, raw row, normalized row, independence, bias, null model, and result contracts.",
             "Maintain build ledger, checkpoint reviews, claim trace matrix, trust debt, and trust status summary.",
-            "Run `check`, `agent-audit`, `leak-scan`, `gate`, and `acceptance-audit` before release review.",
+            "Run `check`, `agent-audit`, `leak-scan`, `gate`, `acceptance-audit`, and `review-packet` before release review.",
         ]
     return "# Next Actions\n\n" + "\n".join(f"- {item}" for item in actions)
 
@@ -2327,6 +2659,34 @@ def command_acceptance_audit(args: argparse.Namespace) -> int:
     return 0
 
 
+def command_review_packet(args: argparse.Namespace) -> int:
+    package = args.package.resolve()
+    level = package_level(package, args.level)
+    status = build_review_packet(
+        package,
+        level,
+        args.out,
+        args.allow_hold,
+        args.include_package_files,
+        not args.no_zip,
+    )
+    print(
+        json.dumps(
+            {
+                "level": status["level"],
+                "decision": status["decision"],
+                "all_clear": status["all_clear"],
+                "blocker_count": status["blocker_count"],
+                "output_dir": status["output_dir"],
+                "zip_path": status.get("zip_path", ""),
+                "zip_sha256": status.get("zip_sha256", ""),
+            },
+            indent=2,
+        )
+    )
+    return int(status["exit_code"])
+
+
 def render_leak_report(status: dict) -> str:
     lines = [
         "# CRAMPS Leak Scan Report",
@@ -2437,6 +2797,7 @@ def command_status(args: argparse.Namespace) -> int:
     leak_path = package / "ai_controls" / "leak_scan_status.json"
     agent_audit_path = package / "ai_controls" / "agent_audit_status.json"
     acceptance_audit_path = package / "ai_controls" / "acceptance_audit_status.json"
+    review_packet_path = package / "exports" / "review_packet" / "review_packet_status.json"
     result = {
         "package": str(package),
         "state": {
@@ -2450,6 +2811,7 @@ def command_status(args: argparse.Namespace) -> int:
         "leak_scan": json.loads(leak_path.read_text(encoding="utf-8")) if leak_path.exists() else None,
         "agent_audit": json.loads(agent_audit_path.read_text(encoding="utf-8")) if agent_audit_path.exists() else None,
         "acceptance_audit": json.loads(acceptance_audit_path.read_text(encoding="utf-8")) if acceptance_audit_path.exists() else None,
+        "review_packet": json.loads(review_packet_path.read_text(encoding="utf-8")) if review_packet_path.exists() else None,
     }
     print(json.dumps(result, indent=2, sort_keys=True))
     return 0
@@ -2497,7 +2859,7 @@ def command_doctor(_args: argparse.Namespace) -> int:
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         prog="cramps",
-        description="Create, operate, check, audit, gate, leak-scan, accept, and quarantine CRAMPS packages.",
+        description="Create, operate, check, audit, gate, leak-scan, accept, packet, and quarantine CRAMPS packages.",
     )
     sub = parser.add_subparsers(dest="command", required=True)
 
@@ -2547,6 +2909,19 @@ def build_parser() -> argparse.ArgumentParser:
     acceptance_audit_parser.add_argument("--fail-on-warning", action="store_true")
     acceptance_audit_parser.set_defaults(func=command_acceptance_audit)
 
+    review_packet = sub.add_parser("review-packet", help="Build a bounded reviewer handoff packet.")
+    review_packet.add_argument("package", type=Path)
+    review_packet.add_argument("--level", choices=["preflight", "full", "auto"], default="auto")
+    review_packet.add_argument("--out", type=Path, default=None)
+    review_packet.add_argument("--allow-hold", action="store_true", help="Write a packet even when acceptance is blocked.")
+    review_packet.add_argument(
+        "--include-package-files",
+        action="store_true",
+        help="Include package artifacts in the ZIP. Default ZIP contains only packet index files.",
+    )
+    review_packet.add_argument("--no-zip", action="store_true")
+    review_packet.set_defaults(func=command_review_packet)
+
     quarantine = sub.add_parser("quarantine", help="Place a package into no-release quarantine.")
     quarantine.add_argument("package", type=Path)
     quarantine.add_argument("--reason", required=True)
@@ -2562,7 +2937,7 @@ def build_parser() -> argparse.ArgumentParser:
     clear.add_argument("--scope", default="")
     clear.set_defaults(func=command_clear_quarantine)
 
-    status = sub.add_parser("status", help="Print package state, sidecar, agent, gate, leak, and acceptance summaries.")
+    status = sub.add_parser("status", help="Print package state, sidecar, agent, gate, leak, acceptance, and packet summaries.")
     status.add_argument("package", type=Path)
     status.set_defaults(func=command_status)
 

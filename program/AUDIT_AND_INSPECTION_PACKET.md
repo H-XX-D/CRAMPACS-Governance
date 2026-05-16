@@ -93,3 +93,25 @@ An audit is not complete until it produces:
 - CAPA references for accepted findings
 - auditor conclusion
 - management or release-authority response
+
+## 7. CLI Review Packet
+
+Before a package is handed to a reviewer, run:
+
+```bash
+python tools/cramps_cli.py review-packet <package_dir>
+```
+
+The command writes `exports/review_packet/` with:
+
+- `review_packet_status.json`
+- `REVIEW_PACKET_SUMMARY.md`
+- `REVIEWER_HANDOFF.md`
+- `REVIEW_PACKET_MANIFEST.csv`
+- `review_packet.zip`
+
+The default ZIP contains only the packet index files. It does not bundle raw
+package evidence unless `--include-package-files` is explicitly used. A packet
+is blocked when the acceptance audit is missing, acceptance is not clear,
+quarantine is required, gates are blocked, or material package artifacts changed
+after acceptance.

@@ -104,6 +104,18 @@ preflight decision or full-system release review. It also checks that sidecar,
 agent-audit, and gate artifacts match the requested level and that the gate was
 run after the sidecar, agent audit, and leak scan.
 
+After acceptance and before handoff, run:
+
+```bash
+python tools/cramps_cli.py review-packet <package_dir>
+```
+
+The command writes `exports/review_packet/`. It creates a reviewer summary,
+manifest, status JSON, and bounded ZIP. By default the ZIP contains only packet
+index files; package evidence files are included only with
+`--include-package-files`. A packet is blocked if material package artifacts
+changed after acceptance.
+
 ## DAG Gate Accounting
 
 CRAMPS gates are dependency gates. A later phase cannot progress merely

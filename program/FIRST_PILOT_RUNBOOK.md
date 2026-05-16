@@ -113,9 +113,10 @@ python tools/cramps_cli.py agent-audit <package> --level preflight
 python tools/cramps_cli.py leak-scan <package>
 python tools/cramps_cli.py gate <package> --level preflight
 python tools/cramps_cli.py acceptance-audit <package> --level preflight
+python tools/cramps_cli.py review-packet <package> --level preflight
 ```
 
-Run `check`, then `agent-audit`, then `leak-scan`, then `gate`, then `acceptance-audit` in that order. The acceptance audit depends on the latest sidecar, agent-control, leak-scan, and gate status.
+Run `check`, then `agent-audit`, then `leak-scan`, then `gate`, then `acceptance-audit`, then `review-packet` in that order. The acceptance audit depends on the latest sidecar, agent-control, leak-scan, and gate status. The review packet depends on the accepted package snapshot.
 
 Preflight output must be one of:
 
@@ -174,9 +175,10 @@ python tools/cramps_cli.py agent-audit <full_package> --level full
 python tools/cramps_cli.py leak-scan <full_package>
 python tools/cramps_cli.py gate <full_package> --level full
 python tools/cramps_cli.py acceptance-audit <full_package> --level full
+python tools/cramps_cli.py review-packet <full_package> --level full
 ```
 
-Run these commands sequentially. Do not evaluate acceptance from stale or missing sidecar, agent-audit, leak-scan, or gate output.
+Run these commands sequentially. Do not evaluate acceptance from stale or missing sidecar, agent-audit, leak-scan, or gate output. Do not hand reviewers a packet that reports material changes after acceptance.
 
 ### Step 5: Closeout
 

@@ -27,7 +27,8 @@ Do not spawn additional agents inside the preflight. Expanded agent deployment s
 6. Run `python tools/cramps_cli.py leak-scan worked_examples/preflight/cramps-phy-synthetic-coordinate-recurrence`.
 7. Run `python tools/cramps_cli.py gate worked_examples/preflight/cramps-phy-synthetic-coordinate-recurrence --level preflight`.
 8. Run `python tools/cramps_cli.py acceptance-audit worked_examples/preflight/cramps-phy-synthetic-coordinate-recurrence --level preflight`.
-9. Treat synthetic rows as quarantined from any real full-system scoring.
+9. Run `python tools/cramps_cli.py review-packet worked_examples/preflight/cramps-phy-synthetic-coordinate-recurrence --level preflight`.
+10. Treat synthetic rows as quarantined from any real full-system scoring.
 
 ## Non-Negotiables
 

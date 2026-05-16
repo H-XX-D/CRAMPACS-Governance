@@ -23,6 +23,8 @@ Then run:
 ```bash
 python tools/cramps_cli.py leak-scan worked_examples/preflight/cramps-phy-synthetic-coordinate-recurrence
 python tools/cramps_cli.py gate worked_examples/preflight/cramps-phy-synthetic-coordinate-recurrence --level preflight
+python tools/cramps_cli.py acceptance-audit worked_examples/preflight/cramps-phy-synthetic-coordinate-recurrence --level preflight
+python tools/cramps_cli.py review-packet worked_examples/preflight/cramps-phy-synthetic-coordinate-recurrence --level preflight
 ```
 
 Expected gate posture:
@@ -31,5 +33,6 @@ Expected gate posture:
 - highest cleared priority: `50`
 - next blocked gate: blank
 - all clear: `true`
+- review-packet decision: `ready_for_review_handoff`
 
 The gate result clears only the worked preflight structure. It does not clear any full `CRAMPS-PHY` gate.
