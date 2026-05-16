@@ -2363,14 +2363,15 @@ def worked_example_runtime_outputs() -> list[str]:
     return contamination
 
 
-def worked_example_manifest_hash_issues() -> list[str]:
-    base = ROOT / "worked_examples"
+def worked_example_manifest_hash_issues(base: Path | None = None, report_root: Path | None = None) -> list[str]:
+    base = base or ROOT / "worked_examples"
+    report_root = report_root or ROOT
     if not base.exists():
         return []
     expected_header = template_header("preflight_manifest.csv")
     issues = []
     for manifest in sorted(base.rglob("preflight_manifest.csv")):
-        manifest_rel = relative_artifact(ROOT, manifest)
+        manifest_rel = relative_artifact(report_root, manifest)
         header = read_csv_header(manifest)
         if header != expected_header:
             issues.append(f"{manifest_rel} header mismatch")
@@ -3212,6 +3213,33 @@ def run_self_test(strict_source: bool, keep_temp: bool) -> dict:
         package = temp_path / "worked-preflight"
         shutil.copytree(ROOT / "worked_examples" / "preflight" / "cramps-phy-synthetic-coordinate-recurrence", package)
         add_self_test_check(checks, "temp_package_copy", "pass", "worked example copied into temp package", str(package))
+
+        manifest_clean_issues = worked_example_manifest_hash_issues(package, temp_path)
+        add_self_test_check(
+            checks,
+            "worked_manifest_hash_clean",
+            "pass" if not manifest_clean_issues else "fail",
+            "worked-example manifest hashes are current in temp copy"
+            if not manifest_clean_issues
+            else f"manifest issues: {', '.join(manifest_clean_issues[:6])}",
+            "worked-example manifest clean check",
+        )
+
+        tampered = temp_path / "tampered-worked-preflight"
+        shutil.copytree(ROOT / "worked_examples" / "preflight" / "cramps-phy-synthetic-coordinate-recurrence", tampered)
+        tampered_scope = tampered / "preflight_scope.md"
+        tampered_scope.write_text(tampered_scope.read_text(encoding="utf-8") + "\nSelf-test tamper line.\n", encoding="utf-8")
+        tamper_issues = worked_example_manifest_hash_issues(tampered, temp_path)
+        tamper_detected = any("sha256 mismatch" in issue and "preflight_scope.md" in issue for issue in tamper_issues)
+        add_self_test_check(
+            checks,
+            "worked_manifest_hash_tamper_trap",
+            "pass" if tamper_detected else "fail",
+            "worked-example manifest detected a modified custody artifact"
+            if tamper_detected
+            else f"expected sha256 mismatch for preflight_scope.md; got: {', '.join(tamper_issues[:6])}",
+            "worked-example manifest tamper check",
+        )
 
         sequence = [
             ("check", ["check", str(package), "--level", "preflight"]),

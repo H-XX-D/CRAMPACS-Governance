@@ -31,6 +31,11 @@ python3 tools/cramps_cli.py promote ./cramps_projects/<preflight_package> --stud
 
 See `CRAMPS_CLI_AI_OPERATOR_GUIDE.md` for the AI operator loop.
 
+`self-test` includes both positive and negative controls: it runs a temp-package
+happy path, verifies reviewer handoff, confirms stale post-acceptance edits are
+blocked, and tampers with a copied worked-example artifact to confirm manifest
+SHA-256 drift is detected.
+
 ## Portable Tool
 
 `cramps_sidecar.py` uses only the Python standard library. It checks preflight or full-study package completeness, writes package metrics, and produces a hash manifest.

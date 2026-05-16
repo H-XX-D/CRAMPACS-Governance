@@ -419,3 +419,20 @@ Artifacts:
 Outcome:
 
 - a reviewer can now trust that the worked example's manifest represents the files actually present in the repository at audit time.
+
+## Post-Build Round 16: Manifest tamper-trap self-test
+
+Focus:
+
+- prove the worked-example manifest control fails closed when a custody artifact changes
+- add a clean-manifest positive check and a tampered-copy negative check to `self-test`
+- make release acceptance documentation name the manifest tamper trap explicitly
+
+Artifacts:
+
+- `tools/cramps_cli.py` self-test manifest clean and tamper checks
+- updated release checklist and tools README
+
+Outcome:
+
+- maintainers now test both sides of the worked-example checksum control: current manifests pass, stale manifests are detected before release.
