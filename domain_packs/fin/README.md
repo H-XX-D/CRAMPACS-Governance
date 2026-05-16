@@ -31,3 +31,7 @@ cleared alerts, comparable accounts without event, backtests with no breach, con
 ## Main Gotcha
 
 look-ahead bias, backtest overfitting, vendor revisions, feedback loops from prior controls
+
+## Standards Anchors
+
+SR 11-7/OCC 2011-12, BCBS 239, FFIEC, SEC Regulation SCI, GLBA/FCRA/ECOA/BSA

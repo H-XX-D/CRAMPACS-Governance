@@ -4,121 +4,115 @@ import { SpreadsheetFile, Workbook } from "@oai/artifact-tool";
 
 const root = path.resolve(path.dirname(new URL(import.meta.url).pathname), "..");
 
-const domains = [
-  {
-    slug: "med",
-    full: "CRAMPACS-MED",
-    light: "crampacs-med",
-    label: "Medicine and clinical evidence",
-    coordinates: ["dose", "exposure window", "biomarker threshold", "adverse-event onset", "phenotype", "care setting"],
-    nulls: ["negative safety analyses", "monitored adverse events not elevated", "failed replications", "cohorts with exposure but no event"],
-    gotchas: ["confounding by indication", "differential coding", "missing nulls", "surveillance bias"],
-    standards: ["PRISMA", "STROBE/RECORD/CONSORT/STARD", "FDA RWE", "ICH GCP", "HIPAA", "21 CFR Part 11"],
-  },
-  {
-    slug: "gen",
-    full: "CRAMPACS-GEN",
-    light: "crampacs-gen",
-    label: "Genomics and omics",
-    coordinates: ["locus", "variant", "gene", "pathway", "cell type", "expression threshold"],
-    nulls: ["failed replications", "non-significant loci", "negative functional assays", "tested pathways not enriched"],
-    gotchas: ["population stratification", "batch effects", "genome-build drift", "winner's curse"],
-    standards: ["GA4GH", "ClinGen", "MIAME/MINSEQE", "STREGA", "FAIR"],
-  },
-  {
-    slug: "clim",
-    full: "CRAMPACS-CLIM",
-    light: "crampacs-clim",
-    label: "Climate and Earth systems",
-    coordinates: ["latitude", "longitude", "depth", "pressure level", "season", "climate mode"],
-    nulls: ["comparable regions without anomaly", "model runs without recurrence", "negative attribution studies"],
-    gotchas: ["spatial autocorrelation", "temporal autocorrelation", "non-stationary baseline", "model-family dependence"],
-    standards: ["WMO", "CF Conventions", "CMIP/ESGF", "IPCC uncertainty", "FAIR"],
-  },
-  {
-    slug: "mat",
-    full: "CRAMPACS-MAT",
-    light: "crampacs-mat",
-    label: "Materials science",
-    coordinates: ["composition ratio", "dopant level", "phase", "lattice parameter", "processing temperature", "operating condition"],
-    nulls: ["failed syntheses", "tested materials without property jump", "simulations with no predicted anomaly"],
-    gotchas: ["unreported failed syntheses", "hidden processing parameters", "batch variation", "simulation convergence artifacts"],
-    standards: ["OPTIMADE", "NOMAD/FAIR-DI", "Materials Project provenance", "PIF/GEMD", "ISO 17025"],
-  },
-  {
-    slug: "eng",
-    full: "CRAMPACS-ENG",
-    light: "crampacs-eng",
-    label: "Engineering reliability",
-    coordinates: ["load", "vibration frequency", "temperature", "firmware version", "supplier lot", "cycle count"],
-    nulls: ["units exposed without failure", "passed qualification tests", "lots with no anomaly", "sensor streams without recurrence"],
-    gotchas: ["fleet exposure imbalance", "maintenance censoring", "supplier-lot dependence", "sensor drift"],
-    standards: ["NIST Engineering Statistics", "ISO 9001", "ISO 31000", "ISO 17025", "IEC 61508", "ASME V&V"],
-  },
-  {
-    slug: "fin",
-    full: "CRAMPACS-FIN",
-    light: "crampacs-fin",
-    label: "Finance, fraud, and risk",
-    coordinates: ["asset", "tenor", "counterparty", "time window", "transaction velocity", "network position"],
-    nulls: ["cleared alerts", "comparable accounts without event", "backtests with no breach", "control portfolios"],
-    gotchas: ["look-ahead bias", "backtest overfitting", "vendor revisions", "feedback loops from prior controls"],
-    standards: ["SR 11-7/OCC 2011-12", "BCBS 239", "FFIEC", "SEC Regulation SCI", "GLBA/FCRA/ECOA/BSA"],
-  },
-  {
-    slug: "cyb",
-    full: "CRAMPACS-CYB",
-    light: "crampacs-cyb",
-    label: "Cybersecurity",
-    coordinates: ["CVE", "ATT&CK technique", "port", "protocol", "endpoint class", "time-to-exploit"],
-    nulls: ["exposed assets not exploited", "rules with no hits", "scanned vulnerabilities not exploited", "false positives"],
-    gotchas: ["sensor coverage gaps", "duplicate intel feeds", "alert suppression", "honeypot selection bias"],
-    standards: ["NIST CSF 2.0", "MITRE ATT&CK", "CISA KEV", "CVSS v4", "ISO 27001", "STIX/TAXII"],
-  },
-  {
-    slug: "ast",
-    full: "CRAMPACS-AST",
-    light: "crampacs-ast",
-    label: "Astronomy and astrophysics",
-    coordinates: ["sky coordinate", "redshift", "wavelength", "period", "phase", "cadence"],
-    nulls: ["follow-up non-detections", "survey fields with no event", "searched spectral windows with no feature"],
-    gotchas: ["sky coverage bias", "cadence bias", "follow-up selection bias", "calibration drift"],
-    standards: ["FITS", "IVOA", "VOEvent", "NASA ADS", "FAIR/DataCite"],
-  },
-  {
-    slug: "phy",
-    full: "CRAMPACS-PHY",
-    light: "crampacs-phy",
-    label: "Physics and physical anomaly catalogs",
-    coordinates: ["mass", "energy", "frequency", "redshift", "coupling", "cross section"],
-    nulls: ["null searches", "exclusion contours", "control regions", "sidebands", "failed replications"],
-    gotchas: ["look-elsewhere effect", "theory-fashion clustering", "shared detector pipelines", "plot digitization error"],
-    standards: ["PRISMA", "PDG statistics", "HEP look-elsewhere practice", "JCGM GUM", "FAIR/DataCite/PROV"],
-  },
-];
+const domains = JSON.parse(await fs.readFile(path.join(root, "tools", "crampacs_domains.json"), "utf8"));
 
 const layers = [
   ["0", "Concept", "Vocabulary, claim boundary, uppercase/lowercase distinction", "README, naming policy"],
-  ["1", "Lightweight preflight", "1-2 day triage and seed artifacts", "preflight policy and templates"],
-  ["2", "Gotchas", "Fast failure-mode checks", "gotcha guide and printouts"],
-  ["3", "Standards", "Governance, quality gates, document control", "standards policy"],
-  ["4", "Methodology", "Coordinate ontology, nulls, dependence, bias, claim tiers", "methodology policy"],
-  ["5", "Domain overlay", "Field-specific adaptation", "domain overlays and packs"],
-  ["6", "Data contracts", "Structured tables and stable IDs", "templates"],
-  ["7", "Checksums", "Cross-unit reproducibility and unit integrity", "checksum policy"],
-  ["8", "Sidecar metrics", "Package readiness and blockers", "sidecar runner"],
-  ["9", "Full SOP", "End-to-end study execution", "program SOP and protocol template"],
-  ["10", "Regulatory", "Pair with domain controls", "domain addenda"],
+  ["1", "Lightweight preflight", "1-2 day triage and seed artifacts", "preflight policy, preflight templates, domain packs"],
+  ["2", "Gotchas", "Fast failure-mode checks and stop signs", "gotcha guide, field printouts"],
+  ["3", "Program standards", "Governance, quality gates, document control, release authority, CAPA", "program operating manual, control catalog, document control, release RACI, gate map, CAPA procedure"],
+  ["4", "Methodology", "Coordinate ontology, nulls, dependence, bias, claim tiers", "methodology policy, protocol template"],
+  ["5", "Domain overlay", "Field-specific adaptation", "domain overlays, domain packs, field printouts"],
+  ["6", "Data contracts", "Structured tables, stable IDs, register schemas", "templates, register data dictionary, package scaffold"],
+  ["7", "Checksums", "Cross-unit reproducibility and unit integrity", "checksum policy, reproducibility binder"],
+  ["8", "Sidecar metrics", "Package readiness, binder coverage, blockers", "sidecar runner"],
+  ["9", "Full SOP", "End-to-end study execution and evidence package assembly", "program SOP, evidence package spec, assurance case, decision memo"],
+  ["10", "Regulatory and deployment", "Safety supervisor review, audit, validation, training, regulated deployment", "supervisor packet, audit procedure, validation plan, training plan, regulated addendum, deployment playbook, 90-day roadmap"],
   ["11", "Platform", "Software workflow modules", "future product layer"],
 ];
 
 const gates = [
-  ["Protocol", "Study charter, role assignment, protocol, candidate registry", "Before extraction"],
-  ["Extraction", "Source flow, exclusions, row provenance, extraction confidence", "Before normalization"],
-  ["Normalization", "Raw values preserved, transforms registered, uncertainty assigned", "Before analysis"],
-  ["Independence and bias", "Independence grades, bias review, missing evidence, weights", "Before scoring"],
-  ["Statistical", "Primary statistic, null model, global correction, sensitivities", "Before reporting"],
-  ["Release", "Repro capsule, red team, signoff, claim language", "Before external use"],
+  ["G0 Charter", "decision statement, assurance level, roles, intended use, prohibited use", "Before protocol lock"],
+  ["G1 Coordinate Lock", "coordinate ontology, candidate registry, tolerance basis, transform rules, negative controls", "Before source scoring"],
+  ["G2 Source Universe", "search strategy, source catalog, source flow, exclusions, null search", "Before extraction closeout"],
+  ["G3 Row Integrity", "raw rows, source trace, extraction confidence, review status, quarantine log", "Before normalization closeout"],
+  ["G4 Dependence and Bias", "evidence-family map, independence grades, bias table, missing-evidence memo, weights", "Before analysis"],
+  ["G5 Statistical Method", "primary statistic, null model, multiplicity correction, negative controls, sensitivity plan", "Before reporting"],
+  ["G6 Reproducibility", "checksums, environment, run script, output hashes, clean-run report", "Before release review"],
+  ["G7 Release", "assurance case, red-team findings, decision memo, evidence tier, claim-language approval", "Before external or operational use"],
+];
+
+const controls = [
+  ["GOV-01", "Decision authority assigned", "Prevent ownerless decisions", "charter, role assignment, decision memo"],
+  ["GOV-02", "Assurance level declared", "Prevent lowercase work being treated as full assurance", "charter, report title"],
+  ["DOC-02", "Protocol lock", "Prevent post-hoc method changes", "protocol hash, lock timestamp"],
+  ["COORD-01", "Coordinate definition", "Prevent vague or mobile target coordinates", "coordinate ontology"],
+  ["COORD-02", "Tolerance justification", "Prevent tolerance creep", "candidate registry"],
+  ["SRC-02", "Null/non-event search", "Prevent positive-only evidence", "source catalog, null row count"],
+  ["ROW-01", "Row provenance", "Ensure every row traces to source", "raw row table"],
+  ["ROW-02", "Raw/normalized separation", "Prevent unit and transform overwrites", "raw and normalized tables"],
+  ["IND-01", "Evidence-family map", "Prevent duplicate evidence multiplication", "independence groups"],
+  ["BIAS-01", "Missing-evidence assessment", "Identify inaccessible or unpublished nulls", "missing-evidence memo"],
+  ["STAT-02", "Null model specification", "Make the test basis explicit", "null model spec"],
+  ["STAT-03", "Global correction", "Control look-elsewhere and multiplicity", "result table"],
+  ["STAT-04", "Sensitivity tests", "Identify fragility", "sensitivity results"],
+  ["REPRO-01", "Checksum manifest", "Detect silent file drift", "manifest and hashes"],
+  ["REPRO-03", "Clean reproduction", "Verify package can be rerun", "reproducibility report"],
+  ["REL-01", "Evidence tier assignment", "Prevent overclaiming", "evidence tier table"],
+  ["REL-02", "Claim language approval", "Prevent unsupported conclusions", "signed report review"],
+  ["CAPA-01", "Deviation handling", "Track failures and repairs", "deviation/CAPA log"],
+  ["TRAIN-01", "Role training", "Ensure operators know controls", "training matrix"],
+];
+
+const assuranceClaims = [
+  ["AC-01", "Coordinate was pre-specified", "protocol hash, candidate registry", "coordinate moved after rows were known"],
+  ["AC-02", "Source universe was not cherry-picked", "search log, source flow", "null sources omitted"],
+  ["AC-03", "Rows are traceable and correctly extracted", "row table, source references", "AI or analyst inferred values incorrectly"],
+  ["AC-04", "Units and transforms are controlled", "raw/normalized split, transform registry", "hidden conversion created cluster"],
+  ["AC-05", "Dependence is modeled or controlled", "evidence-family map, weights", "duplicate evidence counted independently"],
+  ["AC-06", "Missing evidence and bias are assessed", "bias table, missing-evidence memo", "reporting bias explains cluster"],
+  ["AC-07", "Null model is fit for purpose", "null spec, negative controls", "null is too weak"],
+  ["AC-08", "Multiple testing is addressed", "global correction", "local result is look-elsewhere artifact"],
+  ["AC-09", "Result is robust enough for tier", "sensitivity tests", "one source drives result"],
+  ["AC-10", "Package is reproducible", "checksums, clean run", "output cannot be recreated"],
+  ["AC-11", "Claim language matches evidence", "evidence tier, approved report", "report overstates causality"],
+];
+
+const validationBatteries = [
+  ["A", "Known negative", "Recurrence should not exist", "No false high-confidence recurrence"],
+  ["B", "Synthetic planted cluster", "Known recurrence is injected", "Detects planted recurrence under registered statistic"],
+  ["C", "Duplicate-evidence trap", "Many rows derive from one source family", "Down-weights or collapses duplicates"],
+  ["D", "Missing-null trap", "Nulls are hidden until audit", "Flags missing evidence and demotes/holds"],
+  ["E", "Unit-conversion trap", "Mixed units/reference systems", "Raw/normalized audit catches drift"],
+  ["F", "Inter-rater reliability", "Independent reviewers grade same sample", "Disagreements measured and adjudicated"],
+];
+
+const packageScaffold = [
+  ["00_charter", "decision, roles, intended use, prohibited use, constraints", "study_charter.md; role_assignment.csv"],
+  ["01_protocol_lock", "protocol, candidate registry, amendment control", "protocol.md; candidate_coordinate_registry.csv; amendment_log.csv"],
+  ["02_sources", "search strategy, source catalog, source flow", "search_strategy.md; source_catalog.csv; source_flow.md"],
+  ["03_extraction", "raw rows and extraction review", "anomaly_rows_raw.csv; extraction_notes.md"],
+  ["04_coordinate_normalization", "transforms, normalized rows, unit audit", "coordinate_transform_registry.csv; normalized_rows.csv; unit_conversion_audit.md"],
+  ["05_dependence_bias", "independence, bias, missing evidence", "independence_groups.csv; bias_assessment.csv; missing_evidence_assessment.md"],
+  ["06_statistics", "analysis plan, null model, result, controls, sensitivities", "statistical_analysis_plan.md; null_model_runs.csv; analysis_result.csv; negative_controls.md; sensitivity_results.md"],
+  ["07_reproducibility", "checksums, environment, run instructions, clean run", "checksum_manifest.csv; environment_record.md; run_instructions.md; clean_run_report.md"],
+  ["08_assurance_case", "claims, rebuttals, residual risk", "assurance_case.md; assurance_case_register.csv; risk_register.csv"],
+  ["09_review_and_release", "gate review, audit, decision, release signoff", "gate_review_record.csv; audit_report.md; decision_memo.md; claim_language_approval.md; release_signoff.md"],
+  ["registers", "package-level governance registers", "document; control; gate; assurance; CAPA; decision; risk; training"],
+];
+
+const programRegisters = [
+  ["document_register.csv", "document control, version, status, approval"],
+  ["control_evidence_register.csv", "control-by-control evidence map"],
+  ["gate_review_record.csv", "gate decisions, blockers, release holds"],
+  ["assurance_case_register.csv", "claim, evidence, rebuttal, residual risk"],
+  ["deviation_capa_log.csv", "deviation, containment, CAPA, effectiveness"],
+  ["decision_log.csv", "authorized decision, tier, conditions, prohibited claims"],
+  ["risk_register.csv", "active and residual risks"],
+  ["training_matrix.csv", "role training and competency"],
+];
+
+const supervisorQuestions = [
+  ["1", "What coordinate is being tested?"],
+  ["2", "Was it locked before scoring?"],
+  ["3", "What nulls or non-events were included?"],
+  ["4", "What evidence is duplicated or dependent?"],
+  ["5", "What bias could create the pattern?"],
+  ["6", "What negative control was used?"],
+  ["7", "What would make us stop believing the recurrence?"],
+  ["8", "Can the package be reproduced?"],
+  ["9", "What action is being requested?"],
+  ["10", "What claim is explicitly prohibited?"],
 ];
 
 const gotchas = [
@@ -210,6 +204,34 @@ function governanceWorkbook() {
     ["Gate", "Required evidence", "When checked"],
     ...gates,
   ]);
+  addSheet(wb, "Control Catalog", [
+    ["Control ID", "Control", "Objective", "Evidence"],
+    ...controls,
+  ]);
+  addSheet(wb, "Assurance Claims", [
+    ["Claim ID", "Claim", "Required evidence", "Common rebuttal"],
+    ...assuranceClaims,
+  ]);
+  addSheet(wb, "Supervisor Questions", [
+    ["No.", "Question", "Answer", "Evidence link", "Open risk"],
+    ...supervisorQuestions.map((q) => [q[0], q[1], "", "", ""]),
+  ]);
+  addSheet(wb, "Validation Batteries", [
+    ["Battery", "Name", "Test condition", "Pass condition", "Status", "Notes"],
+    ...validationBatteries.map((v) => [...v, "", ""]),
+  ]);
+  addSheet(wb, "Package Scaffold", [
+    ["Binder", "Purpose", "Minimum records"],
+    ...packageScaffold,
+  ]);
+  addSheet(wb, "Program Registers", [
+    ["Register", "Purpose", "Owner", "Review status"],
+    ...programRegisters.map((r) => [...r, "", ""]),
+  ]);
+  addSheet(wb, "CAPA Log", [
+    ["Deviation ID", "Study ID", "Severity", "Affected controls", "Description", "Containment", "Root cause", "Corrective action", "Preventive action", "Owner", "Due date", "Verification", "Effectiveness check date", "Effectiveness result", "Approver", "Status"],
+    ["", "", "", "", "", "", "", "", "", "", "", "", "", "", "", ""],
+  ]);
   addSheet(wb, "Gotchas", [
     ["Gotcha", "Symptom", "Fast sanity check"],
     ...gotchas,
@@ -255,13 +277,13 @@ function domainWorkbook(domain) {
     ["Claim boundary", `This is ${domain.light}, not a ${domain.full} confirmatory result.`],
   ]);
   addSheet(wb, "Preflight Sources", [
-    ["source_id", "citation_or_label", "url_or_path", "source_type", "source_role", "unit_or_site", "known_dependence", "screening_status", "notes"],
-    ["", "", "", "", "positive_or_anomaly", "", "", "", ""],
-    ["", "", "", "", "null_or_non_event", "", "", "", ""],
+    ["source_id", "citation_or_label", "url_or_path", "source_type", "domain", "source_role", "publication_or_snapshot_date", "unit_or_site", "known_dependence", "screening_status", "notes"],
+    ["", "", "", "", domain.slug, "positive_or_anomaly", "", "", "", "", ""],
+    ["", "", "", "", domain.slug, "null_or_non_event", "", "", "", "", ""],
   ]);
   addSheet(wb, "Preflight Rows", [
-    ["row_id", "source_id", "coordinate_label", "coordinate_value", "coordinate_units", "row_type", "result_direction", "uncertainty_status", "dependence_concern", "bias_concern", "null_or_non_event_flag", "notes"],
-    ["", "", "", "", "", "", "", "", "", "", "", ""],
+    ["row_id", "source_id", "coordinate_label", "coordinate_value", "coordinate_units", "row_type", "result_direction", "uncertainty_status", "extraction_confidence", "dependence_concern", "bias_concern", "null_or_non_event_flag", "notes"],
+    ["", "", "", "", "", "", "", "", "", "", "", "", ""],
   ]);
   addSheet(wb, "Gotchas", [
     ["Gotcha", "Status", "Notes"],
@@ -272,6 +294,10 @@ function domainWorkbook(domain) {
     ["Gate", "Status", "Owner", "Evidence", "Notes"],
     ["Preflight import disposition complete", "", "", "", ""],
     ...gates.map((g) => [g[0], "", "", g[1], ""]),
+  ]);
+  addSheet(wb, "Full Evidence Binder", [
+    ["Binder", "Status", "Owner", "Minimum records", "Notes"],
+    ...packageScaffold.map((b) => [b[0], "", "", b[2], ""]),
   ]);
   addSheet(wb, "Import Log", [
     ["full_study_id", "preflight_id", "artifact_path", "artifact_sha256", "imported_as", "reviewer_id", "review_disposition", "decision_timestamp", "notes"],
@@ -300,6 +326,22 @@ ${mdTable(["Layer", "Name", "Purpose", "Documents"], layers)}
 ## Quality Gates
 
 ${mdTable(["Gate", "Required evidence", "When checked"], gates)}
+
+## Supervisor Questions
+
+${mdTable(["No.", "Question"], supervisorQuestions)}
+
+## Core Controls
+
+${mdTable(["Control ID", "Control", "Objective", "Evidence"], controls)}
+
+## Package Scaffold
+
+${mdTable(["Binder", "Purpose", "Minimum records"], packageScaffold)}
+
+## Program Registers
+
+${mdTable(["Register", "Purpose"], programRegisters)}
 `
   );
 

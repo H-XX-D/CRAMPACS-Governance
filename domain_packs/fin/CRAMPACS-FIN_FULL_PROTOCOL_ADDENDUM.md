@@ -30,6 +30,10 @@ Define at least one coordinate, source class, or row family expected not to recu
 
 List required hashes for domain-specific source systems, units, transforms, vocabularies, reference systems, or vendor snapshots.
 
+## Domain Standards Anchors
+
+SR 11-7/OCC 2011-12, BCBS 239, FFIEC, SEC Regulation SCI, GLBA/FCRA/ECOA/BSA
+
 ## Claim Limits
 
 This `CRAMPACS-FIN` study can produce a full CRAMPACS evidence package only after protocol lock, full source flow, null inclusion, independence review, bias review, null-model analysis, sensitivity tests, checksum reproduction, and signoff.

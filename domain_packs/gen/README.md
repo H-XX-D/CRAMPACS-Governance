@@ -31,3 +31,7 @@ failed replications, non-significant loci, negative functional assays, tested pa
 ## Main Gotcha
 
 population stratification, batch effects, genome-build drift, winner's curse
+
+## Standards Anchors
+
+GA4GH, ClinGen, MIAME/MINSEQE, STREGA, FAIR

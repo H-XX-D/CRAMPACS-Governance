@@ -15,6 +15,7 @@
 - protocol
 - endpoint class
 - time-to-exploit
+- detection rule
 
 ## Nulls and Non-Events
 

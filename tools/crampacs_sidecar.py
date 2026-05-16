@@ -68,6 +68,64 @@ FULL_REQUIRED = [
     "amendment_log.csv",
 ]
 
+FULL_BINDERS = [
+    "00_charter",
+    "01_protocol_lock",
+    "02_sources",
+    "03_extraction",
+    "04_coordinate_normalization",
+    "05_dependence_bias",
+    "06_statistics",
+    "07_reproducibility",
+    "08_assurance_case",
+    "09_review_and_release",
+    "registers",
+]
+
+FULL_REQUIRED_RECORDS = [
+    "00_charter/study_charter.md",
+    "00_charter/role_assignment.csv",
+    "01_protocol_lock/protocol.md",
+    "01_protocol_lock/candidate_coordinate_registry.csv",
+    "01_protocol_lock/amendment_log.csv",
+    "02_sources/search_strategy.md",
+    "02_sources/source_catalog.csv",
+    "02_sources/source_flow.md",
+    "03_extraction/anomaly_rows_raw.csv",
+    "03_extraction/extraction_notes.md",
+    "04_coordinate_normalization/normalized_rows.csv",
+    "04_coordinate_normalization/coordinate_transform_registry.csv",
+    "04_coordinate_normalization/unit_conversion_audit.md",
+    "05_dependence_bias/independence_groups.csv",
+    "05_dependence_bias/bias_assessment.csv",
+    "05_dependence_bias/missing_evidence_assessment.md",
+    "06_statistics/statistical_analysis_plan.md",
+    "06_statistics/null_model_runs.csv",
+    "06_statistics/analysis_result.csv",
+    "06_statistics/negative_controls.md",
+    "06_statistics/sensitivity_results.md",
+    "07_reproducibility/checksum_manifest.csv",
+    "07_reproducibility/environment_record.md",
+    "07_reproducibility/run_instructions.md",
+    "07_reproducibility/clean_run_report.md",
+    "08_assurance_case/assurance_case.md",
+    "08_assurance_case/assurance_case_register.csv",
+    "08_assurance_case/risk_register.csv",
+    "09_review_and_release/audit_report.md",
+    "09_review_and_release/decision_memo.md",
+    "09_review_and_release/gate_review_record.csv",
+    "09_review_and_release/claim_language_approval.md",
+    "09_review_and_release/release_signoff.md",
+    "registers/assurance_case_register.csv",
+    "registers/control_evidence_register.csv",
+    "registers/deviation_capa_log.csv",
+    "registers/decision_log.csv",
+    "registers/document_register.csv",
+    "registers/gate_review_record.csv",
+    "registers/risk_register.csv",
+    "registers/training_matrix.csv",
+]
+
 ALIASES = {
     "preflight_scope.md": ["*PREFLIGHT_SCOPE.md"],
     "preflight_sources.csv": ["*PREFLIGHT_SOURCES.csv"],
@@ -105,6 +163,10 @@ def find_file(root: Path, name: str) -> Path | None:
         if alias_matches:
             return alias_matches[0]
     return None
+
+
+def relative_exists(root: Path, rel: str) -> bool:
+    return (root / rel).exists()
 
 
 def read_csv(path: Path | None) -> CsvInfo:
@@ -262,8 +324,13 @@ def score_full(root: Path) -> dict:
     bias = load_csv_rows(paths.get("bias_assessment.csv"))
     null_runs = load_csv_rows(paths.get("null_model_runs.csv"))
     results = load_csv_rows(paths.get("analysis_result.csv"))
+    control_records = load_csv_rows(root / "registers" / "control_evidence_register.csv")
+    gate_records = load_csv_rows(root / "registers" / "gate_review_record.csv")
+    decision_records = load_csv_rows(root / "registers" / "decision_log.csv")
 
     required_present = sum(1 for path in paths.values() if path and path.exists())
+    binder_present = sum(1 for binder in FULL_BINDERS if (root / binder).is_dir())
+    program_record_present = sum(1 for rel in FULL_REQUIRED_RECORDS if relative_exists(root, rel))
     null_count = count_values(raw_rows, ["result_type"], NULL_TYPES)
     positive_count = count_values(raw_rows, ["result_type"], POSITIVE_TYPES)
     independence_coverage = nonempty_fraction(independence, "independence_grade")
@@ -275,10 +342,20 @@ def score_full(root: Path) -> dict:
     blockers = []
     if required_present < len(FULL_REQUIRED):
         blockers.append("missing_required_full_artifacts")
+    if binder_present < len(FULL_BINDERS):
+        blockers.append("missing_required_evidence_binders")
+    if program_record_present < len(FULL_REQUIRED_RECORDS):
+        blockers.append("missing_required_program_records")
     if not raw_rows:
         blockers.append("no_raw_rows_entered")
     if not candidates:
         blockers.append("no_candidate_coordinates_entered")
+    if not control_records:
+        blockers.append("no_control_evidence_records")
+    if not gate_records:
+        blockers.append("no_gate_review_records")
+    if not decision_records:
+        blockers.append("no_decision_records")
     if raw_rows and null_count == 0:
         blockers.append("no_null_or_non_event_rows")
     if candidates and candidate_lock_coverage < 1:
@@ -293,18 +370,22 @@ def score_full(root: Path) -> dict:
         blockers.append("no_global_result_fields")
 
     completeness = required_present / len(FULL_REQUIRED)
+    binder_coverage = binder_present / len(FULL_BINDERS)
+    program_record_coverage = program_record_present / len(FULL_REQUIRED_RECORDS)
     null_coverage = 1.0 if null_count > 0 else 0.0
     null_model_coverage = 1.0 if null_run_count > 0 else 0.0
 
     readiness = round(
         100
         * (
-            0.20 * completeness
-            + 0.15 * null_coverage
-            + 0.15 * candidate_lock_coverage
-            + 0.15 * independence_coverage
-            + 0.15 * bias_coverage
-            + 0.20 * null_model_coverage
+            0.15 * completeness
+            + 0.10 * null_coverage
+            + 0.12 * candidate_lock_coverage
+            + 0.12 * independence_coverage
+            + 0.12 * bias_coverage
+            + 0.14 * null_model_coverage
+            + 0.13 * binder_coverage
+            + 0.12 * program_record_coverage
         ),
         1,
     )
@@ -322,9 +403,18 @@ def score_full(root: Path) -> dict:
         "level": "CRAMPACS_full",
         "required_present": required_present,
         "required_total": len(FULL_REQUIRED),
+        "binder_present": binder_present,
+        "binder_total": len(FULL_BINDERS),
+        "binder_coverage": round(binder_coverage, 3),
+        "program_record_present": program_record_present,
+        "program_record_total": len(FULL_REQUIRED_RECORDS),
+        "program_record_coverage": round(program_record_coverage, 3),
         "raw_row_count": len(raw_rows),
         "normalized_row_count": len(normalized_rows),
         "candidate_count": len(candidates),
+        "control_evidence_record_count": len(control_records),
+        "gate_review_record_count": len(gate_records),
+        "decision_record_count": len(decision_records),
         "positive_like_rows": positive_count,
         "null_or_non_event_rows": null_count,
         "independence_coverage": round(independence_coverage, 3),

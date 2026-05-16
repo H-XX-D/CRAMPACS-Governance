@@ -39,6 +39,10 @@ follow-up non-detections, survey fields with no event, searched spectral windows
 
 sky coverage bias, cadence bias, follow-up selection bias, calibration drift
 
+## Standards Anchors
+
+FITS, IVOA, VOEvent, NASA ADS, FAIR/DataCite
+
 ## Practitioner Rule
 
 Lowercase can seed uppercase. Lowercase cannot claim uppercase assurance.

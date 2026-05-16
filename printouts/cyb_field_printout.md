@@ -39,6 +39,10 @@ exposed assets not exploited, rules with no hits, scanned vulnerabilities not ex
 
 sensor coverage gaps, duplicate intel feeds, alert suppression, honeypot selection bias
 
+## Standards Anchors
+
+NIST CSF 2.0, MITRE ATT&CK, CISA KEV, CVSS v4, ISO 27001, STIX/TAXII
+
 ## Practitioner Rule
 
 Lowercase can seed uppercase. Lowercase cannot claim uppercase assurance.

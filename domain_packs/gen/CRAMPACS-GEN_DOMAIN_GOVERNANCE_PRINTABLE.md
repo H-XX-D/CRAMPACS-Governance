@@ -14,7 +14,9 @@
 - gene
 - pathway
 - cell type
+- tissue
 - expression threshold
+- perturbation
 
 ## Nulls and Non-Events
 

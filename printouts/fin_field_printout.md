@@ -39,6 +39,10 @@ cleared alerts, comparable accounts without event, backtests with no breach, con
 
 look-ahead bias, backtest overfitting, vendor revisions, feedback loops from prior controls
 
+## Standards Anchors
+
+SR 11-7/OCC 2011-12, BCBS 239, FFIEC, SEC Regulation SCI, GLBA/FCRA/ECOA/BSA
+
 ## Practitioner Rule
 
 Lowercase can seed uppercase. Lowercase cannot claim uppercase assurance.

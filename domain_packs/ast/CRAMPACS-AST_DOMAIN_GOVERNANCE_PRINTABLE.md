@@ -15,6 +15,7 @@
 - period
 - phase
 - cadence
+- source class
 
 ## Nulls and Non-Events
 

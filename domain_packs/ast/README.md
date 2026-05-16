@@ -31,3 +31,7 @@ follow-up non-detections, survey fields with no event, searched spectral windows
 ## Main Gotcha
 
 sky coverage bias, cadence bias, follow-up selection bias, calibration drift
+
+## Standards Anchors
+
+FITS, IVOA, VOEvent, NASA ADS, FAIR/DataCite

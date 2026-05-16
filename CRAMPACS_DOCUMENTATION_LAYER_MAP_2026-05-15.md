@@ -121,6 +121,12 @@ Purpose:
 
 Documents:
 
+- `program/PROGRAM_OPERATING_MANUAL.md`
+- `program/CONTROL_CATALOG.md`
+- `program/DOCUMENT_CONTROL_PROCEDURE.md`
+- `program/RELEASE_AUTHORITY_RACI.md`
+- `program/CANONICAL_GATE_MAP.md`
+- `program/DEVIATION_AND_CAPA_PROCEDURE.md`
 - `policies/CRAMPACS_STANDARDS_AND_PRACTICES_POLICY_2026-05-15.md`
 
 Output:
@@ -129,6 +135,7 @@ Output:
 - Quality gates.
 - Deviation and corrective-action rules.
 - Reporting policy.
+- Auditable control evidence requirements.
 
 ### Layer 4: Core Methodology Layer
 
@@ -200,6 +207,10 @@ Documents:
 - `templates/role_assignment.csv`
 - `domain_packs/<domain>/*_PREFLIGHT_SOURCES.csv`
 - `domain_packs/<domain>/*_PREFLIGHT_ROWS.csv`
+- `program/REGISTER_DATA_DICTIONARY.md`
+- `program/registers/*.csv`
+- `program/PACKAGE_SCAFFOLD_MANIFEST.md`
+- `tools/scaffold_crampacs_package.py`
 
 Output:
 
@@ -254,6 +265,11 @@ Purpose:
 
 Documents:
 
+- `program/EVIDENCE_PACKAGE_SPEC.md`
+- `program/PACKAGE_SCAFFOLD_MANIFEST.md`
+- `program/ASSURANCE_CASE_FRAMEWORK.md`
+- `program/DECISION_MEMO_TEMPLATE.md`
+- `program/DEVIATION_AND_CAPA_TEMPLATE.md`
 - `policies/CRAMPACS_PROGRAM_SOP_2026-05-15.md`
 - `templates/CRAMPACS_PROTOCOL_TEMPLATE.md`
 
@@ -270,6 +286,7 @@ Output:
 - Reporting.
 - Reproducibility capsule.
 - External review.
+- Assurance claim register.
 
 ### Layer 10: Regulatory and Accreditation Layer
 
@@ -279,6 +296,16 @@ Purpose:
 
 Documents:
 
+- `program/SAFETY_SUPERVISOR_PACKET.md`
+- `program/AUDIT_AND_INSPECTION_PACKET.md`
+- `program/AUDIT_PROCEDURE.md`
+- `program/AUDIT_REPORT_TEMPLATE.md`
+- `program/VALIDATION_AND_BENCHMARKING_PLAN.md`
+- `program/VALIDATION_REPORT_TEMPLATE.md`
+- `program/REGULATED_DEPLOYMENT_ADDENDUM.md`
+- `program/DEPLOYMENT_PLAYBOOK.md`
+- `program/TRAINING_AND_COMPETENCY_PLAN.md`
+- `program/IMPLEMENTATION_ROADMAP_90_DAY.md`
 - Core standards policy.
 - Domain overlay.
 - Organization-specific compliance addendum.

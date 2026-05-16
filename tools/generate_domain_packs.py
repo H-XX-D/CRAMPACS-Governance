@@ -3,94 +3,33 @@
 
 from __future__ import annotations
 
+import json
 from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
 
-DOMAINS = [
-    {
-        "slug": "med",
-        "upper": "CRAMPACS-MED",
-        "lower": "crampacs-med",
-        "label": "Medicine and clinical evidence",
-        "coordinates": "dose, exposure window, biomarker threshold, adverse-event onset, phenotype, care setting",
-        "nulls": "negative safety analyses, monitored adverse events not elevated, failed replications, cohorts with exposure but no event",
-        "gotcha": "confounding by indication, differential coding, missing nulls, surveillance bias",
-    },
-    {
-        "slug": "gen",
-        "upper": "CRAMPACS-GEN",
-        "lower": "crampacs-gen",
-        "label": "Genomics and omics",
-        "coordinates": "locus, variant, gene, pathway, cell type, tissue, expression threshold, perturbation",
-        "nulls": "failed replications, non-significant loci, negative functional assays, tested pathways not enriched",
-        "gotcha": "population stratification, batch effects, genome-build drift, winner's curse",
-    },
-    {
-        "slug": "clim",
-        "upper": "CRAMPACS-CLIM",
-        "lower": "crampacs-clim",
-        "label": "Climate and Earth systems",
-        "coordinates": "latitude, longitude, depth, pressure level, season, climate mode, threshold, basin",
-        "nulls": "comparable regions without anomaly, model runs without recurrence, negative attribution studies",
-        "gotcha": "spatial autocorrelation, temporal autocorrelation, non-stationary baseline, model-family dependence",
-    },
-    {
-        "slug": "mat",
-        "upper": "CRAMPACS-MAT",
-        "lower": "crampacs-mat",
-        "label": "Materials science",
-        "coordinates": "composition ratio, dopant level, phase, lattice parameter, processing temperature, operating condition",
-        "nulls": "failed syntheses, tested materials without property jump, simulations with no predicted anomaly",
-        "gotcha": "unreported failed syntheses, hidden processing parameters, batch variation, simulation convergence artifacts",
-    },
-    {
-        "slug": "eng",
-        "upper": "CRAMPACS-ENG",
-        "lower": "crampacs-eng",
-        "label": "Engineering reliability",
-        "coordinates": "load, vibration frequency, temperature, firmware version, supplier lot, cycle count, failure mode",
-        "nulls": "units exposed without failure, passed qualification tests, lots with no anomaly, sensor streams without recurrence",
-        "gotcha": "fleet exposure imbalance, maintenance censoring, supplier-lot dependence, sensor drift",
-    },
-    {
-        "slug": "fin",
-        "upper": "CRAMPACS-FIN",
-        "lower": "crampacs-fin",
-        "label": "Finance, fraud, and risk",
-        "coordinates": "asset, tenor, counterparty, time window, transaction velocity, network position, model threshold",
-        "nulls": "cleared alerts, comparable accounts without event, backtests with no breach, control portfolios",
-        "gotcha": "look-ahead bias, backtest overfitting, vendor revisions, feedback loops from prior controls",
-    },
-    {
-        "slug": "cyb",
-        "upper": "CRAMPACS-CYB",
-        "lower": "crampacs-cyb",
-        "label": "Cybersecurity",
-        "coordinates": "CVE, ATT&CK technique, port, protocol, endpoint class, time-to-exploit, detection rule",
-        "nulls": "exposed assets not exploited, rules with no hits, scanned vulnerabilities not exploited, false positives",
-        "gotcha": "sensor coverage gaps, duplicate intel feeds, alert suppression, honeypot selection bias",
-    },
-    {
-        "slug": "ast",
-        "upper": "CRAMPACS-AST",
-        "lower": "crampacs-ast",
-        "label": "Astronomy and astrophysics",
-        "coordinates": "sky coordinate, redshift, wavelength, period, phase, cadence, source class",
-        "nulls": "follow-up non-detections, survey fields with no event, searched spectral windows with no feature",
-        "gotcha": "sky coverage bias, cadence bias, follow-up selection bias, calibration drift",
-    },
-    {
-        "slug": "phy",
-        "upper": "CRAMPACS-PHY",
-        "lower": "crampacs-phy",
-        "label": "Physics and physical anomaly catalogs",
-        "coordinates": "mass, energy, frequency, redshift, coupling, cross section, decay channel, event topology",
-        "nulls": "null searches, exclusion contours, control regions, sidebands, non-detections, failed replications",
-        "gotcha": "look-elsewhere effect, theory-fashion clustering, shared detector pipelines, plot digitization error",
-    },
-]
+
+def load_domains() -> list[dict[str, str]]:
+    raw = json.loads((ROOT / "tools" / "crampacs_domains.json").read_text(encoding="utf-8"))
+    domains = []
+    for item in raw:
+        domains.append(
+            {
+                "slug": item["slug"],
+                "upper": item["full"],
+                "lower": item["light"],
+                "label": item["label"],
+                "coordinates": ", ".join(item["coordinates"]),
+                "nulls": ", ".join(item["nulls"]),
+                "gotcha": ", ".join(item["gotchas"]),
+                "standards": ", ".join(item["standards"]),
+            }
+        )
+    return domains
+
+
+DOMAINS = load_domains()
 
 
 def write(path: Path, text: str) -> None:
@@ -133,6 +72,10 @@ Use the lowercase documents for a one to two day triage pass. Use the uppercase 
 ## Main Gotcha
 
 {domain["gotcha"]}
+
+## Standards Anchors
+
+{domain["standards"]}
 """
 
 
@@ -297,6 +240,10 @@ Define at least one coordinate, source class, or row family expected not to recu
 
 List required hashes for domain-specific source systems, units, transforms, vocabularies, reference systems, or vendor snapshots.
 
+## Domain Standards Anchors
+
+{domain["standards"]}
+
 ## Claim Limits
 
 This `{domain["upper"]}` study can produce a full CRAMPACS evidence package only after protocol lock, full source flow, null inclusion, independence review, bias review, null-model analysis, sensitivity tests, checksum reproduction, and signoff.
@@ -325,6 +272,10 @@ def domain_governance_printable(domain: dict[str, str]) -> str:
 ## Gotchas
 
 {chr(10).join(f"- {x.strip()}" for x in domain["gotcha"].split(","))}
+
+## Standards Anchors
+
+{chr(10).join(f"- {x.strip()}" for x in domain["standards"].split(","))}
 
 ## Field Gate
 
@@ -425,6 +376,10 @@ Output:
 
 {domain["gotcha"]}
 
+## Standards Anchors
+
+{domain["standards"]}
+
 ## Practitioner Rule
 
 Lowercase can seed uppercase. Lowercase cannot claim uppercase assurance.
@@ -448,7 +403,10 @@ def main() -> int:
     write(
         ROOT / "printouts" / "crampacs_preflight_1_to_2_day_printout.md",
         """
-# crampacs 1-2 Day Preflight Printout
+# crampacs-* 1-2 Day Preflight Printout
+
+Use this only for the lowercase preflight route, for example `crampacs-med`.
+If escalated, the decision must name the matching uppercase full system, for example `CRAMPACS-MED`.
 
 ## Inputs
 
@@ -483,7 +441,7 @@ def main() -> int:
 
 ## Decision
 
-- advance_to_CRAMPACS
+- advance_to_CRAMPACS-<DOMAIN>
 - hold_coordinate_lock
 - hold_source_completeness
 - hold_dependence_or_bias

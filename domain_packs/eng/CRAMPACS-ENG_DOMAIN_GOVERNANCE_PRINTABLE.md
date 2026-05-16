@@ -15,6 +15,7 @@
 - firmware version
 - supplier lot
 - cycle count
+- failure mode
 
 ## Nulls and Non-Events
 

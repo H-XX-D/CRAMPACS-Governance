@@ -6,23 +6,62 @@ This repository contains a domain-general governance, methodology, and data-cont
 
 CRAMPACS is not a discovery shortcut. It is a disciplined evidence-synthesis framework for building defensible anomaly-prioritization results.
 
-## Core Documents
+## Program Spine
 
-- `CRAMPACS_DOCUMENTATION_LAYER_MAP_2026-05-15.md`  
+Start here if you are deploying CRAMPACS inside an organization.
+
+- `program/README.md`
+  Entry point for the operational assurance program.
+- `program/PROGRAM_OPERATING_MANUAL.md`
+  Defines authority, assurance levels, gates, stop rules, evidence tiers, and release requirements.
+- `program/CONTROL_CATALOG.md`
+  Auditable control catalog covering governance, protocol lock, coordinates, sources, rows, independence, bias, statistics, reproducibility, release, CAPA, and training.
+- `program/DOCUMENT_CONTROL_PROCEDURE.md`
+  Controlled-document ownership, approval, versioning, effective-date, review, and retirement procedure.
+- `program/RELEASE_AUTHORITY_RACI.md` and `program/CANONICAL_GATE_MAP.md`
+  Release authority, veto rights, gate IDs, gate inputs, outputs, and blocker rules.
+- `program/DEVIATION_AND_CAPA_PROCEDURE.md`
+  Deviation, containment, root-cause, corrective-action, preventive-action, effectiveness-check, and reopening procedure.
+- `program/ASSURANCE_CASE_FRAMEWORK.md`
+  Claim, evidence, rebuttal, and residual-risk framework for defending a CRAMPACS result.
+- `program/EVIDENCE_PACKAGE_SPEC.md`
+  Required binder structure for a complete evidence package.
+- `program/PACKAGE_SCAFFOLD_MANIFEST.md`
+  Exact scaffold structure and sidecar expectations for full evidence packages.
+- `program/DEPLOYMENT_PLAYBOOK.md`
+  Practical rollout sequence for introducing CRAMPACS inside an organization.
+- `program/SAFETY_SUPERVISOR_PACKET.md`
+  Practical approval/hold/reject packet for safety supervisors, government program officers, and risk owners.
+- `program/AUDIT_AND_INSPECTION_PACKET.md`
+  Inspection plan, sampling rules, audit tests, and severity levels.
+- `program/AUDIT_PROCEDURE.md` and `program/AUDIT_REPORT_TEMPLATE.md`
+  Audit planning, evidence sampling, finding classification, reporting, and closure mechanics.
+- `program/VALIDATION_AND_BENCHMARKING_PLAN.md`
+  Validation batteries for known negatives, planted clusters, duplicate-evidence traps, missing-null traps, unit-conversion traps, and inter-rater reliability.
+- `program/VALIDATION_REPORT_TEMPLATE.md`
+  Standard report format for documenting validation evidence and acceptance decisions.
+- `program/REGULATED_DEPLOYMENT_ADDENDUM.md`
+  Added controls for safety, security, public agency, financial, clinical, or other regulated decisions.
+- `program/TRAINING_AND_COMPETENCY_PLAN.md` and `program/IMPLEMENTATION_ROADMAP_90_DAY.md`
+  Role competency expectations and a 90-day operational rollout plan.
+
+## Supporting Documents
+
+- `CRAMPACS_DOCUMENTATION_LAYER_MAP_2026-05-15.md`
   Explains the documentation layers and how lowercase preflights compose into uppercase full systems.
-- `policies/CRAMPACS_NAMING_AND_ASSURANCE_LEVELS_2026-05-15.md`  
+- `policies/CRAMPACS_NAMING_AND_ASSURANCE_LEVELS_2026-05-15.md`
   Defines uppercase `CRAMPACS-*` as full assurance and lowercase `crampacs-*` as lightweight preflight.
-- `policies/CRAMPACS_PROGRAM_SOP_2026-05-15.md`  
+- `policies/CRAMPACS_PROGRAM_SOP_2026-05-15.md`
   End-to-end SOP from study charter to external review.
-- `policies/CRAMPACS_STANDARDS_AND_PRACTICES_POLICY_2026-05-15.md`  
+- `policies/CRAMPACS_STANDARDS_AND_PRACTICES_POLICY_2026-05-15.md`
   Standards stack, quality gates, document control, accreditation-ready controls.
-- `policies/CRAMPACS_METHODOLOGY_POLICY_2026-05-15.md`  
+- `policies/CRAMPACS_METHODOLOGY_POLICY_2026-05-15.md`
   Domain-general methodology rules, claim tiers, null models, sensitivity requirements.
-- `policies/CRAMPACS_CROSS_UNIT_EXPERIMENT_CHECKSUM_GUIDELINES_2026-05-15.md`  
+- `policies/CRAMPACS_CROSS_UNIT_EXPERIMENT_CHECKSUM_GUIDELINES_2026-05-15.md`
   Cross-unit, cross-site, and cross-measurement checksum rules.
-- `policies/crampacs_lightweight_preflight_policy_2026-05-15.md`  
+- `policies/crampacs_lightweight_preflight_policy_2026-05-15.md`
   One to two day lightweight preflight system.
-- `policies/crampacs_gotchas_and_sanity_checks_2026-05-15.md`  
+- `policies/crampacs_gotchas_and_sanity_checks_2026-05-15.md`
   Failure-mode and sanity-check guide.
 
 ## Domain Names
@@ -83,6 +122,14 @@ It writes:
 - `crampacs_sidecar_metrics.md`
 
 The sidecar reports readiness, blockers, null/non-event coverage, dependence coverage, bias coverage, and package checksums.
+
+For full packages, start from the evidence-binder scaffold:
+
+```bash
+python tools/scaffold_crampacs_package.py <package_dir> --domain med --study-id STUDY001
+```
+
+The full-system sidecar checks both scientific data contracts and program controls: binder coverage, required records, control evidence, gate review records, decision records, row provenance, null/non-event coverage, dependence, bias, null-model runs, and checksums.
 
 ## Claim Boundary
 

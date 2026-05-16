@@ -39,6 +39,10 @@ failed syntheses, tested materials without property jump, simulations with no pr
 
 unreported failed syntheses, hidden processing parameters, batch variation, simulation convergence artifacts
 
+## Standards Anchors
+
+OPTIMADE, NOMAD/FAIR-DI, Materials Project provenance, PIF/GEMD, ISO 17025
+
 ## Practitioner Rule
 
 Lowercase can seed uppercase. Lowercase cannot claim uppercase assurance.

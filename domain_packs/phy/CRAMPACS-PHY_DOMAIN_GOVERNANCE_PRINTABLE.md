@@ -15,6 +15,8 @@
 - redshift
 - coupling
 - cross section
+- decay channel
+- event topology
 
 ## Nulls and Non-Events
 
@@ -22,6 +24,7 @@
 - exclusion contours
 - control regions
 - sidebands
+- non-detections
 - failed replications
 
 ## Gotchas

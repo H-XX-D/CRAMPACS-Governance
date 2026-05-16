@@ -1,4 +1,7 @@
-# crampacs 1-2 Day Preflight Printout
+# crampacs-* 1-2 Day Preflight Printout
+
+Use this only for the lowercase preflight route, for example `crampacs-med`.
+If escalated, the decision must name the matching uppercase full system, for example `CRAMPACS-MED`.
 
 ## Inputs
 
@@ -33,7 +36,7 @@
 
 ## Decision
 
-- advance_to_CRAMPACS
+- advance_to_CRAMPACS-<DOMAIN>
 - hold_coordinate_lock
 - hold_source_completeness
 - hold_dependence_or_bias

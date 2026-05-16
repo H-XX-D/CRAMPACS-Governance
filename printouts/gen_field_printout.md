@@ -39,6 +39,10 @@ failed replications, non-significant loci, negative functional assays, tested pa
 
 population stratification, batch effects, genome-build drift, winner's curse
 
+## Standards Anchors
+
+GA4GH, ClinGen, MIAME/MINSEQE, STREGA, FAIR
+
 ## Practitioner Rule
 
 Lowercase can seed uppercase. Lowercase cannot claim uppercase assurance.

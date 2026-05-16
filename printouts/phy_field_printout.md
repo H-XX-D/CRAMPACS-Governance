@@ -39,6 +39,10 @@ null searches, exclusion contours, control regions, sidebands, non-detections, f
 
 look-elsewhere effect, theory-fashion clustering, shared detector pipelines, plot digitization error
 
+## Standards Anchors
+
+PRISMA, PDG statistics, HEP look-elsewhere practice, JCGM GUM, FAIR/DataCite/PROV
+
 ## Practitioner Rule
 
 Lowercase can seed uppercase. Lowercase cannot claim uppercase assurance.

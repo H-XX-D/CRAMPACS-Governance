@@ -30,6 +30,10 @@ Define at least one coordinate, source class, or row family expected not to recu
 
 List required hashes for domain-specific source systems, units, transforms, vocabularies, reference systems, or vendor snapshots.
 
+## Domain Standards Anchors
+
+PRISMA, STROBE/RECORD/CONSORT/STARD, FDA RWE, ICH GCP, HIPAA, 21 CFR Part 11
+
 ## Claim Limits
 
 This `CRAMPACS-MED` study can produce a full CRAMPACS evidence package only after protocol lock, full source flow, null inclusion, independence review, bias review, null-model analysis, sensitivity tests, checksum reproduction, and signoff.

@@ -30,6 +30,10 @@ Define at least one coordinate, source class, or row family expected not to recu
 
 List required hashes for domain-specific source systems, units, transforms, vocabularies, reference systems, or vendor snapshots.
 
+## Domain Standards Anchors
+
+NIST CSF 2.0, MITRE ATT&CK, CISA KEV, CVSS v4, ISO 27001, STIX/TAXII
+
 ## Claim Limits
 
 This `CRAMPACS-CYB` study can produce a full CRAMPACS evidence package only after protocol lock, full source flow, null inclusion, independence review, bias review, null-model analysis, sensitivity tests, checksum reproduction, and signoff.

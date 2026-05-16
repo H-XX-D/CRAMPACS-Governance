@@ -31,3 +31,7 @@ failed syntheses, tested materials without property jump, simulations with no pr
 ## Main Gotcha
 
 unreported failed syntheses, hidden processing parameters, batch variation, simulation convergence artifacts
+
+## Standards Anchors
+
+OPTIMADE, NOMAD/FAIR-DI, Materials Project provenance, PIF/GEMD, ISO 17025

@@ -8,7 +8,7 @@
 
 Choose one:
 
-- advance_to_CRAMPACS
+- advance_to_CRAMPACS-<DOMAIN>
 - hold_coordinate_lock
 - hold_source_completeness
 - hold_dependence_or_bias

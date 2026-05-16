@@ -1,0 +1,92 @@
+[
+  {
+    "slug": "med",
+    "full": "CRAMPACS-MED",
+    "light": "crampacs-med",
+    "label": "Medicine and clinical evidence",
+    "coordinates": ["dose", "exposure window", "biomarker threshold", "adverse-event onset", "phenotype", "care setting"],
+    "nulls": ["negative safety analyses", "monitored adverse events not elevated", "failed replications", "cohorts with exposure but no event"],
+    "gotchas": ["confounding by indication", "differential coding", "missing nulls", "surveillance bias"],
+    "standards": ["PRISMA", "STROBE/RECORD/CONSORT/STARD", "FDA RWE", "ICH GCP", "HIPAA", "21 CFR Part 11"]
+  },
+  {
+    "slug": "gen",
+    "full": "CRAMPACS-GEN",
+    "light": "crampacs-gen",
+    "label": "Genomics and omics",
+    "coordinates": ["locus", "variant", "gene", "pathway", "cell type", "tissue", "expression threshold", "perturbation"],
+    "nulls": ["failed replications", "non-significant loci", "negative functional assays", "tested pathways not enriched"],
+    "gotchas": ["population stratification", "batch effects", "genome-build drift", "winner's curse"],
+    "standards": ["GA4GH", "ClinGen", "MIAME/MINSEQE", "STREGA", "FAIR"]
+  },
+  {
+    "slug": "clim",
+    "full": "CRAMPACS-CLIM",
+    "light": "crampacs-clim",
+    "label": "Climate and Earth systems",
+    "coordinates": ["latitude", "longitude", "depth", "pressure level", "season", "climate mode", "threshold", "basin"],
+    "nulls": ["comparable regions without anomaly", "model runs without recurrence", "negative attribution studies"],
+    "gotchas": ["spatial autocorrelation", "temporal autocorrelation", "non-stationary baseline", "model-family dependence"],
+    "standards": ["WMO", "CF Conventions", "CMIP/ESGF", "IPCC uncertainty", "FAIR"]
+  },
+  {
+    "slug": "mat",
+    "full": "CRAMPACS-MAT",
+    "light": "crampacs-mat",
+    "label": "Materials science",
+    "coordinates": ["composition ratio", "dopant level", "phase", "lattice parameter", "processing temperature", "operating condition"],
+    "nulls": ["failed syntheses", "tested materials without property jump", "simulations with no predicted anomaly"],
+    "gotchas": ["unreported failed syntheses", "hidden processing parameters", "batch variation", "simulation convergence artifacts"],
+    "standards": ["OPTIMADE", "NOMAD/FAIR-DI", "Materials Project provenance", "PIF/GEMD", "ISO 17025"]
+  },
+  {
+    "slug": "eng",
+    "full": "CRAMPACS-ENG",
+    "light": "crampacs-eng",
+    "label": "Engineering reliability",
+    "coordinates": ["load", "vibration frequency", "temperature", "firmware version", "supplier lot", "cycle count", "failure mode"],
+    "nulls": ["units exposed without failure", "passed qualification tests", "lots with no anomaly", "sensor streams without recurrence"],
+    "gotchas": ["fleet exposure imbalance", "maintenance censoring", "supplier-lot dependence", "sensor drift"],
+    "standards": ["NIST Engineering Statistics", "ISO 9001", "ISO 31000", "ISO 17025", "IEC 61508", "ASME V&V"]
+  },
+  {
+    "slug": "fin",
+    "full": "CRAMPACS-FIN",
+    "light": "crampacs-fin",
+    "label": "Finance, fraud, and risk",
+    "coordinates": ["asset", "tenor", "counterparty", "time window", "transaction velocity", "network position", "model threshold"],
+    "nulls": ["cleared alerts", "comparable accounts without event", "backtests with no breach", "control portfolios"],
+    "gotchas": ["look-ahead bias", "backtest overfitting", "vendor revisions", "feedback loops from prior controls"],
+    "standards": ["SR 11-7/OCC 2011-12", "BCBS 239", "FFIEC", "SEC Regulation SCI", "GLBA/FCRA/ECOA/BSA"]
+  },
+  {
+    "slug": "cyb",
+    "full": "CRAMPACS-CYB",
+    "light": "crampacs-cyb",
+    "label": "Cybersecurity",
+    "coordinates": ["CVE", "ATT&CK technique", "port", "protocol", "endpoint class", "time-to-exploit", "detection rule"],
+    "nulls": ["exposed assets not exploited", "rules with no hits", "scanned vulnerabilities not exploited", "false positives"],
+    "gotchas": ["sensor coverage gaps", "duplicate intel feeds", "alert suppression", "honeypot selection bias"],
+    "standards": ["NIST CSF 2.0", "MITRE ATT&CK", "CISA KEV", "CVSS v4", "ISO 27001", "STIX/TAXII"]
+  },
+  {
+    "slug": "ast",
+    "full": "CRAMPACS-AST",
+    "light": "crampacs-ast",
+    "label": "Astronomy and astrophysics",
+    "coordinates": ["sky coordinate", "redshift", "wavelength", "period", "phase", "cadence", "source class"],
+    "nulls": ["follow-up non-detections", "survey fields with no event", "searched spectral windows with no feature"],
+    "gotchas": ["sky coverage bias", "cadence bias", "follow-up selection bias", "calibration drift"],
+    "standards": ["FITS", "IVOA", "VOEvent", "NASA ADS", "FAIR/DataCite"]
+  },
+  {
+    "slug": "phy",
+    "full": "CRAMPACS-PHY",
+    "light": "crampacs-phy",
+    "label": "Physics and physical anomaly catalogs",
+    "coordinates": ["mass", "energy", "frequency", "redshift", "coupling", "cross section", "decay channel", "event topology"],
+    "nulls": ["null searches", "exclusion contours", "control regions", "sidebands", "non-detections", "failed replications"],
+    "gotchas": ["look-elsewhere effect", "theory-fashion clustering", "shared detector pipelines", "plot digitization error"],
+    "standards": ["PRISMA", "PDG statistics", "HEP look-elsewhere practice", "JCGM GUM", "FAIR/DataCite/PROV"]
+  }
+]

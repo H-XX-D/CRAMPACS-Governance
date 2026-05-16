@@ -31,3 +31,7 @@ comparable regions without anomaly, model runs without recurrence, negative attr
 ## Main Gotcha
 
 spatial autocorrelation, temporal autocorrelation, non-stationary baseline, model-family dependence
+
+## Standards Anchors
+
+WMO, CF Conventions, CMIP/ESGF, IPCC uncertainty, FAIR

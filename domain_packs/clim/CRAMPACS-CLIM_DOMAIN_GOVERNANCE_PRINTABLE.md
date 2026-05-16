@@ -15,6 +15,8 @@
 - pressure level
 - season
 - climate mode
+- threshold
+- basin
 
 ## Nulls and Non-Events
 

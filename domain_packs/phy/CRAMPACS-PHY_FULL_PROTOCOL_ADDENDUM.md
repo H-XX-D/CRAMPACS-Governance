@@ -30,6 +30,10 @@ Define at least one coordinate, source class, or row family expected not to recu
 
 List required hashes for domain-specific source systems, units, transforms, vocabularies, reference systems, or vendor snapshots.
 
+## Domain Standards Anchors
+
+PRISMA, PDG statistics, HEP look-elsewhere practice, JCGM GUM, FAIR/DataCite/PROV
+
 ## Claim Limits
 
 This `CRAMPACS-PHY` study can produce a full CRAMPACS evidence package only after protocol lock, full source flow, null inclusion, independence review, bias review, null-model analysis, sensitivity tests, checksum reproduction, and signoff.

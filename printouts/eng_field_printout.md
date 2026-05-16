@@ -39,6 +39,10 @@ units exposed without failure, passed qualification tests, lots with no anomaly,
 
 fleet exposure imbalance, maintenance censoring, supplier-lot dependence, sensor drift
 
+## Standards Anchors
+
+NIST Engineering Statistics, ISO 9001, ISO 31000, ISO 17025, IEC 61508, ASME V&V
+
 ## Practitioner Rule
 
 Lowercase can seed uppercase. Lowercase cannot claim uppercase assurance.

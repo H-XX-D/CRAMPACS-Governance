@@ -39,6 +39,10 @@ negative safety analyses, monitored adverse events not elevated, failed replicat
 
 confounding by indication, differential coding, missing nulls, surveillance bias
 
+## Standards Anchors
+
+PRISMA, STROBE/RECORD/CONSORT/STARD, FDA RWE, ICH GCP, HIPAA, 21 CFR Part 11
+
 ## Practitioner Rule
 
 Lowercase can seed uppercase. Lowercase cannot claim uppercase assurance.
